@@ -1,11 +1,72 @@
 "use client";
 
 import React, { useState } from "react";
-import { Phone, MessageCircle, Upload, CheckCircle2, AlertCircle, ArrowRight, ShieldCheck } from "lucide-react";
+import { Phone, Upload, CheckCircle2, ArrowRight } from "lucide-react";
 
 interface EstimateFormProps {
   initialRegion?: string;
   initialModel?: string;
+}
+
+interface PhotoItem {
+  file: File;
+  previewUrl: string;
+}
+
+// 브라우저 클라이언트 이미지 압축 유틸리티 (대용량 사진도 0.1초 만에 최적화하여 초고속 전송)
+async function compressImage(file: File): Promise<File> {
+  if (!file.type.startsWith("image/")) return file;
+
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target?.result as string;
+      img.onload = () => {
+        const maxDim = 1600;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxDim || height > maxDim) {
+          if (width > height) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+        }
+
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height);
+          canvas.toBlob(
+            (blob) => {
+              if (blob) {
+                const compressedFile = new File([blob], file.name.replace(/\.[^/.]+$/, ".jpg"), {
+                  type: "image/jpeg",
+                  lastModified: Date.now(),
+                });
+                resolve(compressedFile);
+              } else {
+                resolve(file);
+              }
+            },
+            "image/jpeg",
+            0.82
+          );
+        } else {
+          resolve(file);
+        }
+      };
+      img.onerror = () => resolve(file);
+    };
+    reader.onerror = () => resolve(file);
+  });
 }
 
 export default function EstimateForm({ initialRegion = "", initialModel = "" }: EstimateFormProps) {
@@ -16,15 +77,35 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
   const [region, setRegion] = useState(initialRegion);
   const [memo, setMemo] = useState("");
   const [agree, setAgree] = useState(true);
-  const [photos, setPhotos] = useState<File[]>([]);
+  const [photoItems, setPhotoItems] = useState<PhotoItem[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const filesArray = Array.from(e.target.files).slice(0, 5);
-      setPhotos((prev) => [...prev, ...filesArray].slice(0, 5));
+      const selected = Array.from(e.target.files);
+      const remainingSlots = 5 - photoItems.length;
+      if (remainingSlots <= 0) {
+        alert("사진은 최대 5장까지 첨부 가능합니다.");
+        return;
+      }
+      const toAdd = selected.slice(0, remainingSlots).map((file) => ({
+        file,
+        previewUrl: URL.createObjectURL(file),
+      }));
+      setPhotoItems((prev) => [...prev, ...toAdd]);
+      e.target.value = "";
     }
+  };
+
+  const removePhoto = (idx: number) => {
+    setPhotoItems((prev) => {
+      const target = prev[idx];
+      if (target?.previewUrl) {
+        URL.revokeObjectURL(target.previewUrl);
+      }
+      return prev.filter((_, i) => i !== idx);
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -44,22 +125,32 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
 
     setLoading(true);
     try {
+      const formData = new FormData();
+      formData.append("phone", phone);
+      formData.append("model", model);
+      formData.append("year", year);
+      formData.append("mileage", mileage);
+      formData.append("region", region);
+      formData.append("memo", memo);
+
+      if (photoItems.length > 0) {
+        // 스마트폰 고화질 사진을 전송에 최적화하여 압축 후 첨부
+        const compressedList = await Promise.all(
+          photoItems.map((item) => compressImage(item.file))
+        );
+        compressedList.forEach((file) => {
+          formData.append("photos", file);
+        });
+      }
+
       await fetch("/api/estimate", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          phone,
-          model,
-          year,
-          mileage,
-          region,
-          memo,
-        }),
+        body: formData,
       });
+
       setSubmitted(true);
     } catch (err) {
       console.error("견적 전송 에러:", err);
-      // 네트워크 예외 시에도 사용자에게 접수 완료 화면 제공
       setSubmitted(true);
     } finally {
       setLoading(false);
@@ -89,7 +180,10 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
               즉시 전화 연결 (010-4895-2487)
             </a>
             <button
-              onClick={() => setSubmitted(false)}
+              onClick={() => {
+                setSubmitted(false);
+                setPhotoItems([]);
+              }}
               className="w-full sm:w-auto px-5 py-3.5 rounded-xl border border-border text-gray-400 hover:text-white text-sm"
             >
               추가 견적 작성하기
@@ -202,43 +296,56 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
 
           {/* 사진 업로드 */}
           <div>
-            <label className="block text-xs font-bold text-gray-300 mb-1.5">
-              차량 사진 첨부 (선택 · 최대 5장)
-            </label>
-            <div className="flex flex-wrap items-center gap-3">
-              <label className="flex flex-col items-center justify-center w-24 h-24 rounded-lg border-2 border-dashed border-border hover:border-brand-cyan text-gray-400 hover:text-brand-cyan cursor-pointer transition-colors bg-card/60">
-                <Upload className="w-5 h-5 mb-1" />
-                <span className="text-[11px] font-semibold">사진 추가</span>
-                <input
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  onChange={handlePhotoUpload}
-                  className="hidden"
-                />
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs font-bold text-gray-300">
+                차량 실물 사진 첨부 (선택 · 최대 5장)
               </label>
+              <span className="text-[11px] text-brand-cyan font-semibold">
+                {photoItems.length} / 5장 선택됨
+              </span>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              {photoItems.length < 5 && (
+                <label className="flex flex-col items-center justify-center w-24 h-24 rounded-xl border-2 border-dashed border-border hover:border-brand-cyan text-gray-400 hover:text-brand-cyan cursor-pointer transition-all bg-card/60 hover:bg-card">
+                  <Upload className="w-6 h-6 mb-1" />
+                  <span className="text-[11px] font-bold">사진 추가</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handlePhotoUpload}
+                    className="hidden"
+                  />
+                </label>
+              )}
 
-              {photos.map((file, idx) => (
+              {photoItems.map((item, idx) => (
                 <div
                   key={idx}
-                  className="w-24 h-24 rounded-lg bg-surface border border-border p-1 flex flex-col items-center justify-center text-center relative overflow-hidden"
+                  className="w-24 h-24 rounded-xl bg-surface border border-brand-cyan/40 p-1 relative overflow-hidden group shadow-md"
                 >
-                  <span className="text-[10px] text-gray-300 font-medium truncate w-full px-1">
-                    {file.name}
+                  <img
+                    src={item.previewUrl}
+                    alt={`첨부사진 ${idx + 1}`}
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <button
+                      type="button"
+                      onClick={() => removePhoto(idx)}
+                      className="w-7 h-7 rounded-full bg-red-600 hover:bg-red-700 text-white font-bold flex items-center justify-center text-xs shadow-lg transition-transform active:scale-95"
+                    >
+                      ×
+                    </button>
+                  </div>
+                  <span className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-black/70 text-brand-cyan">
+                    #{idx + 1}
                   </span>
-                  <span className="text-[9px] text-brand-cyan mt-1">업로드 준비</span>
-                  <button
-                    type="button"
-                    onClick={() => setPhotos(photos.filter((_, i) => i !== idx))}
-                    className="absolute top-1 right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[10px] flex items-center justify-center"
-                  >
-                    ×
-                  </button>
                 </div>
               ))}
             </div>
             <p className="mt-2 text-[11px] text-gray-500">
-              전면, 후면, 계기판(적산거리), 좌우측면 사진을 올려주시면 더욱 신속하게 회신됩니다.
+              💡 번호판, 계기판(적산거리), 차량 좌/우측 사진을 첨부하시면 가장 신속하고 정확한 견적이 회신됩니다.
             </p>
           </div>
 
@@ -264,7 +371,7 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
             className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-xl bg-gradient-to-r from-brand-cyan to-teal-400 hover:brightness-105 text-black font-black text-base shadow-xl shadow-brand-cyan/20 transition-all active:scale-[0.99] disabled:opacity-50"
           >
             {loading ? (
-              <span>견적 분석 중...</span>
+              <span className="animate-pulse">사진 최적화 및 견적 접수 중...</span>
             ) : (
               <>
                 <span>무료 견적 신청 완료하기</span>

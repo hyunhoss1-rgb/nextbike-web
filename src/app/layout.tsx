@@ -5,7 +5,7 @@ import Footer from "@/components/Footer";
 import FloatingCta from "@/components/FloatingCta";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.xn--b60bj1s89e3pf91mzkd.com"),
+  metadataBase: new URL("https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr"),
   title: {
     default: "중고오토바이매입 | 전국 출장 최고가 당일 현금 매입 - 넥스트바이크",
     template: "%s | 넥스트바이크",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     "할리데이비슨",
     "넥스트바이크",
   ],
-  authors: [{ name: "넥스트바이크", url: "https://www.xn--b60bj1s89e3pf91mzkd.com" }],
+  authors: [{ name: "넥스트바이크", url: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr" }],
   creator: "넥스트바이크",
   publisher: "넥스트바이크",
   robots: {
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "ko_KR",
-    url: "https://www.xn--b60bj1s89e3pf91mzkd.com",
+    url: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr",
     siteName: "넥스트바이크",
     title: "중고오토바이매입 | 전국 출장 최고가 당일 현금 매입 - 넥스트바이크",
     description:

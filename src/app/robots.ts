@@ -12,6 +12,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
       },
     ],
-    sitemap: "https://www.xn--b60bj1s89e3pf91mzkd.com/sitemap.xml",
+    sitemap: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/sitemap.xml",
   };
 }

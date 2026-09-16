@@ -16,7 +16,7 @@ export default function CasesPage() {
 
   return (
     <div className="py-10 sm:py-16">
-      <JsonLd type="main" canonicalUrl="https://www.xn--b60bj1s89e3pf91mzkd.com/cases" />
+      <JsonLd type="main" canonicalUrl="https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/cases" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         <div className="text-center max-w-3xl mx-auto space-y-4">

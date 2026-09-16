@@ -12,16 +12,16 @@ export default function JsonLd({
   type = "main",
   regionName,
   modelName,
-  canonicalUrl = "https://www.xn--b60bj1s89e3pf91mzkd.com",
+  canonicalUrl = "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr",
 }: JsonLdProps) {
   // 1. Organization Schema
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "@id": "https://www.xn--b60bj1s89e3pf91mzkd.com/#organization",
+    "@id": "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/#organization",
     name: "넥스트바이크",
     alternateName: "NEXTBIKE",
-    url: "https://www.xn--b60bj1s89e3pf91mzkd.com",
+    url: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr",
     telephone: "010-4895-2487",
     address: {
       "@type": "PostalAddress",
@@ -44,7 +44,7 @@ export default function JsonLd({
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "넥스트바이크",
-    url: "https://www.xn--b60bj1s89e3pf91mzkd.com",
+    url: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr",
     inLanguage: "ko-KR",
   };
 
@@ -107,7 +107,7 @@ export default function JsonLd({
         "@type": "ListItem",
         position: 1,
         name: "홈",
-        item: "https://www.xn--b60bj1s89e3pf91mzkd.com",
+        item: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr",
       },
       ...(regionName
         ? [
@@ -115,7 +115,7 @@ export default function JsonLd({
               "@type": "ListItem",
               position: 2,
               name: "전국 오토바이 매입",
-              item: "https://www.xn--b60bj1s89e3pf91mzkd.com/regions",
+              item: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions",
             },
             {
               "@type": "ListItem",
@@ -130,7 +130,7 @@ export default function JsonLd({
               "@type": "ListItem",
               position: 2,
               name: "기종별 매입",
-              item: "https://www.xn--b60bj1s89e3pf91mzkd.com/models",
+              item: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/models",
             },
             {
               "@type": "ListItem",

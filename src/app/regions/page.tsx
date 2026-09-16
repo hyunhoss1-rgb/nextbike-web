@@ -29,7 +29,7 @@ export default function RegionsIndexPage() {
 
   return (
     <div className="py-8 sm:py-14 space-y-12">
-      <JsonLd type="main" canonicalUrl="https://www.xn--b60bj1s89e3pf91mzkd.com/regions" />
+      <JsonLd type="main" canonicalUrl="https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions" />
 
       {/* 상단 브레드크럼 & 타이틀 */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

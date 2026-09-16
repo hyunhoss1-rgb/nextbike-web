@@ -3,7 +3,7 @@ import { REGIONS } from "@/data/regions";
 import { BIKE_MODELS } from "@/data/models";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://www.xn--b60bj1s89e3pf91mzkd.com";
+  const baseUrl = "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr";
   const now = new Date();
 
   // 기본 정적 페이지

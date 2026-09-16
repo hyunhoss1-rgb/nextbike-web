@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const title = `${model.name} 매입 | 중고 시세 최고가 당일 현금 매입`;
   const description = `${model.name} 중고 오토바이 출장 매입 전문. ${model.summary} 배기량 ${model.displacement}, 연식·적산거리 무관 최고가 감정 및 당일 전액 입금.`;
-  const canonical = `https://www.xn--b60bj1s89e3pf91mzkd.com/models/${model.slug}`;
+  const canonical = `https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/models/${model.slug}`;
 
   return {
     title,
@@ -71,7 +71,7 @@ export default function ModelDetailPage({ params }: Props) {
     notFound();
   }
 
-  const canonicalUrl = `https://www.xn--b60bj1s89e3pf91mzkd.com/models/${model.slug}`;
+  const canonicalUrl = `https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/models/${model.slug}`;
 
   return (
     <div className="py-6 sm:py-10 space-y-16">

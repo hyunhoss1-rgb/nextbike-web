@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const title = `${region.name} 오토바이매입 | 당일 최고가 출장 매입`;
   const description = `${region.fullName} 전역 중고 오토바이 출장 매입 전문 넥스트바이크. ${region.description} 실차 확인 후 100% 당일 전액 입금.`;
-  const canonical = `https://www.xn--b60bj1s89e3pf91mzkd.com/regions/${region.slug}`;
+  const canonical = `https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions/${region.slug}`;
 
   return {
     title,
@@ -78,7 +78,7 @@ export default function RegionPage({ params }: Props) {
     notFound();
   }
 
-  const canonicalUrl = `https://www.xn--b60bj1s89e3pf91mzkd.com/regions/${region.slug}`;
+  const canonicalUrl = `https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions/${region.slug}`;
 
   // 이 지역 인기 모델 매핑
   const popularBikeList = BIKE_MODELS.filter((m) =>

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { Phone, CheckCircle2, ArrowRight, Camera, ImagePlus, X } from "lucide-react";
 
 interface EstimateFormProps {
@@ -34,7 +35,6 @@ async function compressImage(file: File): Promise<File> {
           const maxDim = 1600;
           let width = img.width;
           let height = img.height;
-
           if (width > maxDim || height > maxDim) {
             if (width > height) {
               height = Math.round((height * maxDim) / width);
@@ -65,7 +65,7 @@ async function compressImage(file: File): Promise<File> {
                 }
               },
               "image/jpeg",
-              0.82
+              0.8
             );
           } else {
             resolve(file);
@@ -98,13 +98,44 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
   const [photoItems, setPhotoItems] = useState<PhotoItem[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   // 실시간 웹 내장 카메라 뷰파인더 상태 (아이폰/갤럭시 브라우저 튕김 0%)
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [cameraLoading, setCameraLoading] = useState(false);
+  const [isFlashing, setIsFlashing] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const fallbackInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // 카메라 실행 시 배경 스크롤 원천 차단 (조준창과 셔터가 한 화면에 100% 고정)
+  useEffect(() => {
+    if (isCameraOpen) {
+      const origBodyOverflow = document.body.style.overflow;
+      const origDocOverflow = document.documentElement.style.overflow;
+      const origBodyTouch = document.body.style.touchAction;
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.touchAction = "none";
+      return () => {
+        document.body.style.overflow = origBodyOverflow;
+        document.documentElement.style.overflow = origDocOverflow;
+        document.body.style.touchAction = origBodyTouch;
+      };
+    }
+  }, [isCameraOpen]);
+
+  // 카메라 모달 열릴 때 비디오 스트림 자동 연결 보장
+  useEffect(() => {
+    if (isCameraOpen && streamRef.current && videoRef.current) {
+      videoRef.current.srcObject = streamRef.current;
+      videoRef.current.play().catch(() => {});
+    }
+  }, [isCameraOpen]);
 
   // 모바일 카메라 촬영 시 메모리 부족으로 브라우저 탭이 재실행되어도 입력 내용 100% 자동 복구
   useEffect(() => {
@@ -189,6 +220,9 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
 
   const capturePhoto = () => {
     if (!videoRef.current || photoItems.length >= 5) return;
+    setIsFlashing(true);
+    setTimeout(() => setIsFlashing(false), 150);
+
     const video = videoRef.current;
     const canvas = document.createElement("canvas");
     canvas.width = video.videoWidth || 1280;
@@ -296,46 +330,62 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
       {/* 장식용 상단 악센트 바 */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-cyan via-teal-400 to-blue-500" />
 
-      {/* 웹 내장 실시간 카메라 뷰파인더 모달 (브라우저 밖으로 나가지 않아 튕김 원천 0%) */}
-      {isCameraOpen && (
-        <div className="fixed inset-0 z-50 bg-black/95 flex flex-col items-center justify-between p-4 pb-8 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="w-full max-w-md flex items-center justify-between py-2 text-white">
+      {/* 웹 내장 실시간 카메라 뷰파인더 모달 (createPortal로 최상위 document.body에 직접 부착) */}
+      {mounted && isCameraOpen && typeof document !== "undefined" && createPortal(
+        <div className="fixed inset-0 z-[99999] bg-black/98 w-screen h-[100dvh] flex flex-col justify-between items-center p-3 pb-safe select-none touch-none overflow-hidden animate-in fade-in duration-200">
+          {/* 1. 상단 상태바 */}
+          <div className="w-full max-w-md flex items-center justify-between px-2 pt-1 h-10 shrink-0 text-white">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" />
-              <span className="text-sm font-bold">실시간 카메라 촬영</span>
+              <span className="text-sm font-bold tracking-tight">실시간 바이크 촬영</span>
             </div>
-            <span className="text-xs text-brand-cyan font-extrabold bg-brand-cyan/10 px-2.5 py-1 rounded-full border border-brand-cyan/30">
-              {photoItems.length} / 5장 촬영됨
-            </span>
-          </div>
-
-          <div className="w-full max-w-md aspect-[4/3] max-h-[52vh] relative rounded-2xl overflow-hidden bg-black flex items-center justify-center border-2 border-brand-cyan/40 shadow-2xl my-auto">
-            {cameraLoading && (
-              <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm animate-pulse">
-                카메라 연결 중...
-              </div>
-            )}
-            <video
-              ref={videoRef}
-              playsInline
-              autoPlay
-              muted
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 pointer-events-none border-2 border-white/20 rounded-2xl m-3 flex items-center justify-center">
-              <span className="text-[11px] text-white/70 bg-black/60 px-3 py-1.5 rounded-full backdrop-blur-sm">
-                바이크가 화면에 꽉 차도록 촬영해 주세요
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-brand-cyan font-black bg-brand-cyan/15 px-2.5 py-1 rounded-full border border-brand-cyan/30">
+                {photoItems.length} / 5장
               </span>
+              <button
+                type="button"
+                onClick={stopCamera}
+                className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white ml-1 active:scale-95"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
           </div>
 
-          {/* 실시간 촬영된 썸네일 미리보기 바 */}
+          {/* 2. 중앙 조준창 (화면 높이에 맞춰 동적으로 4:3 비율 완벽 유지, 1화면에 100% 고정) */}
+          <div className="flex-1 w-full max-w-md flex items-center justify-center min-h-0 py-2 relative">
+            <div className="w-full aspect-[4/3] max-h-full relative rounded-2xl overflow-hidden bg-zinc-950 flex items-center justify-center border-2 border-brand-cyan/50 shadow-2xl">
+              {isFlashing && (
+                <div className="absolute inset-0 bg-white z-20 animate-out fade-out duration-150 pointer-events-none" />
+              )}
+              {cameraLoading && (
+                <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm animate-pulse z-10">
+                  카메라 연결 중...
+                </div>
+              )}
+              <video
+                ref={videoRef}
+                playsInline
+                autoPlay
+                muted
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 pointer-events-none border-2 border-white/20 rounded-2xl m-3 flex items-center justify-center">
+                <span className="text-[11px] text-white/90 bg-black/60 px-3 py-1.5 rounded-full backdrop-blur-sm border border-white/10 font-medium">
+                  바이크가 화면에 꽉 차도록 촬영해 주세요
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* 3. 촬영된 썸네일 미리보기 바 */}
           {photoItems.length > 0 && (
-            <div className="w-full max-w-md flex items-center justify-center gap-2 py-1 overflow-x-auto">
+            <div className="w-full max-w-md flex items-center justify-center gap-2 py-1 h-12 shrink-0 overflow-x-auto">
               {photoItems.map((item, idx) => (
-                <div key={idx} className="relative w-12 h-12 rounded-lg overflow-hidden border border-brand-cyan/70 shrink-0 shadow-md">
+                <div key={idx} className="relative w-10 h-10 rounded-lg overflow-hidden border-2 border-brand-cyan shrink-0 shadow-md">
                   <img src={item.previewUrl} alt={`촬영 ${idx + 1}`} className="w-full h-full object-cover" />
-                  <span className="absolute bottom-0 right-0 bg-black/80 text-[10px] text-brand-cyan px-1 font-bold">
+                  <span className="absolute bottom-0 right-0 bg-black/80 text-[9px] text-brand-cyan px-1 font-bold">
                     {idx + 1}
                   </span>
                 </div>
@@ -343,34 +393,36 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
             </div>
           )}
 
-          <div className="w-full max-w-md flex items-center justify-between px-6 pt-2 pb-2">
+          {/* 4. 하단 셔터 및 완료 버튼 (화면 최하단에 항상 고정) */}
+          <div className="w-full max-w-md flex items-center justify-between px-6 pt-1 pb-3 shrink-0">
             <button
               type="button"
               onClick={stopCamera}
-              className="text-sm text-gray-400 hover:text-white px-3 py-2 font-medium"
+              className="text-sm text-gray-400 hover:text-white px-3 py-2 font-medium active:scale-95"
             >
               닫기
             </button>
 
-            {/* 대형 셔터 버튼 */}
+            {/* 대형 셔터 버튼 (찰칵) */}
             <button
               type="button"
               onClick={capturePhoto}
               disabled={photoItems.length >= 5}
-              className="w-20 h-20 rounded-full border-4 border-white p-1 flex items-center justify-center active:scale-90 transition-transform shadow-2xl disabled:opacity-40"
+              className="w-18 h-18 rounded-full border-4 border-white p-1 flex items-center justify-center active:scale-90 transition-transform shadow-2xl disabled:opacity-40"
             >
-              <div className="w-16 h-16 rounded-full bg-brand-cyan hover:bg-white transition-colors" />
+              <div className="w-14 h-14 rounded-full bg-brand-cyan hover:bg-white transition-colors" />
             </button>
 
             <button
               type="button"
               onClick={stopCamera}
-              className="text-sm font-bold text-brand-cyan px-4 py-2 rounded-xl bg-brand-cyan/10 border border-brand-cyan/30 active:scale-95"
+              className="text-sm font-bold text-brand-cyan px-4 py-2.5 rounded-xl bg-brand-cyan/15 border border-brand-cyan/40 active:scale-95 shadow-md shadow-brand-cyan/10"
             >
               완료 ({photoItems.length})
             </button>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {submitted ? (

@@ -646,29 +646,29 @@ export default function HomePage() {
           </ScrollReveal>
 
           <ScrollReveal animation="fade-up" delay={350}>
-            <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 w-full max-w-2xl mx-auto">
+            <div className="pt-2 flex flex-col md:flex-row items-stretch md:items-center justify-center gap-3 w-full max-w-4xl mx-auto">
               <a
                 href="tel:01048952487"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-brand-cyan text-black font-black text-sm sm:text-base hover:bg-brand-cyanHover transition-all shadow-xl shadow-brand-cyan/25 active:scale-95"
+                className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-brand-cyan text-black font-black text-sm md:text-base whitespace-nowrap hover:bg-brand-cyanHover transition-all shadow-xl shadow-brand-cyan/25 active:scale-95"
               >
-                <Phone className="w-5 h-5" />
-                전화 바로 상담 (010-4895-2487)
+                <Phone className="w-5 h-5 shrink-0" />
+                <span>전화 바로 상담 (010-4895-2487)</span>
               </a>
               <a
                 href="https://open.kakao.com/o/skSUkiHg"
                 target="_blank"
                 rel="noreferrer"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-brand-yellow text-[#191600] font-black text-sm sm:text-base hover:brightness-105 transition-all shadow-xl shadow-yellow-500/10 active:scale-95 animate-shimmer"
+                className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-brand-yellow text-[#191600] font-black text-sm md:text-base whitespace-nowrap hover:brightness-105 transition-all shadow-xl shadow-yellow-500/10 active:scale-95 animate-shimmer"
               >
-                <MessageCircle className="w-5 h-5" />
-                카톡 1:1 사진 견적 문의
+                <MessageCircle className="w-5 h-5 shrink-0" />
+                <span>카톡 1:1 사진 견적 문의</span>
               </a>
               <a
                 href="#estimate"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-surface/80 border border-border hover:border-brand-cyan text-white font-bold text-sm sm:text-base transition-all active:scale-95"
+                className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-surface/80 border border-border hover:border-brand-cyan text-white font-bold text-sm md:text-base whitespace-nowrap transition-all active:scale-95"
               >
-                <ClipboardList className="w-5 h-5 text-brand-cyan" />
-                30초 온라인 간편 견적
+                <ClipboardList className="w-5 h-5 text-brand-cyan shrink-0" />
+                <span>30초 온라인 간편 견적</span>
               </a>
             </div>
           </ScrollReveal>

@@ -309,7 +309,7 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
             </span>
           </div>
 
-          <div className="w-full max-w-md flex-1 relative rounded-2xl overflow-hidden bg-black flex items-center justify-center border border-border shadow-2xl my-2">
+          <div className="w-full max-w-md aspect-[4/3] max-h-[52vh] relative rounded-2xl overflow-hidden bg-black flex items-center justify-center border-2 border-brand-cyan/40 shadow-2xl my-auto">
             {cameraLoading && (
               <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm animate-pulse">
                 카메라 연결 중...
@@ -329,7 +329,21 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
             </div>
           </div>
 
-          <div className="w-full max-w-md flex items-center justify-between px-6 pt-2">
+          {/* 실시간 촬영된 썸네일 미리보기 바 */}
+          {photoItems.length > 0 && (
+            <div className="w-full max-w-md flex items-center justify-center gap-2 py-1 overflow-x-auto">
+              {photoItems.map((item, idx) => (
+                <div key={idx} className="relative w-12 h-12 rounded-lg overflow-hidden border border-brand-cyan/70 shrink-0 shadow-md">
+                  <img src={item.previewUrl} alt={`촬영 ${idx + 1}`} className="w-full h-full object-cover" />
+                  <span className="absolute bottom-0 right-0 bg-black/80 text-[10px] text-brand-cyan px-1 font-bold">
+                    {idx + 1}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="w-full max-w-md flex items-center justify-between px-6 pt-2 pb-2">
             <button
               type="button"
               onClick={stopCamera}

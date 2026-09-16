@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Phone, CheckCircle2, ArrowRight, Camera, ImagePlus } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { Phone, CheckCircle2, ArrowRight, Camera, ImagePlus, X } from "lucide-react";
 
 interface EstimateFormProps {
   initialRegion?: string;
@@ -22,7 +22,6 @@ async function compressImage(file: File): Promise<File> {
   if (!isImage) return file;
 
   return new Promise((resolve) => {
-    // 2.5초 안전 타임아웃: 압축이 지연되거나 특수 코덱일 경우 원본 파일 그대로 전송하여 사진 누락 원천 차단
     const timeout = setTimeout(() => resolve(file), 2500);
 
     const reader = new FileReader();
@@ -100,6 +99,13 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // 실시간 웹 내장 카메라 뷰파인더 상태 (아이폰/갤럭시 브라우저 튕김 0%)
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const [cameraLoading, setCameraLoading] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const fallbackInputRef = useRef<HTMLInputElement>(null);
+
   // 모바일 카메라 촬영 시 메모리 부족으로 브라우저 탭이 재실행되어도 입력 내용 100% 자동 복구
   useEffect(() => {
     try {
@@ -113,7 +119,6 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
         if (parsed.region) setRegion(parsed.region);
         if (parsed.memo) setMemo(parsed.memo);
 
-        // 이전 입력값이 복구된 경우 사용자가 바로 볼 수 있게 견적 폼으로 스크롤 이동
         if (parsed.phone || parsed.model) {
           setTimeout(() => {
             const el = document.getElementById("estimate");
@@ -135,6 +140,77 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
       );
     } catch {}
   }, [phone, model, year, mileage, region, memo]);
+
+  // 웹 내장 카메라 실행 (브라우저를 절대 벗어나지 않아 튕김 원천 차단)
+  const startCamera = async () => {
+    if (photoItems.length >= 5) {
+      alert("사진은 최대 5장까지 첨부 가능합니다.");
+      return;
+    }
+
+    if (typeof navigator === "undefined" || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      fallbackInputRef.current?.click();
+      return;
+    }
+
+    setCameraLoading(true);
+    setIsCameraOpen(true);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: { ideal: "environment" },
+          width: { ideal: 1920 },
+          height: { ideal: 1080 },
+        },
+        audio: false,
+      });
+      streamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        await videoRef.current.play();
+      }
+    } catch (err) {
+      console.warn("카메라 권한 오류 또는 미지원, 기본 파일 첨부로 전환합니다:", err);
+      stopCamera();
+      fallbackInputRef.current?.click();
+    } finally {
+      setCameraLoading(false);
+    }
+  };
+
+  const stopCamera = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
+    }
+    setIsCameraOpen(false);
+    setCameraLoading(false);
+  };
+
+  const capturePhoto = () => {
+    if (!videoRef.current || photoItems.length >= 5) return;
+    const video = videoRef.current;
+    const canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth || 1280;
+    canvas.height = video.videoHeight || 720;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    canvas.toBlob(
+      (blob) => {
+        if (blob) {
+          const file = new File([blob], `bike_cam_${Date.now()}.jpg`, {
+            type: "image/jpeg",
+            lastModified: Date.now(),
+          });
+          const previewUrl = URL.createObjectURL(file);
+          setPhotoItems((prev) => [...prev, { file, previewUrl }].slice(0, 5));
+        }
+      },
+      "image/jpeg",
+      0.85
+    );
+  };
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -202,7 +278,6 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
         body: formData,
       });
 
-      // 제출 완료 시 임시 저장 캐시 삭제
       try {
         sessionStorage.removeItem("nextbike_estimate_draft");
       } catch {}
@@ -220,6 +295,69 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
     <div id="estimate" className="relative p-5 sm:p-8 md:p-10 rounded-2xl bg-surface border border-border shadow-2xl overflow-hidden">
       {/* 장식용 상단 악센트 바 */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand-cyan via-teal-400 to-blue-500" />
+
+      {/* 웹 내장 실시간 카메라 뷰파인더 모달 (브라우저 밖으로 나가지 않아 튕김 원천 0%) */}
+      {isCameraOpen && (
+        <div className="fixed inset-0 z-50 bg-black/95 flex flex-col items-center justify-between p-4 pb-8 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="w-full max-w-md flex items-center justify-between py-2 text-white">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" />
+              <span className="text-sm font-bold">실시간 카메라 촬영</span>
+            </div>
+            <span className="text-xs text-brand-cyan font-extrabold bg-brand-cyan/10 px-2.5 py-1 rounded-full border border-brand-cyan/30">
+              {photoItems.length} / 5장 촬영됨
+            </span>
+          </div>
+
+          <div className="w-full max-w-md flex-1 relative rounded-2xl overflow-hidden bg-black flex items-center justify-center border border-border shadow-2xl my-2">
+            {cameraLoading && (
+              <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm animate-pulse">
+                카메라 연결 중...
+              </div>
+            )}
+            <video
+              ref={videoRef}
+              playsInline
+              autoPlay
+              muted
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 pointer-events-none border-2 border-white/20 rounded-2xl m-3 flex items-center justify-center">
+              <span className="text-[11px] text-white/70 bg-black/60 px-3 py-1.5 rounded-full backdrop-blur-sm">
+                바이크가 화면에 꽉 차도록 촬영해 주세요
+              </span>
+            </div>
+          </div>
+
+          <div className="w-full max-w-md flex items-center justify-between px-6 pt-2">
+            <button
+              type="button"
+              onClick={stopCamera}
+              className="text-sm text-gray-400 hover:text-white px-3 py-2 font-medium"
+            >
+              닫기
+            </button>
+
+            {/* 대형 셔터 버튼 */}
+            <button
+              type="button"
+              onClick={capturePhoto}
+              disabled={photoItems.length >= 5}
+              className="w-20 h-20 rounded-full border-4 border-white p-1 flex items-center justify-center active:scale-90 transition-transform shadow-2xl disabled:opacity-40"
+            >
+              <div className="w-16 h-16 rounded-full bg-brand-cyan hover:bg-white transition-colors" />
+            </button>
+
+            <button
+              type="button"
+              onClick={stopCamera}
+              className="text-sm font-bold text-brand-cyan px-4 py-2 rounded-xl bg-brand-cyan/10 border border-brand-cyan/30 active:scale-95"
+            >
+              완료 ({photoItems.length})
+            </button>
+          </div>
+        </div>
+      )}
 
       {submitted ? (
         <div className="py-12 text-center space-y-5 animate-in zoom-in-95 duration-300">
@@ -366,14 +504,14 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
               </span>
             </div>
 
-            {/* 업로드 선택 버튼 (앨범 멀티선택 & 경량 즉시촬영) */}
+            {/* 업로드 선택 버튼 (1. 앨범 멀티선택 & 2. 웹 내장 즉시촬영) */}
             {photoItems.length < 5 && (
               <div className="grid grid-cols-2 gap-2.5 mb-3">
-                {/* 1. 앨범/갤러리에서 선택 (가장 안정적 & 여러 장 한번에) */}
-                <label className="flex flex-col items-center justify-center p-3 rounded-xl border border-dashed border-border hover:border-brand-cyan text-gray-300 hover:text-brand-cyan cursor-pointer transition-all bg-card/80 hover:bg-card active:scale-[0.98]">
+                {/* 1. 앨범/갤러리에서 선택 (가장 권장) */}
+                <label className="flex flex-col items-center justify-center p-3 rounded-xl border border-dashed border-brand-cyan/50 hover:border-brand-cyan text-gray-200 hover:text-brand-cyan cursor-pointer transition-all bg-card/90 hover:bg-card active:scale-[0.98] shadow-sm">
                   <ImagePlus className="w-6 h-6 mb-1 text-brand-cyan" />
                   <span className="text-xs font-bold text-white">앨범에서 선택</span>
-                  <span className="text-[10px] text-gray-400 mt-0.5">여러 장 한 번에</span>
+                  <span className="text-[10px] text-brand-cyan mt-0.5">여러 장 한 번에 (추천)</span>
                   <input
                     type="file"
                     accept="image/*"
@@ -383,19 +521,26 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
                   />
                 </label>
 
-                {/* 2. 즉시 카메라 촬영 (메모리 튕김 방지 단일 캡처) */}
-                <label className="flex flex-col items-center justify-center p-3 rounded-xl border border-dashed border-border hover:border-brand-cyan text-gray-300 hover:text-brand-cyan cursor-pointer transition-all bg-card/80 hover:bg-card active:scale-[0.98]">
+                {/* 2. 웹 내장 즉시 촬영 버튼 (브라우저 안에서 찰칵) */}
+                <button
+                  type="button"
+                  onClick={startCamera}
+                  className="flex flex-col items-center justify-center p-3 rounded-xl border border-dashed border-border hover:border-teal-400 text-gray-300 hover:text-teal-400 cursor-pointer transition-all bg-card/80 hover:bg-card active:scale-[0.98]"
+                >
                   <Camera className="w-6 h-6 mb-1 text-teal-400" />
                   <span className="text-xs font-bold text-white">카메라 촬영</span>
-                  <span className="text-[10px] text-gray-400 mt-0.5">현장에서 즉시 촬영</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    capture="environment"
-                    onChange={handlePhotoUpload}
-                    className="hidden"
-                  />
-                </label>
+                  <span className="text-[10px] text-gray-400 mt-0.5">웹 화면에서 즉시 찰칵</span>
+                </button>
+
+                {/* 미지원 브라우저용 히든 폴백 input */}
+                <input
+                  ref={fallbackInputRef}
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  onChange={handlePhotoUpload}
+                  className="hidden"
+                />
               </div>
             )}
 
@@ -417,7 +562,7 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
                       onClick={() => removePhoto(idx)}
                       className="absolute top-1 right-1 w-6 h-6 rounded-full bg-red-600/90 hover:bg-red-700 text-white font-bold flex items-center justify-center text-xs shadow-md active:scale-90"
                     >
-                      ×
+                      <X className="w-3.5 h-3.5" />
                     </button>
                     <span className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-black/75 text-brand-cyan">
                       #{idx + 1}
@@ -427,13 +572,13 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
               </div>
             )}
 
-            {/* 모바일 메모리 튕김 예방 안내 박스 */}
+            {/* 안내 팁 박스 */}
             <div className="p-2.5 rounded-lg bg-card/60 border border-border/60 text-[11px] text-gray-400 space-y-1">
               <p className="flex items-center gap-1.5 text-gray-300 font-semibold">
                 <span className="text-brand-cyan">💡</span> 사진 첨부 안내
               </p>
               <p className="leading-relaxed">
-                스마트폰 기종에 따라 즉시 촬영 시 카메라 앱의 고화질 메모리 사용으로 브라우저가 다시 열릴 수 있습니다. 이 경우 일반 카메라 앱으로 사진을 먼저 찍어두신 후 <strong className="text-brand-cyan">[앨범에서 선택]</strong>을 누르시면 튕김 없이 가장 안전하게 여러 장을 전송하실 수 있습니다.
+                일반 카메라 앱으로 사진을 미리 촬영해 두신 후 <strong className="text-brand-cyan">[앨범에서 선택]</strong>을 누르시면 여러 장을 가장 안전하고 빠르게 한 번에 업로드하실 수 있습니다.
               </p>
             </div>
           </div>

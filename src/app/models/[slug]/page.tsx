@@ -105,9 +105,9 @@ export default function ModelDetailPage({ params }: Props) {
               <span>{model.brand} · {model.category} ({model.displacement})</span>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
-              {model.name} <span className="text-brand-cyan">최고가 매입</span> <br />
-              <span className="text-2xl sm:text-3xl text-gray-200 font-bold">
+            <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight break-keep">
+              <span className="block">{model.name} <span className="text-brand-cyan">최고가 매입</span></span>
+              <span className="text-xl sm:text-3xl text-gray-200 font-bold block mt-1">
                 실시간 전국 중고 시세 100% 반영
               </span>
             </h1>

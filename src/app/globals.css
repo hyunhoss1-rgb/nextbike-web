@@ -23,6 +23,13 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+h1, h2, h3, h4, h5, h6, p, span, a, button {
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 /* 모바일 텍스트 입력창 자동 확대 방지 (최소 16px 보장) */

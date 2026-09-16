@@ -13,59 +13,78 @@ interface PhotoItem {
   previewUrl: string;
 }
 
-// 브라우저 클라이언트 이미지 압축 유틸리티 (대용량 사진도 0.1초 만에 최적화하여 초고속 전송)
+// 브라우저 클라이언트 이미지 압축 유틸리티 (대용량 사진도 0.1초 만에 최적화, PC/모바일 호환 보장)
 async function compressImage(file: File): Promise<File> {
-  if (!file.type.startsWith("image/")) return file;
+  if (typeof window === "undefined") return file;
+  const isImage =
+    file.type.startsWith("image/") ||
+    /\.(jpe?g|png|webp|gif|bmp|jfif|heic|svg)$/i.test(file.name);
+  if (!isImage) return file;
 
   return new Promise((resolve) => {
+    // 2.5초 안전 타임아웃: 압축이 지연되거나 특수 코덱일 경우 원본 파일 그대로 전송하여 사진 누락 원천 차단
+    const timeout = setTimeout(() => resolve(file), 2500);
+
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = (event) => {
       const img = new Image();
-      img.src = event.target?.result as string;
       img.onload = () => {
-        const maxDim = 1600;
-        let width = img.width;
-        let height = img.height;
+        clearTimeout(timeout);
+        try {
+          const maxDim = 1600;
+          let width = img.width;
+          let height = img.height;
 
-        if (width > maxDim || height > maxDim) {
-          if (width > height) {
-            height = Math.round((height * maxDim) / width);
-            width = maxDim;
-          } else {
-            width = Math.round((width * maxDim) / height);
-            height = maxDim;
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
           }
-        }
 
-        const canvas = document.createElement("canvas");
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext("2d");
-        if (ctx) {
-          ctx.drawImage(img, 0, 0, width, height);
-          canvas.toBlob(
-            (blob) => {
-              if (blob) {
-                const compressedFile = new File([blob], file.name.replace(/\.[^/.]+$/, ".jpg"), {
-                  type: "image/jpeg",
-                  lastModified: Date.now(),
-                });
-                resolve(compressedFile);
-              } else {
-                resolve(file);
-              }
-            },
-            "image/jpeg",
-            0.82
-          );
-        } else {
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, width, height);
+            canvas.toBlob(
+              (blob) => {
+                if (blob) {
+                  const safeName = file.name.replace(/\.[^/.]+$/, "") + ".jpg";
+                  const compressedFile = new File([blob], safeName, {
+                    type: "image/jpeg",
+                    lastModified: Date.now(),
+                  });
+                  resolve(compressedFile);
+                } else {
+                  resolve(file);
+                }
+              },
+              "image/jpeg",
+              0.82
+            );
+          } else {
+            resolve(file);
+          }
+        } catch {
           resolve(file);
         }
       };
-      img.onerror = () => resolve(file);
+      img.onerror = () => {
+        clearTimeout(timeout);
+        resolve(file);
+      };
+      img.src = event.target?.result as string;
     };
-    reader.onerror = () => resolve(file);
+    reader.onerror = () => {
+      clearTimeout(timeout);
+      resolve(file);
+    };
   });
 }
 
@@ -197,11 +216,13 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
               <span className="w-1.5 h-1.5 rounded-full bg-brand-cyan animate-pulse" />
               30초 간편 무료 견적 신청
             </div>
-            <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              연락처와 모델명만 남겨주시면 <br />
+            <h3 className="text-[17px] sm:text-2xl md:text-3xl font-black text-white tracking-tight break-keep leading-snug">
+              <span className="block text-gray-300 text-xs sm:text-base font-semibold mb-1">
+                연락처와 모델명만 남겨주시면
+              </span>
               <span className="text-brand-cyan">최고가 예상 견적</span>을 즉시 안내합니다
             </h3>
-            <p className="mt-2 text-xs sm:text-sm text-gray-400">
+            <p className="mt-2 text-xs sm:text-sm text-gray-400 break-keep">
               사진을 함께 첨부해 주시면 보다 정확한 실차 감정가를 5분 이내에 안내받으실 수 있습니다.
             </p>
           </div>

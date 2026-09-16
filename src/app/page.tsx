@@ -76,8 +76,8 @@ export default function HomePage() {
               </ScrollReveal>
 
               <ScrollReveal animation="fade-up" delay={200}>
-                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.15]">
-                  바이크를 싣기 전, <br />
+                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.18] break-keep">
+                  <span className="block">바이크를 싣기 전,</span>
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan via-teal-300 to-blue-400">
                     현장 100% 즉시 입금
                   </span>
@@ -223,8 +223,8 @@ export default function HomePage() {
                 <ShieldAlert className="w-3.5 h-3.5" />
                 특수 매입 솔루션
               </div>
-              <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
-                시동 불능·사고차·장기 방치 바이크도 <br className="hidden sm:inline" />
+              <h2 className="text-xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight break-keep leading-snug">
+                <span className="block">시동불능 · 사고차 · 방치 바이크도</span>
                 <span className="text-brand-cyan">전문 감정으로 정직하게</span> 매입합니다
               </h2>
               <p className="mt-3 text-xs sm:text-sm text-gray-400">
@@ -294,8 +294,8 @@ export default function HomePage() {
                 <Award className="w-3.5 h-3.5" />
                 넥스트바이크 5대 안심 원칙
               </div>
-              <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
-                고객님이 신뢰할 수 있는 <br className="hidden sm:inline" />
+              <h2 className="text-xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight break-keep leading-snug">
+                <span className="block">고객님이 신뢰할 수 있는</span>
                 <span className="text-brand-cyan">정직한 매입 5대 약속</span>
               </h2>
               <p className="mt-3 text-xs sm:text-sm text-gray-400">
@@ -491,8 +491,9 @@ export default function HomePage() {
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan text-xs font-bold mb-3">
                 원스톱 다이렉트 프로세스
               </div>
-              <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
-                복잡한 절차 없는 <span className="text-brand-cyan">간편 4단계 매입 시스템</span>
+              <h2 className="text-xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight break-keep leading-snug">
+                <span className="block">복잡한 절차 없는</span>
+                <span className="text-brand-cyan">간편 4단계 매입 시스템</span>
               </h2>
               <p className="mt-3 text-xs sm:text-sm text-gray-400">
                 라이더의 소중한 시간을 아끼는 간편 4단계로, 당일 상담부터 구청 서류 이전까지 깔끔하게 완료합니다.
@@ -630,8 +631,8 @@ export default function HomePage() {
           </ScrollReveal>
 
           <ScrollReveal animation="fade-up" delay={150}>
-            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-              잠자고 있는 바이크, <br />
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-snug break-keep">
+              <span className="block">잠자고 있는 바이크,</span>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan via-teal-300 to-blue-400">
                 지금 최고가로 현금화
               </span>하세요!

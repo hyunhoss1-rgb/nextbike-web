@@ -217,7 +217,7 @@ export default function RegionPage({ params }: Props) {
             </div>
 
             {/* H1 메인 타이틀 */}
-            <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+            <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight break-keep">
               {region.name} <span className="text-brand-cyan">오토바이 매입</span>
             </h1>
 

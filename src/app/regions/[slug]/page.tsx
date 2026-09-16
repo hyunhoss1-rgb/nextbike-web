@@ -246,32 +246,32 @@ export default function RegionPage({ params }: Props) {
               </div>
             </div>
 
-            {/* 3대 CTA 버튼: 전화상담 / 온라인 견적 신청 / 카카오톡 상담 (사진 3) */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-2.5 pt-2 w-full max-w-md mx-auto lg:mx-0">
+            {/* 3대 CTA 버튼: 전화상담 / 온라인 견적 신청 / 카카오톡 상담 */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-2.5 pt-2 w-full">
               <a
                 href="tel:01048952487"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-surface border border-border hover:border-brand-cyan text-white font-bold text-xs sm:text-sm transition-all shadow-md active:scale-95"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-surface border border-border hover:border-brand-cyan text-white font-bold text-xs sm:text-sm whitespace-nowrap shrink-0 transition-all shadow-md active:scale-95"
               >
-                <Phone className="w-4 h-4 text-brand-cyan" />
-                <span>전화 상담 010-4895-2487</span>
+                <Phone className="w-4 h-4 text-brand-cyan shrink-0" />
+                <span className="whitespace-nowrap">전화 상담 010-4895-2487</span>
               </a>
 
               <a
                 href="#estimate-form"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-brand-cyan hover:bg-brand-cyan/90 text-black font-black text-xs sm:text-sm transition-all shadow-lg shadow-brand-cyan/25 active:scale-95"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-brand-cyan hover:bg-brand-cyan/90 text-black font-black text-xs sm:text-sm whitespace-nowrap shrink-0 transition-all shadow-lg shadow-brand-cyan/25 active:scale-95"
               >
-                <Send className="w-4 h-4" />
-                <span>온라인 견적 신청</span>
+                <Send className="w-4 h-4 shrink-0" />
+                <span className="whitespace-nowrap">온라인 견적 신청</span>
               </a>
 
               <a
                 href="https://open.kakao.com/o/skSUkiHg"
                 target="_blank"
                 rel="noreferrer"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-brand-yellow hover:bg-[#ffe033] text-[#191600] font-black text-xs sm:text-sm transition-all shadow-md active:scale-95"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-brand-yellow hover:bg-[#ffe033] text-[#191600] font-black text-xs sm:text-sm whitespace-nowrap shrink-0 transition-all shadow-md active:scale-95"
               >
-                <MessageCircle className="w-4 h-4" />
-                <span>카카오톡 상담</span>
+                <MessageCircle className="w-4 h-4 shrink-0" />
+                <span className="whitespace-nowrap">카카오톡 상담</span>
               </a>
             </div>
 
@@ -279,20 +279,22 @@ export default function RegionPage({ params }: Props) {
             <div className="pt-3">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 p-3.5 rounded-xl bg-surface/70 border border-border/80 text-center">
                 <div className="p-2 rounded-lg bg-card/60">
-                  <div className="text-[11px] font-extrabold text-brand-cyan">100% 사전 입금</div>
-                  <div className="text-[10px] text-gray-400 mt-0.5">상차 전 계좌 확인</div>
+                  <div className="text-[11px] font-extrabold text-brand-cyan whitespace-nowrap">100% 사전 입금</div>
+                  <div className="text-[10px] text-gray-400 mt-0.5 whitespace-nowrap">상차 전 계좌 확인</div>
                 </div>
                 <div className="p-2 rounded-lg bg-card/60">
-                  <div className="text-[11px] font-extrabold text-brand-cyan">부당 감가 ZERO</div>
-                  <div className="text-[10px] text-gray-400 mt-0.5">사전 협의 견적 보증</div>
+                  <div className="text-[11px] font-extrabold text-brand-cyan whitespace-nowrap">부당 감가 ZERO</div>
+                  <div className="text-[10px] text-gray-400 mt-0.5 whitespace-nowrap">사전 협의 견적 보증</div>
                 </div>
                 <div className="p-2 rounded-lg bg-card/60">
-                  <div className="text-[11px] font-extrabold text-brand-cyan">출장비 0원 지원</div>
-                  <div className="text-[10px] text-gray-400 mt-0.5">{region.name} 전역 무상 방문</div>
+                  <div className="text-[11px] font-extrabold text-brand-cyan whitespace-nowrap">출장비 0원 지원</div>
+                  <div className="text-[10px] text-gray-400 mt-0.5 whitespace-nowrap truncate" title={`${region.name} 전역 무상 방문`}>
+                    {region.name} 전역 무상 방문
+                  </div>
                 </div>
                 <div className="p-2 rounded-lg bg-card/60">
-                  <div className="text-[11px] font-extrabold text-brand-cyan">당일 서류 완료</div>
-                  <div className="text-[10px] text-gray-400 mt-0.5">24시간 내 구청 이전</div>
+                  <div className="text-[11px] font-extrabold text-brand-cyan whitespace-nowrap">당일 서류 완료</div>
+                  <div className="text-[10px] text-gray-400 mt-0.5 whitespace-nowrap">24시간 내 구청 이전</div>
                 </div>
               </div>
             </div>

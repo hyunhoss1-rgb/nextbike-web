@@ -161,22 +161,22 @@ export default function ModelDetailPage({ params }: Props) {
             </div>
 
             {/* 빠른 액션 버튼 */}
-            <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-3 w-full max-w-md mx-auto lg:mx-0">
+            <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-3 w-full">
               <a
                 href="tel:01048952487"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-brand-cyan text-black font-extrabold text-sm shadow-lg shadow-brand-cyan/25 active:scale-95"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-brand-cyan text-black font-extrabold text-sm whitespace-nowrap shrink-0 shadow-lg shadow-brand-cyan/25 active:scale-95"
               >
-                <Phone className="w-4 h-4" />
-                {model.name} 전화 시세 문의
+                <Phone className="w-4 h-4 shrink-0" />
+                <span className="whitespace-nowrap">{model.name} 전화 시세 문의</span>
               </a>
               <a
                 href="https://open.kakao.com/o/skSUkiHg"
                 target="_blank"
                 rel="noreferrer"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-brand-yellow text-[#191600] font-black text-sm active:scale-95"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-brand-yellow text-[#191600] font-black text-sm whitespace-nowrap shrink-0 active:scale-95"
               >
-                <MessageCircle className="w-4 h-4" />
-                카카오톡 1:1 상담
+                <MessageCircle className="w-4 h-4 shrink-0" />
+                <span className="whitespace-nowrap">카카오톡 1:1 상담</span>
               </a>
             </div>
           </div>

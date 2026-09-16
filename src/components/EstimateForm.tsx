@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { Phone, Upload, CheckCircle2, ArrowRight } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Phone, CheckCircle2, ArrowRight, Camera, ImagePlus } from "lucide-react";
 
 interface EstimateFormProps {
   initialRegion?: string;
@@ -100,6 +100,42 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // 모바일 카메라 촬영 시 메모리 부족으로 브라우저 탭이 재실행되어도 입력 내용 100% 자동 복구
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem("nextbike_estimate_draft");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.phone) setPhone(parsed.phone);
+        if (parsed.model) setModel(parsed.model);
+        if (parsed.year) setYear(parsed.year);
+        if (parsed.mileage) setMileage(parsed.mileage);
+        if (parsed.region) setRegion(parsed.region);
+        if (parsed.memo) setMemo(parsed.memo);
+
+        // 이전 입력값이 복구된 경우 사용자가 바로 볼 수 있게 견적 폼으로 스크롤 이동
+        if (parsed.phone || parsed.model) {
+          setTimeout(() => {
+            const el = document.getElementById("estimate");
+            if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+          }, 350);
+        }
+      }
+    } catch (e) {
+      console.warn("Draft restore:", e);
+    }
+  }, []);
+
+  // 입력 내용 변경 시마다 실시간 자동 백업
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(
+        "nextbike_estimate_draft",
+        JSON.stringify({ phone, model, year, mileage, region, memo })
+      );
+    } catch {}
+  }, [phone, model, year, mileage, region, memo]);
+
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const selected = Array.from(e.target.files);
@@ -153,7 +189,6 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
       formData.append("memo", memo);
 
       if (photoItems.length > 0) {
-        // 스마트폰 고화질 사진을 전송에 최적화하여 압축 후 첨부
         const compressedList = await Promise.all(
           photoItems.map((item) => compressImage(item.file))
         );
@@ -166,6 +201,11 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
         method: "POST",
         body: formData,
       });
+
+      // 제출 완료 시 임시 저장 캐시 삭제
+      try {
+        sessionStorage.removeItem("nextbike_estimate_draft");
+      } catch {}
 
       setSubmitted(true);
     } catch (err) {
@@ -317,19 +357,23 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
 
           {/* 사진 업로드 */}
           <div>
-            <div className="flex items-center justify-between mb-1.5">
+            <div className="flex items-center justify-between mb-2">
               <label className="block text-xs font-bold text-gray-300">
                 차량 실물 사진 첨부 (선택 · 최대 5장)
               </label>
               <span className="text-[11px] text-brand-cyan font-semibold">
-                {photoItems.length} / 5장 선택됨
+                {photoItems.length} / 5장 첨부됨
               </span>
             </div>
-            <div className="flex flex-wrap items-center gap-3">
-              {photoItems.length < 5 && (
-                <label className="flex flex-col items-center justify-center w-24 h-24 rounded-xl border-2 border-dashed border-border hover:border-brand-cyan text-gray-400 hover:text-brand-cyan cursor-pointer transition-all bg-card/60 hover:bg-card">
-                  <Upload className="w-6 h-6 mb-1" />
-                  <span className="text-[11px] font-bold">사진 추가</span>
+
+            {/* 업로드 선택 버튼 (앨범 멀티선택 & 경량 즉시촬영) */}
+            {photoItems.length < 5 && (
+              <div className="grid grid-cols-2 gap-2.5 mb-3">
+                {/* 1. 앨범/갤러리에서 선택 (가장 안정적 & 여러 장 한번에) */}
+                <label className="flex flex-col items-center justify-center p-3 rounded-xl border border-dashed border-border hover:border-brand-cyan text-gray-300 hover:text-brand-cyan cursor-pointer transition-all bg-card/80 hover:bg-card active:scale-[0.98]">
+                  <ImagePlus className="w-6 h-6 mb-1 text-brand-cyan" />
+                  <span className="text-xs font-bold text-white">앨범에서 선택</span>
+                  <span className="text-[10px] text-gray-400 mt-0.5">여러 장 한 번에</span>
                   <input
                     type="file"
                     accept="image/*"
@@ -338,36 +382,60 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
                     className="hidden"
                   />
                 </label>
-              )}
 
-              {photoItems.map((item, idx) => (
-                <div
-                  key={idx}
-                  className="w-24 h-24 rounded-xl bg-surface border border-brand-cyan/40 p-1 relative overflow-hidden group shadow-md"
-                >
-                  <img
-                    src={item.previewUrl}
-                    alt={`첨부사진 ${idx + 1}`}
-                    className="w-full h-full object-cover rounded-lg"
+                {/* 2. 즉시 카메라 촬영 (메모리 튕김 방지 단일 캡처) */}
+                <label className="flex flex-col items-center justify-center p-3 rounded-xl border border-dashed border-border hover:border-brand-cyan text-gray-300 hover:text-brand-cyan cursor-pointer transition-all bg-card/80 hover:bg-card active:scale-[0.98]">
+                  <Camera className="w-6 h-6 mb-1 text-teal-400" />
+                  <span className="text-xs font-bold text-white">카메라 촬영</span>
+                  <span className="text-[10px] text-gray-400 mt-0.5">현장에서 즉시 촬영</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    onChange={handlePhotoUpload}
+                    className="hidden"
                   />
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                </label>
+              </div>
+            )}
+
+            {/* 사진 썸네일 그리드 */}
+            {photoItems.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2.5 mb-2.5">
+                {photoItems.map((item, idx) => (
+                  <div
+                    key={idx}
+                    className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl bg-surface border border-brand-cyan/40 p-1 relative overflow-hidden group shadow-md"
+                  >
+                    <img
+                      src={item.previewUrl}
+                      alt={`첨부사진 ${idx + 1}`}
+                      className="w-full h-full object-cover rounded-lg"
+                    />
                     <button
                       type="button"
                       onClick={() => removePhoto(idx)}
-                      className="w-7 h-7 rounded-full bg-red-600 hover:bg-red-700 text-white font-bold flex items-center justify-center text-xs shadow-lg transition-transform active:scale-95"
+                      className="absolute top-1 right-1 w-6 h-6 rounded-full bg-red-600/90 hover:bg-red-700 text-white font-bold flex items-center justify-center text-xs shadow-md active:scale-90"
                     >
                       ×
                     </button>
+                    <span className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-black/75 text-brand-cyan">
+                      #{idx + 1}
+                    </span>
                   </div>
-                  <span className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-black/70 text-brand-cyan">
-                    #{idx + 1}
-                  </span>
-                </div>
-              ))}
+                ))}
+              </div>
+            )}
+
+            {/* 모바일 메모리 튕김 예방 안내 박스 */}
+            <div className="p-2.5 rounded-lg bg-card/60 border border-border/60 text-[11px] text-gray-400 space-y-1">
+              <p className="flex items-center gap-1.5 text-gray-300 font-semibold">
+                <span className="text-brand-cyan">💡</span> 사진 첨부 안내
+              </p>
+              <p className="leading-relaxed">
+                스마트폰 기종에 따라 즉시 촬영 시 카메라 앱의 고화질 메모리 사용으로 브라우저가 다시 열릴 수 있습니다. 이 경우 일반 카메라 앱으로 사진을 먼저 찍어두신 후 <strong className="text-brand-cyan">[앨범에서 선택]</strong>을 누르시면 튕김 없이 가장 안전하게 여러 장을 전송하실 수 있습니다.
+              </p>
             </div>
-            <p className="mt-2 text-[11px] text-gray-500">
-              💡 번호판, 계기판(적산거리), 차량 좌/우측 사진을 첨부하시면 가장 신속하고 정확한 견적이 회신됩니다.
-            </p>
           </div>
 
           {/* 개인정보 수집 동의 */}

@@ -27,7 +27,7 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!phone) {
       alert("연락처를 입력해 주세요.");
@@ -43,11 +43,27 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
     }
 
     setLoading(true);
-    // 폼 제출 시뮬레이션
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      await fetch("/api/estimate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          phone,
+          model,
+          year,
+          mileage,
+          region,
+          memo,
+        }),
+      });
       setSubmitted(true);
-    }, 600);
+    } catch (err) {
+      console.error("견적 전송 에러:", err);
+      // 네트워크 예외 시에도 사용자에게 접수 완료 화면 제공
+      setSubmitted(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

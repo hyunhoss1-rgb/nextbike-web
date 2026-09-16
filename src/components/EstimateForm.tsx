@@ -332,7 +332,10 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
 
       {/* 웹 내장 실시간 카메라 뷰파인더 모달 (createPortal로 최상위 document.body에 직접 부착) */}
       {mounted && isCameraOpen && typeof document !== "undefined" && createPortal(
-        <div className="fixed inset-0 z-[99999] bg-black/98 w-screen h-[100dvh] flex flex-col justify-between items-center p-3 pb-safe select-none touch-none overflow-hidden animate-in fade-in duration-200">
+        <div
+          className="fixed inset-0 z-[99999] bg-black w-screen h-[100dvh] flex flex-col justify-between items-center p-3 pb-6 select-none touch-none overflow-hidden"
+          style={{ backgroundColor: "#000000", zIndex: 99999 }}
+        >
           {/* 1. 상단 상태바 */}
           <div className="w-full max-w-md flex items-center justify-between px-2 pt-1 h-10 shrink-0 text-white">
             <div className="flex items-center gap-2">

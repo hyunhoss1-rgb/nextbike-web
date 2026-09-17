@@ -12,9 +12,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
       },
     ],
-    sitemap: [
-      "https://www.전국중고오토바이매입.kr/sitemap.xml",
-      "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/sitemap.xml",
-    ],
+    sitemap: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/sitemap.xml",
   };
 }

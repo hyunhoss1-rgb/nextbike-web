@@ -223,7 +223,7 @@ export default function RegionPage({ params }: Props) {
 
             {/* 상세 소개글 */}
             <p className="text-sm sm:text-base text-gray-300 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-              {region.fullName} 전지역 중고 오토바이·스쿠터 최고가 당일 출장 매입. 방치차·사고차·고장차·서류 분실 상담 환영.
+              {region.fullName} 전지역 상차 전 100% 즉시 전액 입금. 더 이상 교묘한 현장 감가 상술에 스트레스받지 마세요. 사전 합의된 견적 그대로 정직하게 당일 출장 매입합니다.
             </p>
 
             {/* 4대 체크포인트 (사진 3의 4개 체크 불릿) */}

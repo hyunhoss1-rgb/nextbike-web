@@ -77,16 +77,16 @@ export default function HomePage() {
 
               <ScrollReveal animation="fade-up" delay={200}>
                 <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.18] break-keep">
-                  <span className="block">바이크를 싣기 전,</span>
+                  <span className="block">상차 전 100% 즉시 전액 입금</span>
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan via-teal-300 to-blue-400">
-                    현장 100% 즉시 입금
+                    더 이상 교묘한 감가 상술에 당하지 마세요
                   </span>
                 </h1>
               </ScrollReveal>
 
               <ScrollReveal animation="fade-up" delay={300}>
                 <p className="text-sm sm:text-lg text-gray-300 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                  현장 억지 감가·흥정 ZERO. 자체 정비 기술력을 바탕으로 실거래 시세를 정직하게 감정합니다. 출퇴근 스쿠터부터 리터급 바이크, 사고차·방치차까지 전국 어디든 당일 방문합니다.
+                  전화로 높게 부르고 현장에서 깎아내리는 불투명한 거래는 그만. 고객님 계좌에 1원 한 장 빠짐없이 입금된 것을 직접 확인하신 뒤에만 바이크를 싣습니다.
                 </p>
               </ScrollReveal>
 
@@ -295,11 +295,11 @@ export default function HomePage() {
                 넥스트바이크 5대 안심 원칙
               </div>
               <h2 className="text-xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight break-keep leading-snug">
-                <span className="block">고객님이 신뢰할 수 있는</span>
-                <span className="text-brand-cyan">정직한 매입 5대 약속</span>
+                <span className="block">더 이상 악성 매입 상술에 당하지 마세요</span>
+                <span className="text-brand-cyan">상차 전 100% 입금 & 정직한 5대 약속</span>
               </h2>
               <p className="mt-3 text-xs sm:text-sm text-gray-400">
-                불필요한 현장 실랑이나 강제 감가 없이, 투명하고 품격 있는 바이크 정리를 약속드립니다.
+                전화로 부른 최고가와 현장 가격이 다른 불투명한 거래는 그만. 계좌 입금 확인 후 바이크를 싣는 투명한 절차를 약속합니다.
               </p>
             </div>
           </ScrollReveal>
@@ -641,7 +641,7 @@ export default function HomePage() {
 
           <ScrollReveal animation="fade-up" delay={250}>
             <p className="text-sm sm:text-base text-gray-300 max-w-2xl mx-auto leading-relaxed">
-              복잡한 서류 작성과 번거로운 직거래 흥정은 그만! 넥스트바이크가 전국 계신 곳 문 앞까지 직접 찾아가 현장에서 100% 당일 입금해 드립니다.
+              전화로 높게 부르고 현장에서 깎는 악성 상술에 지치셨나요? 넥스트바이크는 상차 전 고객님 계좌로 100% 전액 입금을 직접 확인하신 뒤에만 바이크를 안전하게 싣습니다.
             </p>
           </ScrollReveal>
 

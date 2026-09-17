@@ -583,33 +583,27 @@ export function getDailyPurchaseCases(limit = 12): PurchaseCase[] {
 
     if (idx === 0) {
       daysOffset = 0;
-      timeString = "오늘 16:40 정산완료";
+      timeString = "오늘 정산완료";
     } else if (idx === 1) {
-      daysOffset = 0;
-      timeString = "오늘 14:15 정산완료";
+      daysOffset = 1;
+      timeString = "어제 정산완료";
     } else if (idx === 2) {
-      daysOffset = 0;
-      timeString = "오늘 11:30 정산완료";
+      daysOffset = 1;
+      timeString = "어제 정산완료";
     } else if (idx === 3) {
-      daysOffset = 1;
-      timeString = "어제 17:20 정산완료";
+      daysOffset = 2;
+      timeString = "2일 전 정산완료";
     } else if (idx === 4) {
-      daysOffset = 1;
-      timeString = "어제 13:50 정산완료";
+      daysOffset = 2;
+      timeString = "2일 전 정산완료";
     } else if (idx === 5) {
-      daysOffset = 2;
-      timeString = "2일 전 정산완료";
-    } else if (idx === 6) {
-      daysOffset = 2;
-      timeString = "2일 전 정산완료";
-    } else if (idx === 7) {
       daysOffset = 3;
       timeString = "3일 전 정산완료";
-    } else if (idx === 8) {
+    } else if (idx === 6) {
       daysOffset = 4;
       timeString = "4일 전 정산완료";
     } else {
-      daysOffset = idx - 4;
+      daysOffset = idx - 2;
       timeString = `${daysOffset}일 전 정산완료`;
     }
 

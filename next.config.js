@@ -28,6 +28,17 @@ const nextConfig = {
         destination: 'https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/:path*',
         permanent: true,
       },
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr',
+          },
+        ],
+        destination: 'https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/:path*',
+        permanent: true,
+      },
     ];
   },
 };

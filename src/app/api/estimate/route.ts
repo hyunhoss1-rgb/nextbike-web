@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
+export async function GET() {
+  return NextResponse.json({ status: "ok", message: "NextBike Estimate API is operational" });
+}
+
 export async function POST(req: Request) {
   try {
     const contentType = req.headers.get("content-type") || "";

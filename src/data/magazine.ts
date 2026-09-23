@@ -32,7 +32,7 @@ export const MAGAZINE_ARTICLES: MagazineArticle[] = [
     category: "서류·행정",
     publishDate: "2026-09-23",
     readingTime: "4분 완독",
-    author: "넥스트바이크 대표 배현호",
+    author: "넥스트바이크 매입팀",
     featured: true,
     tags: ["매입계약서", "오토바이계약서양식", "차대용접환불", "사고차은폐방지", "투명거래원칙"],
     sections: [
@@ -54,7 +54,7 @@ export const MAGAZINE_ARTICLES: MagazineArticle[] = [
 • 차량 상태: 사전 고지 내용 및 무사고/유사고 내역
 • 거래일자: 2026.08.19
 • 거래금액: 2,300,000원 (실거래 합의 금액)
-• 매입자: 넥스트바이크 배현호
+• 매입자: 넥스트바이크
 • 입금계좌: ○○은행 000-00-****** (판매자 본인 명의)
 • 입금일시: 상차 전 실시간 전액 입금 완료
 

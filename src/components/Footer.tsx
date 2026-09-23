@@ -66,7 +66,6 @@ export default function Footer() {
             <div className="pt-2 text-xs space-y-1.5 text-gray-400">
               <p>
                 <strong className="text-gray-300">상호명:</strong> 넥스트바이크 (NEXTBIKE) &nbsp;|&nbsp;{" "}
-                <strong className="text-gray-300">대표자:</strong> 배현호 &nbsp;|&nbsp;{" "}
                 <strong className="text-gray-300">사업자등록번호:</strong> 699-16-02037
               </p>
               <p>

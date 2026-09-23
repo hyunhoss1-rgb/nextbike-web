@@ -68,6 +68,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: "넥스트바이크",
       locale: "ko_KR",
       type: "website",
+      images: [
+        {
+          url: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-image.jpg",
+          width: 1200,
+          height: 630,
+          alt: `${region.name} 오토바이 매입`,
+        },
+      ],
     },
   };
 }

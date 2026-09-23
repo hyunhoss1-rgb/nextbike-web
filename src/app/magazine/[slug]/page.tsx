@@ -214,7 +214,7 @@ export default function MagazineDetailPage({ params }: Props) {
                         )}
                         <span>{section.callout.title}</span>
                       </div>
-                      <p className="text-xs sm:text-sm opacity-90 leading-relaxed pl-6">
+                      <p className="text-xs sm:text-sm opacity-90 leading-relaxed pl-6 whitespace-pre-line">
                         {section.callout.description}
                       </p>
                     </div>

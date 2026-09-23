@@ -593,8 +593,8 @@ export default function HomePage() {
               {
                 num: "04",
                 icon: FileCheck,
-                title: "상차 전 입금 & 서류 완료",
-                desc: "계좌 입금을 먼저 확인시켜 드린 후 차량을 상차하며, 24시간 내 구청 명의이전/말소 전산증을 발송합니다.",
+                title: "상차 전 전액입금 & 계약확인서",
+                desc: "100% 계좌 입금 확인 후 상차를 진행하며, 모바일 매입 계약 확인서 교부 및 24시간 내 구청 서류 이전을 완료합니다.",
               },
             ].map((step, idx) => {
               const IconComponent = step.icon;

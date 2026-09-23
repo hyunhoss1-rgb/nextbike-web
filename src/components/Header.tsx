@@ -88,6 +88,15 @@ export default function Header() {
             차종별 매입
           </Link>
           <Link
+            href="/magazine"
+            className="hover:text-brand-cyan transition-colors flex items-center gap-1"
+          >
+            <span>매거진</span>
+            <span className="text-[9px] font-black text-[#191600] px-1.5 py-0.5 rounded-full bg-brand-yellow leading-none">
+              NEW
+            </span>
+          </Link>
+          <Link
             href="/cases"
             className="hover:text-brand-cyan transition-colors"
           >
@@ -166,6 +175,19 @@ export default function Header() {
             className="flex items-center justify-between py-2.5 px-3 rounded-lg text-sm font-bold text-gray-200 hover:bg-card hover:text-brand-cyan transition-colors"
           >
             <span>🏍️ 인기 70+ 기종별 최고가 매입</span>
+            <ChevronRight className="w-4 h-4 text-gray-500" />
+          </Link>
+          <Link
+            href="/magazine"
+            onClick={() => setMobileMenuOpen(false)}
+            className="flex items-center justify-between py-2.5 px-3 rounded-lg text-sm font-bold text-gray-200 hover:bg-card hover:text-brand-cyan transition-colors"
+          >
+            <span className="flex items-center gap-2">
+              <span>📚 매거진 &amp; 라이더 매입 팁</span>
+              <span className="text-[9px] font-black text-[#191600] px-1.5 py-0.5 rounded-full bg-brand-yellow leading-none">
+                NEW
+              </span>
+            </span>
             <ChevronRight className="w-4 h-4 text-gray-500" />
           </Link>
           <Link

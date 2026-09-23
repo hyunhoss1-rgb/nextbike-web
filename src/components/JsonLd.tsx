@@ -2,10 +2,15 @@ import React from "react";
 import { FAQS } from "@/data/faqs";
 
 interface JsonLdProps {
-  type?: "main" | "region" | "model";
+  type?: "main" | "region" | "model" | "magazine";
   regionName?: string;
   modelName?: string;
   canonicalUrl?: string;
+  articleTitle?: string;
+  articleDescription?: string;
+  articleDate?: string;
+  articleAuthor?: string;
+  articleTags?: string[];
 }
 
 export default function JsonLd({
@@ -13,6 +18,11 @@ export default function JsonLd({
   regionName,
   modelName,
   canonicalUrl = "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr",
+  articleTitle,
+  articleDescription,
+  articleDate,
+  articleAuthor,
+  articleTags,
 }: JsonLdProps) {
   // 1. Organization Schema
   const organizationSchema = {
@@ -139,9 +149,55 @@ export default function JsonLd({
               item: canonicalUrl,
             },
           ]
+        : articleTitle
+        ? [
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: "매거진",
+              item: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/magazine",
+            },
+            {
+              "@type": "ListItem",
+              position: 3,
+              name: articleTitle,
+              item: canonicalUrl,
+            },
+          ]
         : []),
     ],
   };
+
+  // 7. BlogPosting Schema (네이버/구글 블로그 글 수집 규격)
+  const blogPostingSchema = articleTitle
+    ? {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        headline: articleTitle,
+        description: articleDescription || "",
+        datePublished: articleDate || "2026-09-01",
+        dateModified: articleDate || "2026-09-01",
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": canonicalUrl,
+        },
+        author: {
+          "@type": "Organization",
+          name: articleAuthor || "넥스트바이크",
+          url: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr",
+        },
+        publisher: {
+          "@type": "Organization",
+          name: "넥스트바이크",
+          logo: {
+            "@type": "ImageObject",
+            url: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-image.jpg",
+          },
+        },
+        image: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-image.jpg",
+        keywords: articleTags ? articleTags.join(", ") : "오토바이매입, 중고바이크",
+      }
+    : null;
 
   return (
     <>
@@ -169,6 +225,12 @@ export default function JsonLd({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        />
+      )}
+      {blogPostingSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingSchema) }}
         />
       )}
     </>

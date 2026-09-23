@@ -9,6 +9,7 @@ import JsonLd from "@/components/JsonLd";
 import ScrollReveal, { StatCounter } from "@/components/ScrollReveal";
 import { getDailyPurchaseCases } from "@/data/cases";
 import { CUSTOMER_REVIEWS } from "@/data/reviews";
+import { getRecentArticles } from "@/data/magazine";
 import {
   Phone,
   MessageCircle,
@@ -35,10 +36,12 @@ import {
   HandCoins,
   Star,
   Sparkles,
+  BookOpen,
 } from "lucide-react";
 
 export default function HomePage() {
   const dailyCases = getDailyPurchaseCases(12);
+  const recentArticles = getRecentArticles(3);
 
   return (
     <>
@@ -409,6 +412,73 @@ export default function HomePage() {
                     </span>
                   </div>
                 </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ================= 3-1. 넥스트바이크 프리미엄 매거진 & 매입 팁 ================= */}
+      <section className="py-16 sm:py-20 border-b border-border/60 bg-surface/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+            <ScrollReveal animation="fade-up">
+              <div>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan text-xs font-bold mb-2">
+                  <BookOpen className="w-3.5 h-3.5" />
+                  <span>넥스트바이크 에디토리얼 매거진</span>
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-black text-white">
+                  바이크 매입 백과 &amp; <span className="text-brand-cyan">라이더 실전 가이드</span>
+                </h2>
+                <p className="text-xs sm:text-sm text-gray-400 mt-1">
+                  서류 폐지 요령부터 현장 감가 방어, 중고 시세 전망까지 정비팀이 매일 새로운 팁을 연재합니다.
+                </p>
+              </div>
+            </ScrollReveal>
+
+            <ScrollReveal animation="fade-up" delay={100}>
+              <Link
+                href="/magazine"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-brand-cyan/40 text-brand-cyan hover:bg-brand-cyan hover:text-black font-bold text-xs sm:text-sm transition-all shrink-0"
+              >
+                <span>매거진 전체 칼럼 보기</span>
+                <ChevronRight className="w-4 h-4" />
+              </Link>
+            </ScrollReveal>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {recentArticles.map((article, idx) => (
+              <ScrollReveal key={article.slug} animation="fade-up" delay={idx * 100}>
+                <Link
+                  href={`/magazine/${article.slug}`}
+                  className="p-6 rounded-2xl bg-surface border border-border hover:border-brand-cyan hover:bg-card transition-all group flex flex-col justify-between shadow-md h-full"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-bold text-brand-cyan px-2.5 py-0.5 rounded-full bg-brand-cyan/10 border border-brand-cyan/30">
+                        {article.category}
+                      </span>
+                      <span className="text-[11px] text-gray-400 flex items-center gap-1">
+                        <Clock className="w-3 h-3" />
+                        {article.readingTime}
+                      </span>
+                    </div>
+                    <h3 className="text-base font-bold text-white group-hover:text-brand-cyan transition-colors line-clamp-2 leading-snug">
+                      {article.title}
+                    </h3>
+                    <p className="text-xs text-gray-400 line-clamp-3 leading-relaxed">
+                      {article.excerpt}
+                    </p>
+                  </div>
+                  <div className="pt-4 mt-4 border-t border-border/60 flex items-center justify-between text-xs">
+                    <span className="text-[11px] text-gray-500">{article.publishDate}</span>
+                    <span className="font-bold text-brand-cyan flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                      칼럼 읽기 <ChevronRight className="w-3.5 h-3.5" />
+                    </span>
+                  </div>
+                </Link>
               </ScrollReveal>
             ))}
           </div>

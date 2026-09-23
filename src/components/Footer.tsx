@@ -97,6 +97,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/magazine" className="hover:text-brand-cyan transition-colors">
+                  라이더 매거진 &amp; 매입 가이드
+                </Link>
+              </li>
+              <li>
                 <a href="#estimate" className="hover:text-brand-cyan transition-colors">
                   30초 온라인 무료 견적
                 </a>

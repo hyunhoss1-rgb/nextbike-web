@@ -2,9 +2,9 @@ import React from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { BIKE_MODELS, getModelBySlug } from "@/data/models";
+import { BIKE_MODELS, getModelBySlug, getRelatedModels } from "@/data/models";
 import EstimateForm from "@/components/EstimateForm";
-import RegionLinkGrid from "@/components/RegionLinkGrid";
+import RegionTableGrid from "@/components/RegionTableGrid";
 import FaqSection from "@/components/FaqSection";
 import JsonLd from "@/components/JsonLd";
 import {
@@ -79,6 +79,7 @@ export default function ModelDetailPage({ params }: Props) {
     notFound();
   }
 
+  const relatedModels = getRelatedModels(model.slug, 6);
   const canonicalUrl = `https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/models/${model.slug}`;
 
   return (
@@ -196,18 +197,63 @@ export default function ModelDetailPage({ params }: Props) {
         </div>
       </section>
 
-      {/* ================= 2. 전국 지역별 출장 매입 안내 ================= */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-border/60 pt-12">
-        <div className="mb-6 text-center sm:text-left">
-          <h2 className="text-xl sm:text-2xl font-bold text-white flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2">
-            <ShieldCheck className="w-5 h-5 text-brand-cyan shrink-0" />
-            <span>{model.name} 전국 어디든 당일 출장 매입 가능합니다</span>
-          </h2>
-          <p className="text-xs sm:text-sm text-gray-400 mt-1">
-            서울, 경기, 인천은 물론 전국 모든 시·도 전역에서 동일한 최고가 조건으로 출장 방문합니다.
-          </p>
-        </div>
-        <RegionLinkGrid />
+      {/* ================= 2. 함께 많이 찾는 인기 기종 매입 시세 ================= */}
+      {relatedModels.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-border/60 pt-12 space-y-6">
+          <div className="text-center sm:text-left">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan text-xs font-bold mb-2">
+              <Bike className="w-3.5 h-3.5" />
+              <span>동급 및 인기 기종 시세 비교</span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-black text-white">
+              함께 많이 찾는 <span className="text-brand-cyan">인기 바이크 매입 시세</span>
+            </h2>
+            <p className="text-xs sm:text-sm text-gray-400 mt-1">
+              {model.name} 외에도 다양한 동급 스쿠터 및 제조사별 인기 모델의 실거래 시세를 확인하실 수 있습니다.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            {relatedModels.map((m) => (
+              <Link
+                key={m.slug}
+                href={`/models/${m.slug}`}
+                className="p-3.5 rounded-xl bg-surface border border-border hover:border-brand-cyan hover:bg-card transition-all group flex flex-col justify-between"
+              >
+                <div>
+                  <span className="text-[10px] font-bold text-brand-cyan block">
+                    {m.brand}
+                  </span>
+                  <span className="text-xs sm:text-sm font-bold text-white group-hover:text-brand-cyan mt-0.5 block truncate">
+                    {m.name}
+                  </span>
+                  <span className="text-[11px] text-gray-400 mt-1 block font-medium">
+                    {m.priceRange}
+                  </span>
+                </div>
+                <div className="mt-3 pt-2 border-t border-border/60 flex items-center justify-between text-[10px] text-gray-400">
+                  <span>{m.category}</span>
+                  <span className="text-brand-cyan font-bold flex items-center gap-0.5">
+                    시세확인 <ChevronRight className="w-3 h-3" />
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ================= 3. 전국 60대 거점 직영 출장망 (빈공간 없는 8열 테이블) ================= */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-border/60 pt-12">
+        <RegionTableGrid
+          badgeText={`${model.name} 전국 출장 지원`}
+          title={
+            <>
+              {model.name} 전국 <span className="text-brand-cyan">어디든 당일 출장 매입</span>
+            </>
+          }
+          subtitle="서울, 경기, 인천은 물론 전국 모든 시·도 전역에서 동일한 최고가 조건으로 당일 무료 출장 방문합니다."
+        />
       </section>
 
       {/* ================= 3. FAQ ================= */}

@@ -1498,3 +1498,21 @@ export const BIKE_MODELS: BikeModel[] = [
 export function getModelBySlug(slug: string): BikeModel | undefined {
   return BIKE_MODELS.find((m) => m.slug === slug);
 }
+
+export function getRelatedModels(currentSlug: string, limit = 6): BikeModel[] {
+  const current = getModelBySlug(currentSlug);
+  if (!current) return BIKE_MODELS.slice(0, limit);
+
+  // 같은 브랜드 또는 같은 카테고리 우선 추천
+  const sameBrand = BIKE_MODELS.filter(
+    (m) => m.slug !== currentSlug && m.brand === current.brand
+  );
+  const sameCategory = BIKE_MODELS.filter(
+    (m) => m.slug !== currentSlug && m.brand !== current.brand && m.category === current.category
+  );
+  const others = BIKE_MODELS.filter(
+    (m) => m.slug !== currentSlug && m.brand !== current.brand && m.category !== current.category
+  );
+
+  return [...sameBrand, ...sameCategory, ...others].slice(0, limit);
+}

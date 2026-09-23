@@ -5,7 +5,17 @@ import Link from "next/link";
 import { getTable60Regions } from "@/data/regions";
 import { MapPin, ArrowRight } from "lucide-react";
 
-export default function RegionTableGrid() {
+interface RegionTableGridProps {
+  title?: React.ReactNode;
+  subtitle?: string;
+  badgeText?: string;
+}
+
+export default function RegionTableGrid({
+  title,
+  subtitle,
+  badgeText = "전국 60대 거점 직영 출장망",
+}: RegionTableGridProps = {}) {
   const regions = getTable60Regions();
 
   return (
@@ -14,15 +24,19 @@ export default function RegionTableGrid() {
       <div className="text-center space-y-2.5 max-w-2xl mx-auto">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan text-xs font-bold">
           <MapPin className="w-3.5 h-3.5" />
-          <span>전국 60대 거점 직영 출장망</span>
+          <span>{badgeText}</span>
         </div>
 
         <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-          지역별 실시간 <span className="text-brand-cyan">출장 매입 네트워크</span>
+          {title || (
+            <>
+              지역별 실시간 <span className="text-brand-cyan">출장 매입 네트워크</span>
+            </>
+          )}
         </h2>
 
         <p className="text-xs sm:text-sm text-gray-400">
-          거주하시는 시·군·구를 클릭하시면 상세 출장 소요 시간과 관내 세부 행정동 매입 안내를 확인하실 수 있습니다.
+          {subtitle || "거주하시는 시·군·구를 클릭하시면 상세 출장 소요 시간과 관내 세부 행정동 매입 안내를 확인하실 수 있습니다."}
         </p>
       </div>
 

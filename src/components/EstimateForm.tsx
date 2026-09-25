@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { Phone, CheckCircle2, ArrowRight, Camera, ImagePlus, X } from "lucide-react";
+import Link from "next/link";
+import { Phone, CheckCircle2, ArrowRight, Camera, ImagePlus, X, ShieldCheck } from "lucide-react";
 
 interface EstimateFormProps {
   initialRegion?: string;
@@ -95,6 +96,7 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
   const [region, setRegion] = useState(initialRegion);
   const [memo, setMemo] = useState("");
   const [agree, setAgree] = useState(true);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [photoItems, setPhotoItems] = useState<PhotoItem[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -652,20 +654,109 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
             </div>
           </div>
 
-          {/* 개인정보 수집 동의 */}
-          <div className="pt-2">
-            <label className="flex items-start gap-2.5 cursor-pointer text-xs text-gray-400 select-none">
-              <input
-                type="checkbox"
-                checked={agree}
-                onChange={(e) => setAgree(e.target.checked)}
-                className="mt-0.5 w-4 h-4 rounded border-border accent-brand-cyan"
-              />
-              <span>
-                (필수) 견적 상담 및 방문 일정을 위해 작성한 연락처 및 차량 정보를 수집·이용하는 것에 동의합니다.
-              </span>
-            </label>
+          {/* 개인정보 수집 및 이용 동의 (개인정보보호법 제15조 준수) */}
+          <div className="pt-2 space-y-1.5">
+            <div className="flex items-start justify-between gap-2 text-xs">
+              <label className="flex items-start gap-2.5 cursor-pointer text-gray-300 select-none flex-1">
+                <input
+                  type="checkbox"
+                  checked={agree}
+                  onChange={(e) => setAgree(e.target.checked)}
+                  className="mt-0.5 w-4 h-4 rounded border-border accent-brand-cyan shrink-0"
+                />
+                <span className="leading-snug">
+                  <strong className="text-brand-cyan font-bold">(필수)</strong> 견적 산출 및 상담을 위한 개인정보 수집·이용에 동의합니다.
+                </span>
+              </label>
+              <button
+                type="button"
+                onClick={() => setShowPrivacyModal(true)}
+                className="text-[11px] text-gray-400 hover:text-brand-cyan underline decoration-gray-600 hover:decoration-brand-cyan shrink-0 font-medium py-0.5 px-1"
+              >
+                약관 내용보기
+              </button>
+            </div>
+            <p className="text-[11px] text-gray-500 pl-6 leading-tight">
+              • 수집목적: 매입 견적 및 방문일정 조율 | 보유기간: 상담 및 거래 완료 시 파기
+            </p>
           </div>
+
+          {/* 개인정보 수집 동의 상세 모달 */}
+          {showPrivacyModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+              <div className="bg-surface border border-border rounded-2xl max-w-lg w-full max-h-[85vh] flex flex-col overflow-hidden shadow-2xl">
+                <div className="p-4 sm:p-5 border-b border-border flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <ShieldCheck className="w-5 h-5 text-brand-cyan" />
+                    <h3 className="text-base font-bold text-white">개인정보 수집 및 이용 동의 안내</h3>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowPrivacyModal(false)}
+                    className="p-1 rounded-lg text-gray-400 hover:text-white hover:bg-card"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <div className="p-5 overflow-y-auto space-y-4 text-xs text-gray-300 leading-relaxed">
+                  <p className="text-gray-400">
+                    넥스트바이크는 「개인정보 보호법」 제15조 제2항에 따라 고객님의 소중한 개인정보를 안전하게 처리하며, 아래의 법정 필수 고지사항을 안내해 드립니다.
+                  </p>
+
+                  <div className="space-y-3 bg-card/70 p-4 rounded-xl border border-border/80">
+                    <div>
+                      <h4 className="font-bold text-white mb-1">1. 개인정보 수집·이용 목적</h4>
+                      <p className="text-gray-400">
+                        중고 오토바이 매입 견적 산출, 유선 및 문자 상담, 방문 출장 일정 조율 및 거래 계약 체결 안내
+                      </p>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-white mb-1">2. 수집하는 개인정보 항목</h4>
+                      <p className="text-gray-400">
+                        연락처(휴대전화번호), 오토바이 모델명, 연식, 적산거리, 보관 지역, 차량 상태 사진 및 고객 작성 메모
+                      </p>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-white mb-1">3. 보유 및 이용 기간</h4>
+                      <p className="text-gray-400">
+                        견적 상담 완료 및 거래 목적 달성 시 <strong className="text-brand-cyan">지체 없이 영구 파기</strong> (단, 전자상거래법 등 관련 법령에 따른 보존 의무가 있는 경우 해당 법정 기간 동안 안전하게 보관)
+                      </p>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-white mb-1">4. 동의 거부 권리 및 불이익 안내</h4>
+                      <p className="text-gray-400">
+                        귀하는 개인정보 수집·이용 동의를 거부할 권리가 있습니다. 단, 필수 정보 수집에 동의하지 않으실 경우 정확한 시세 산출 및 무료 출장 견적 서비스 이용이 불가능합니다.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 text-right">
+                    <Link
+                      href="/privacy"
+                      target="_blank"
+                      className="text-brand-cyan hover:underline font-semibold"
+                    >
+                      개인정보처리방침 전문 보기 &rarr;
+                    </Link>
+                  </div>
+                </div>
+
+                <div className="p-4 border-t border-border bg-card/40 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAgree(true);
+                      setShowPrivacyModal(false);
+                    }}
+                    className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-brand-cyan text-black font-extrabold text-xs shadow-md shadow-brand-cyan/20 active:scale-95 transition-transform"
+                  >
+                    확인 및 동의하기
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* 제출 버튼 */}
           <button

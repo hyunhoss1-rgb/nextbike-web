@@ -153,9 +153,27 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* 저작권 표시 */}
+        {/* 약관 및 개인정보처리방침 & 저작권 표시 */}
         <div className="mt-10 pt-6 border-t border-border/40 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
-          <p>© {new Date().getFullYear()} 넥스트바이크 (NEXTBIKE). All rights reserved.</p>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
+            <Link
+              href="/privacy"
+              className="text-gray-100 font-bold hover:text-brand-cyan transition-colors underline decoration-brand-cyan/50 underline-offset-4"
+            >
+              개인정보처리방침
+            </Link>
+            <span className="text-gray-600">|</span>
+            <Link
+              href="/terms"
+              className="text-gray-400 hover:text-brand-cyan transition-colors"
+            >
+              서비스 이용약관
+            </Link>
+            <span className="text-gray-600 hidden sm:inline">|</span>
+            <span className="text-gray-400">
+              © {new Date().getFullYear()} 넥스트바이크 (NEXTBIKE). All rights reserved.
+            </span>
+          </div>
           <p className="text-[11px] text-gray-600">
             본 사이트의 모든 콘텐츠 및 지역별/기종별 매입 시스템은 무단 복제를 금합니다.
           </p>

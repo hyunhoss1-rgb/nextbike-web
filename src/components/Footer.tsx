@@ -120,8 +120,17 @@ export default function Footer() {
 
           {/* 공식 채널 */}
           <div className="md:col-span-3 space-y-3">
-            <h4 className="text-xs font-bold tracking-wider text-gray-200 uppercase">공식 채널</h4>
+            <h4 className="text-xs font-bold tracking-wider text-gray-200 uppercase">공식 채널 &amp; 네트워크</h4>
             <div className="flex flex-col gap-2 text-xs">
+              <a
+                href="https://www.xn--b60bj1s89e3pf91mzkd.com/"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 text-gray-300 hover:text-brand-cyan"
+              >
+                <span>넥스트바이크 공식 본사 (넥스트바이크.com)</span>
+                <ExternalLink className="w-3.5 h-3.5 text-gray-500" />
+              </a>
               <a
                 href="https://blog.naver.com/bhh0820"
                 target="_blank"
@@ -169,6 +178,16 @@ export default function Footer() {
             >
               서비스 이용약관
             </Link>
+            <span className="text-gray-600">|</span>
+            <a
+              href="https://www.xn--b60bj1s89e3pf91mzkd.com/"
+              target="_blank"
+              rel="noreferrer"
+              className="text-gray-400 hover:text-brand-cyan transition-colors inline-flex items-center gap-1"
+            >
+              <span>패밀리사이트: 넥스트바이크.com</span>
+              <ExternalLink className="w-3 h-3 text-gray-500" />
+            </a>
             <span className="text-gray-600 hidden sm:inline">|</span>
             <span className="text-gray-400">
               © {new Date().getFullYear()} 넥스트바이크 (NEXTBIKE). All rights reserved.

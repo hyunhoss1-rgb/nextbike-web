@@ -1,6 +1,11 @@
 import React from "react";
 import { FAQS } from "@/data/faqs";
 
+interface BreadcrumbItem {
+  name: string;
+  item: string;
+}
+
 interface JsonLdProps {
   type?: "main" | "region" | "model" | "magazine";
   regionName?: string;
@@ -11,6 +16,7 @@ interface JsonLdProps {
   articleDate?: string;
   articleAuthor?: string;
   articleTags?: string[];
+  breadcrumbItems?: BreadcrumbItem[];
 }
 
 export default function JsonLd({
@@ -23,6 +29,7 @@ export default function JsonLd({
   articleDate,
   articleAuthor,
   articleTags,
+  breadcrumbItems,
 }: JsonLdProps) {
   // 1. Organization Schema
   const organizationSchema = {
@@ -112,60 +119,67 @@ export default function JsonLd({
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "홈",
-        item: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr",
-      },
-      ...(regionName
-        ? [
-            {
-              "@type": "ListItem",
-              position: 2,
-              name: "전국 오토바이매입",
-              item: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions",
-            },
-            {
-              "@type": "ListItem",
-              position: 3,
-              name: regionName.includes("오토바이") ? regionName : `${regionName} 오토바이매입`,
-              item: canonicalUrl,
-            },
-          ]
-        : modelName
-        ? [
-            {
-              "@type": "ListItem",
-              position: 2,
-              name: "기종별 오토바이매입",
-              item: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/models",
-            },
-            {
-              "@type": "ListItem",
-              position: 3,
-              name: modelName.includes("오토바이") ? modelName : `${modelName} 오토바이매입`,
-              item: canonicalUrl,
-            },
-          ]
-        : articleTitle
-        ? [
-            {
-              "@type": "ListItem",
-              position: 2,
-              name: "매거진",
-              item: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/magazine",
-            },
-            {
-              "@type": "ListItem",
-              position: 3,
-              name: articleTitle,
-              item: canonicalUrl,
-            },
-          ]
-        : []),
-    ],
+    itemListElement: breadcrumbItems && breadcrumbItems.length > 0
+      ? breadcrumbItems.map((b, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          name: b.name,
+          item: b.item,
+        }))
+      : [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "홈",
+            item: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr",
+          },
+          ...(regionName
+            ? [
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "전국 오토바이매입",
+                  item: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  name: regionName.includes("오토바이") ? regionName : `${regionName} 오토바이매입`,
+                  item: canonicalUrl,
+                },
+              ]
+            : modelName
+            ? [
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "기종별 오토바이매입",
+                  item: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/models",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  name: modelName.includes("오토바이") ? modelName : `${modelName} 오토바이매입`,
+                  item: canonicalUrl,
+                },
+              ]
+            : articleTitle
+            ? [
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "매거진",
+                  item: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/magazine",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  name: articleTitle,
+                  item: canonicalUrl,
+                },
+              ]
+            : []),
+        ],
   };
 
   // 7. BlogPosting Schema (네이버/구글 블로그 글 수집 규격)

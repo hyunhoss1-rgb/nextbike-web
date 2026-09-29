@@ -190,12 +190,34 @@ export default function RegionPage({ params }: Props) {
     );
   };
 
+  const breadcrumbItems = [
+    { name: "홈", item: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr" },
+    { name: "전국 오토바이매입", item: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions" },
+    ...(grandParentRegion
+      ? [{
+          name: formatRegionBreadcrumb(grandParentRegion.name),
+          item: `https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions/${grandParentRegion.slug}`,
+        }]
+      : []),
+    ...(parentRegion
+      ? [{
+          name: formatRegionBreadcrumb(parentRegion.name),
+          item: `https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions/${parentRegion.slug}`,
+        }]
+      : []),
+    {
+      name: formatRegionBreadcrumb(region.name),
+      item: canonicalUrl,
+    },
+  ];
+
   return (
     <div className="py-6 sm:py-10 space-y-16">
       <JsonLd
         type="region"
         regionName={formatRegionBreadcrumb(region.name)}
         canonicalUrl={canonicalUrl}
+        breadcrumbItems={breadcrumbItems}
       />
 
       {/* ================= 1. 상단 브레드크럼 & 2열 히어로 레이아웃 (사진 3 완벽 구현) ================= */}

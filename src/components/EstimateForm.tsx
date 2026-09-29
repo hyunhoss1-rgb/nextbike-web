@@ -222,8 +222,15 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
 
   const capturePhoto = () => {
     if (!videoRef.current || photoItems.length >= 5) return;
+    try {
+      if (typeof navigator !== "undefined" && navigator.vibrate) {
+        navigator.vibrate(35);
+      }
+    } catch {
+      // ignore
+    }
     setIsFlashing(true);
-    setTimeout(() => setIsFlashing(false), 150);
+    setTimeout(() => setIsFlashing(false), 120);
 
     const video = videoRef.current;
     const canvas = document.createElement("canvas");
@@ -403,27 +410,37 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
             <button
               type="button"
               onClick={stopCamera}
-              className="text-sm text-gray-400 hover:text-white px-3 py-2 font-medium active:scale-95"
+              className="text-sm text-gray-400 hover:text-white px-3 py-2 font-medium active:scale-95 transition-colors"
             >
               닫기
             </button>
 
-            {/* 대형 셔터 버튼 (찰칵) */}
-            <button
-              type="button"
-              onClick={capturePhoto}
-              disabled={photoItems.length >= 5}
-              className="w-18 h-18 rounded-full border-4 border-white p-1 flex items-center justify-center active:scale-90 transition-transform shadow-2xl disabled:opacity-40"
-            >
-              <div className="w-14 h-14 rounded-full bg-brand-cyan hover:bg-white transition-colors" />
-            </button>
+            {/* 대형 셔터 버튼 (찰칵 - 연속 촬영 완벽 지원, 터치해도 절대 흑백으로 변하지 않음) */}
+            <div className="flex flex-col items-center gap-1">
+              <button
+                type="button"
+                onClick={capturePhoto}
+                disabled={photoItems.length >= 5}
+                className="w-20 h-20 rounded-full border-4 border-white/90 p-1 flex items-center justify-center active:scale-90 transition-transform shadow-2xl disabled:opacity-30 disabled:pointer-events-none touch-manipulation cursor-pointer"
+                aria-label="사진 촬영"
+              >
+                <div className="w-16 h-16 rounded-full bg-brand-cyan active:bg-brand-cyanHover flex items-center justify-center shadow-lg shadow-brand-cyan/40 text-[#0a0d10] transition-colors">
+                  <Camera className="w-7 h-7" />
+                </div>
+              </button>
+              <span className="text-[11px] font-bold text-brand-cyan tracking-wide">
+                {photoItems.length >= 5
+                  ? "최대 5장 완료"
+                  : `연속 촬영 가능 (${photoItems.length}/5장)`}
+              </span>
+            </div>
 
             <button
               type="button"
               onClick={stopCamera}
-              className="text-sm font-bold text-brand-cyan px-4 py-2.5 rounded-xl bg-brand-cyan/15 border border-brand-cyan/40 active:scale-95 shadow-md shadow-brand-cyan/10"
+              className="text-xs sm:text-sm font-bold text-black px-4 py-2.5 rounded-xl bg-brand-cyan hover:bg-brand-cyanHover active:scale-95 shadow-md shadow-brand-cyan/20 transition-all"
             >
-              완료 ({photoItems.length})
+              완료 ({photoItems.length}장)
             </button>
           </div>
         </div>,
@@ -596,11 +613,15 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
                 <button
                   type="button"
                   onClick={startCamera}
-                  className="flex flex-col items-center justify-center p-3 rounded-xl border border-dashed border-border hover:border-teal-400 text-gray-300 hover:text-teal-400 cursor-pointer transition-all bg-card/80 hover:bg-card active:scale-[0.98]"
+                  className="flex flex-col items-center justify-center p-3 rounded-xl border border-dashed border-brand-cyan/40 hover:border-brand-cyan text-gray-200 hover:text-brand-cyan cursor-pointer transition-all bg-card/90 hover:bg-card active:scale-[0.98] shadow-sm"
                 >
-                  <Camera className="w-6 h-6 mb-1 text-teal-400" />
-                  <span className="text-xs font-bold text-white">카메라 촬영</span>
-                  <span className="text-[10px] text-gray-400 mt-0.5">웹 화면에서 즉시 찰칵</span>
+                  <Camera className="w-6 h-6 mb-1 text-brand-cyan" />
+                  <span className="text-xs font-bold text-white">
+                    {photoItems.length > 0 ? "카메라 추가 촬영" : "카메라 촬영"}
+                  </span>
+                  <span className="text-[10px] text-brand-cyan mt-0.5">
+                    {photoItems.length > 0 ? `현재 ${photoItems.length}/5장 (계속 촬영)` : "화면에서 즉시 찰칵"}
+                  </span>
                 </button>
 
                 {/* 미지원 브라우저용 히든 폴백 input */}

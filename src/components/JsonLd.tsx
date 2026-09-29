@@ -124,13 +124,13 @@ export default function JsonLd({
             {
               "@type": "ListItem",
               position: 2,
-              name: "전국 오토바이 매입",
+              name: "전국 오토바이매입",
               item: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions",
             },
             {
               "@type": "ListItem",
               position: 3,
-              name: regionName,
+              name: regionName.includes("오토바이") ? regionName : `${regionName} 오토바이매입`,
               item: canonicalUrl,
             },
           ]
@@ -139,13 +139,13 @@ export default function JsonLd({
             {
               "@type": "ListItem",
               position: 2,
-              name: "기종별 매입",
+              name: "기종별 오토바이매입",
               item: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/models",
             },
             {
               "@type": "ListItem",
               position: 3,
-              name: modelName,
+              name: modelName.includes("오토바이") ? modelName : `${modelName} 오토바이매입`,
               item: canonicalUrl,
             },
           ]

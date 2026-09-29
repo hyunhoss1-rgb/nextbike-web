@@ -100,10 +100,10 @@ export default function ModelDetailPage({ params }: Props) {
           </Link>
           <ChevronRight className="w-3.5 h-3.5 text-gray-600" />
           <Link href="/models" className="hover:text-white">
-            기종별 매입
+            기종별 오토바이매입
           </Link>
           <ChevronRight className="w-3.5 h-3.5 text-gray-600" />
-          <span className="text-brand-cyan font-bold">{model.name}</span>
+          <span className="text-brand-cyan font-bold">{model.name} 오토바이매입</span>
         </nav>
 
         <div className="grid lg:grid-cols-12 gap-10 items-start">

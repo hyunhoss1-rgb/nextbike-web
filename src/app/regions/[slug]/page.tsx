@@ -80,6 +80,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+function formatRegionBreadcrumb(name: string): string {
+  const clean = name.trim();
+  if (clean.endsWith("오토바이매입") || clean.endsWith("오토바이 매입")) return clean;
+  return `${clean} 오토바이매입`;
+}
+
 export default function RegionPage({ params }: Props) {
   const region = getRegionBySlug(params.slug);
   if (!region) {
@@ -164,7 +170,7 @@ export default function RegionPage({ params }: Props) {
     <div className="py-6 sm:py-10 space-y-16">
       <JsonLd
         type="region"
-        regionName={region.name}
+        regionName={formatRegionBreadcrumb(region.name)}
         canonicalUrl={canonicalUrl}
       />
 
@@ -184,35 +190,35 @@ export default function RegionPage({ params }: Props) {
         </div>
 
         <div className="relative z-10">
-          {/* 브레드크럼: 홈 > 전국 오토바이매입 > [조부모(있을 경우)] > [상위도시(있을 경우)] > [지역] */}
+          {/* 브레드크럼: 홈 > 전국 오토바이매입 > [조부모 오토바이매입] > [상위도시 오토바이매입] > [지역 오토바이매입] */}
           <nav className="flex items-center gap-1.5 text-xs text-gray-400 mb-6 flex-wrap">
-          <Link href="/" className="hover:text-white flex items-center gap-1">
-            <Home className="w-3.5 h-3.5" />
-            <span>홈</span>
-          </Link>
-          <ChevronRight className="w-3.5 h-3.5 text-gray-600" />
-          <Link href="/regions" className="hover:text-white">
-            전국 오토바이매입
-          </Link>
-          {grandParentRegion && (
-            <>
-              <ChevronRight className="w-3.5 h-3.5 text-gray-600" />
-              <Link href={`/regions/${grandParentRegion.slug}`} className="hover:text-white">
-                {grandParentRegion.name}
-              </Link>
-            </>
-          )}
-          {parentRegion && (
-            <>
-              <ChevronRight className="w-3.5 h-3.5 text-gray-600" />
-              <Link href={`/regions/${parentRegion.slug}`} className="hover:text-white">
-                {parentRegion.name}
-              </Link>
-            </>
-          )}
-          <ChevronRight className="w-3.5 h-3.5 text-gray-600" />
-          <span className="text-brand-cyan font-bold">{region.name}</span>
-        </nav>
+            <Link href="/" className="hover:text-white flex items-center gap-1">
+              <Home className="w-3.5 h-3.5" />
+              <span>홈</span>
+            </Link>
+            <ChevronRight className="w-3.5 h-3.5 text-gray-600" />
+            <Link href="/regions" className="hover:text-white">
+              전국 오토바이매입
+            </Link>
+            {grandParentRegion && (
+              <>
+                <ChevronRight className="w-3.5 h-3.5 text-gray-600" />
+                <Link href={`/regions/${grandParentRegion.slug}`} className="hover:text-white">
+                  {formatRegionBreadcrumb(grandParentRegion.name)}
+                </Link>
+              </>
+            )}
+            {parentRegion && (
+              <>
+                <ChevronRight className="w-3.5 h-3.5 text-gray-600" />
+                <Link href={`/regions/${parentRegion.slug}`} className="hover:text-white">
+                  {formatRegionBreadcrumb(parentRegion.name)}
+                </Link>
+              </>
+            )}
+            <ChevronRight className="w-3.5 h-3.5 text-gray-600" />
+            <span className="text-brand-cyan font-bold">{formatRegionBreadcrumb(region.name)}</span>
+          </nav>
 
         {/* 2열 히어로: 좌측(헤드라인/체크리스트/CTA/4단계) vs 우측(인접·세부 지역 박스) */}
         <div className="grid lg:grid-cols-12 gap-8 items-start">

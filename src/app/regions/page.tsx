@@ -39,7 +39,7 @@ export default function RegionsIndexPage() {
             <span>홈</span>
           </Link>
           <ChevronRight className="w-3.5 h-3.5 text-gray-600" />
-          <span className="text-brand-cyan font-bold">지역별 매입</span>
+          <span className="text-brand-cyan font-bold">전국 지역별 오토바이매입</span>
         </nav>
 
         <div className="space-y-4 max-w-4xl">

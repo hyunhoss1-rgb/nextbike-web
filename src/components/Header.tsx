@@ -2,7 +2,75 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Phone, MessageCircle, Menu, X, CheckCircle2, ChevronRight, Zap } from "lucide-react";
+import {
+  Phone,
+  MessageCircle,
+  Menu,
+  X,
+  CheckCircle2,
+  ChevronRight,
+  Zap,
+  TrendingUp,
+  MapPin,
+  Bike,
+  BookOpen,
+  ShieldCheck,
+  Star,
+  ListOrdered,
+  HelpCircle,
+} from "lucide-react";
+
+const MOBILE_MENU_ITEMS = [
+  {
+    href: "/price",
+    title: "실시간 중고 시세표",
+    desc: "차종·연식별 당일 최고가 시세 조회",
+    icon: TrendingUp,
+  },
+  {
+    href: "/regions",
+    title: "전국 1,100+ 지역별 출장 매입",
+    desc: "전국 집 앞 1시간 당일 무료 출장",
+    icon: MapPin,
+  },
+  {
+    href: "/models",
+    title: "인기 70+ 기종별 최고가 매입",
+    desc: "스쿠터부터 수입 대형 바이크 전 차종",
+    icon: Bike,
+  },
+  {
+    href: "/magazine",
+    title: "매거진 & 라이더 매입 가이드",
+    desc: "서류 준비·감가 방어 실전 가이드",
+    icon: BookOpen,
+    badge: "NEW",
+  },
+  {
+    href: "/cases",
+    title: "실제 전국 매입 사례",
+    desc: "사진으로 검증하는 투명한 현장 실거래",
+    icon: ShieldCheck,
+  },
+  {
+    href: "/reviews",
+    title: "라이더 생생 거래 후기",
+    desc: "실제 거래 고객 만족도 4.9 / 5.0",
+    icon: Star,
+  },
+  {
+    href: "/#process",
+    title: "4단계 간편 매입 절차",
+    desc: "신청부터 당일 현장 즉시 전액 입금",
+    icon: ListOrdered,
+  },
+  {
+    href: "/#faq",
+    title: "자주 묻는 질문 FAQ",
+    desc: "서류 미비·폐차·하자 관련 해설",
+    icon: HelpCircle,
+  },
+];
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -152,81 +220,47 @@ export default function Header() {
 
       {/* 모바일 드롭다운 메뉴 */}
       {mobileMenuOpen && (
-        <div className="xl:hidden bg-[#11171f] border-b border-border px-4 pt-3 pb-6 space-y-2 animate-in fade-in slide-in-from-top-2 duration-200 max-h-[80vh] overflow-y-auto">
-          <Link
-            href="/price"
-            onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center justify-between py-2.5 px-3 rounded-lg text-sm font-bold text-gray-200 hover:bg-card hover:text-brand-cyan transition-colors"
-          >
-            <span>💰 실시간 중고 시세표</span>
-            <ChevronRight className="w-4 h-4 text-gray-500" />
-          </Link>
-          <Link
-            href="/regions"
-            onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center justify-between py-2.5 px-3 rounded-lg text-sm font-bold text-gray-200 hover:bg-card hover:text-brand-cyan transition-colors"
-          >
-            <span>🗺️ 전국 1,100+ 지역별 출장 매입</span>
-            <ChevronRight className="w-4 h-4 text-gray-500" />
-          </Link>
-          <Link
-            href="/models"
-            onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center justify-between py-2.5 px-3 rounded-lg text-sm font-bold text-gray-200 hover:bg-card hover:text-brand-cyan transition-colors"
-          >
-            <span>🏍️ 인기 70+ 기종별 최고가 매입</span>
-            <ChevronRight className="w-4 h-4 text-gray-500" />
-          </Link>
-          <Link
-            href="/magazine"
-            onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center justify-between py-2.5 px-3 rounded-lg text-sm font-bold text-gray-200 hover:bg-card hover:text-brand-cyan transition-colors"
-          >
-            <span className="flex items-center gap-2">
-              <span>📚 매거진 &amp; 라이더 매입 팁</span>
-              <span className="text-[9px] font-black text-[#191600] px-1.5 py-0.5 rounded-full bg-brand-yellow leading-none">
-                NEW
-              </span>
-            </span>
-            <ChevronRight className="w-4 h-4 text-gray-500" />
-          </Link>
-          <Link
-            href="/cases"
-            onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center justify-between py-2.5 px-3 rounded-lg text-sm font-bold text-gray-200 hover:bg-card hover:text-brand-cyan transition-colors"
-          >
-            <span>📸 실제 전국 매입 사례</span>
-            <ChevronRight className="w-4 h-4 text-gray-500" />
-          </Link>
-          <Link
-            href="/reviews"
-            onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center justify-between py-2.5 px-3 rounded-lg text-sm font-bold text-gray-200 hover:bg-card hover:text-brand-cyan transition-colors"
-          >
-            <span>⭐ 라이더 생생 거래 후기</span>
-            <ChevronRight className="w-4 h-4 text-gray-500" />
-          </Link>
-          <Link
-            href="/#process"
-            onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center justify-between py-2.5 px-3 rounded-lg text-sm font-bold text-gray-200 hover:bg-card hover:text-brand-cyan transition-colors"
-          >
-            <span>📋 4단계 간편 매입 절차</span>
-            <ChevronRight className="w-4 h-4 text-gray-500" />
-          </Link>
-          <Link
-            href="/#faq"
-            onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center justify-between py-2.5 px-3 rounded-lg text-sm font-bold text-gray-200 hover:bg-card hover:text-brand-cyan transition-colors"
-          >
-            <span>❓ 자주 묻는 질문 FAQ</span>
-            <ChevronRight className="w-4 h-4 text-gray-500" />
-          </Link>
+        <div className="xl:hidden bg-[#0a0d10]/98 backdrop-blur-2xl border-b border-border px-3.5 pt-3 pb-6 space-y-2 animate-in fade-in slide-in-from-top-2 duration-200 max-h-[82vh] overflow-y-auto">
+          <div className="space-y-1.5">
+            {MOBILE_MENU_ITEMS.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="group flex items-center justify-between p-2.5 rounded-xl bg-[#121720]/70 hover:bg-[#161d28] border border-white/[0.05] hover:border-brand-cyan/40 active:scale-[0.99] transition-all duration-150"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-9 h-9 rounded-lg bg-brand-cyan/10 border border-brand-cyan/25 flex items-center justify-center text-brand-cyan group-hover:bg-brand-cyan group-hover:text-[#0a0d10] group-hover:border-brand-cyan transition-all duration-150 shrink-0">
+                      <Icon className="w-4 h-4 transition-transform group-hover:scale-110" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-bold text-gray-100 group-hover:text-white transition-colors truncate">
+                          {item.title}
+                        </span>
+                        {item.badge && (
+                          <span className="text-[9px] font-black text-[#191600] px-1.5 py-0.5 rounded-full bg-brand-yellow leading-none shrink-0 shadow-sm">
+                            {item.badge}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-[11px] text-gray-400 group-hover:text-gray-300 transition-colors truncate">
+                        {item.desc}
+                      </p>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-brand-cyan group-hover:translate-x-0.5 transition-all duration-150 shrink-0 ml-2" />
+                </Link>
+              );
+            })}
+          </div>
 
           <div className="pt-3 border-t border-border/80 flex flex-col gap-2">
             <a
               href="tel:01048952487"
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-brand-cyan text-brand-cyan font-bold text-sm bg-brand-cyan/5"
+              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl border border-brand-cyan/50 text-brand-cyan font-bold text-sm bg-brand-cyan/5 hover:bg-brand-cyan/15 active:scale-[0.99] transition-all shadow-sm"
             >
               <Phone className="w-4 h-4" />
               전화 상담 010-4895-2487
@@ -235,7 +269,7 @@ export default function Header() {
               href="https://open.kakao.com/o/skSUkiHg"
               target="_blank"
               rel="noreferrer"
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-yellow text-[#191600] font-black text-sm shadow-md"
+              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-brand-yellow hover:bg-amber-400 text-[#191600] font-black text-sm shadow-md active:scale-[0.99] transition-all"
             >
               <MessageCircle className="w-4 h-4" />
               카카오톡 1:1 실시간 상담

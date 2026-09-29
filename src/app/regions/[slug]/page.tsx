@@ -102,8 +102,32 @@ export default function RegionPage({ params }: Props) {
   // 이 도시에 소속된 동(洞) 또는 구 단위 페이지 목록
   const childDongs = getDongsForCity(region.slug);
 
-  const parentRegion = region.parentSlug ? getRegionBySlug(region.parentSlug) : undefined;
-  const grandParentRegion = parentRegion?.parentSlug ? getRegionBySlug(parentRegion.parentSlug) : undefined;
+  const PROVINCE_SLUG_MAP: Record<string, string> = {
+    경기: "gyeonggi",
+    강원: "gangwon",
+    충북: "chungbuk",
+    충남: "chungnam",
+    전북: "jeonbuk",
+    전남: "jeonnam",
+    경북: "gyeongbuk",
+    경남: "gyeongnam",
+  };
+
+  let parentRegion = region.parentSlug ? getRegionBySlug(region.parentSlug) : undefined;
+  if (!parentRegion && region.province && PROVINCE_SLUG_MAP[region.province]) {
+    const provSlug = PROVINCE_SLUG_MAP[region.province];
+    if (provSlug !== region.slug) {
+      parentRegion = getRegionBySlug(provSlug);
+    }
+  }
+
+  let grandParentRegion = parentRegion?.parentSlug ? getRegionBySlug(parentRegion.parentSlug) : undefined;
+  if (!grandParentRegion && parentRegion && parentRegion.province && PROVINCE_SLUG_MAP[parentRegion.province]) {
+    const provSlug = PROVINCE_SLUG_MAP[parentRegion.province];
+    if (provSlug !== parentRegion.slug && provSlug !== region.slug) {
+      grandParentRegion = getRegionBySlug(provSlug);
+    }
+  }
 
   // 동 페이지일 경우 형제 동 목록 (같은 상위 시/구 내의 다른 동들)
   const siblingDongs = parentRegion ? getDongsForCity(parentRegion.slug) : [];

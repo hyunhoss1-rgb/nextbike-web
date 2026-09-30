@@ -24,6 +24,7 @@ export interface Region {
 
 export const TABLE_60_CITIES: string[] = [
   "seoul",
+  "siheung",
   "busan",
   "daegu",
   "incheon",
@@ -61,7 +62,6 @@ export const TABLE_60_CITIES: string[] = [
   "gimpo",
   "gwangmyeong",
   "gunpo",
-  "siheung",
   "osan",
   "icheon",
   "gyeonggi-gwangju",

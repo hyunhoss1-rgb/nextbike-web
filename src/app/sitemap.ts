@@ -69,8 +69,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const regionRoutes: MetadataRoute.Sitemap = REGIONS.map((region) => ({
     url: `${baseUrl}/regions/${region.slug}`,
     lastModified: now,
-    changeFrequency: "weekly",
-    priority: region.priority || 0.8,
+    changeFrequency: region.slug === "siheung" ? "daily" : "weekly",
+    priority: region.slug === "siheung" ? 1.0 : (region.priority || 0.8),
   }));
 
   // 모든 기종별 개별 랜딩페이지 (74 URL)

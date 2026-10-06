@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!region) return {};
 
   const title = `${region.name} 오토바이매입 | 당일 최고가 출장 매입`;
-  const description = `${region.fullName} 전역 중고 오토바이 출장 매입 전문 넥스트바이크. ${region.description} 실차 확인 후 100% 당일 전액 입금.`;
+  const description = `${region.fullName} 전지역 중고 오토바이·스쿠터 당일 최고가 출장 매입. 방치차·사고차·고장차 전 차종 현장 부당 감가 없이 상차 전 100% 전액 즉시 입금 안전거래. 번호판 폐지 및 서류 대행 무료 지원.`;
   const canonical = `https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions/${region.slug}`;
   const ogImageUrl = "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-safe-pay.jpg";
 
@@ -58,7 +58,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       `${region.name}스쿠터매입`,
       `${region.fullName} 오토바이 출장매입`,
       `${region.name} 중고바이크`,
-      "넥스트바이크",
+      "오토바이당일매입",
+      "중고오토바이출장매입",
     ],
     alternates: {
       canonical,
@@ -67,7 +68,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description,
       url: canonical,
-      siteName: "넥스트바이크",
+      siteName: "전국중고오토바이매입",
       locale: "ko_KR",
       type: "website",
       images: [
@@ -445,7 +446,7 @@ export default function RegionPage({ params }: Props) {
           <div className="space-y-3 text-center md:text-left flex-1">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-yellow/10 border border-brand-yellow/30 text-brand-yellow text-xs font-bold">
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span>넥스트바이크 100% 안심 거래 보증제</span>
+              <span>100% 안심 안전거래 보증제</span>
             </div>
             <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
               {region.name} 오토바이 매입, <span className="text-brand-yellow">상차 전 100% 선입금</span>으로 안전하게

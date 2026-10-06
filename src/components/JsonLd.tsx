@@ -69,7 +69,7 @@ export default function JsonLd({
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    name: regionName ? `넥스트바이크 · ${regionName} 오토바이매입` : "넥스트바이크 (NEXTBIKE)",
+    name: regionName ? `${regionName} 당일 출장 매입` : "전국중고오토바이매입",
     telephone: "010-4895-2487",
     url: canonicalUrl,
     address: {
@@ -96,7 +96,7 @@ export default function JsonLd({
       : "중고 오토바이 전국 출장 매입",
     provider: {
       "@type": "Organization",
-      name: "넥스트바이크",
+      name: "전국중고오토바이매입",
       telephone: "010-4895-2487",
     },
     image: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-safe-pay.jpg",

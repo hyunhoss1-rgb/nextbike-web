@@ -66,10 +66,10 @@ export const metadata: Metadata = {
       "전국 중고 오토바이 당일 출장 매입 전문 넥스트바이크! 전 차종 최고가 시세, 현장 즉시 전액 입금. 30초 간편 견적 신청하세요.",
     images: [
       {
-        url: "/images/og-image.jpg",
+        url: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-safe-pay.jpg",
         width: 1200,
         height: 630,
-        alt: "전국 중고오토바이 출장 매입",
+        alt: "중고오토바이매입 | 전액 100% 선입금 안전거래 넥스트바이크",
       },
     ],
   },
@@ -78,6 +78,7 @@ export const metadata: Metadata = {
     title: "중고오토바이매입 | 전국 출장 최고가 당일 현금 매입",
     description:
       "전국 중고 오토바이 당일 출장 매입 전문 넥스트바이크! 전 차종 최고가 시세, 현장 즉시 전액 입금. 30초 간편 견적 신청하세요.",
+    images: ["https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-safe-pay.jpg"],
   },
   verification: {
     other: {

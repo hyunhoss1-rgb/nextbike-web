@@ -82,6 +82,7 @@ export default function JsonLd({
     priceRange: "₩₩",
     areaServed: regionName ? regionName : "대한민국 전역",
     openingHours: "Mo-Su 00:00-24:00",
+    image: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-safe-pay.jpg",
   };
 
   // 4. Service Schema
@@ -98,6 +99,7 @@ export default function JsonLd({
       name: "넥스트바이크",
       telephone: "010-4895-2487",
     },
+    image: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-safe-pay.jpg",
     areaServed: regionName || "KR",
   };
 
@@ -205,10 +207,10 @@ export default function JsonLd({
           name: "넥스트바이크",
           logo: {
             "@type": "ImageObject",
-            url: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-image.jpg",
+            url: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-safe-pay.jpg",
           },
         },
-        image: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-image.jpg",
+        image: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-safe-pay.jpg",
         keywords: articleTags ? articleTags.join(", ") : "오토바이매입, 중고바이크",
       }
     : null;

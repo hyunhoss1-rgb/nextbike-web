@@ -24,6 +24,7 @@ import {
   Truck,
   Banknote,
   Send,
+  ShieldCheck,
 } from "lucide-react";
 
 interface Props {
@@ -45,6 +46,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = `${region.name} 오토바이매입 | 당일 최고가 출장 매입`;
   const description = `${region.fullName} 전역 중고 오토바이 출장 매입 전문 넥스트바이크. ${region.description} 실차 확인 후 100% 당일 전액 입금.`;
   const canonical = `https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions/${region.slug}`;
+  const ogImageUrl = "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-safe-pay.jpg";
 
   return {
     title,
@@ -70,10 +72,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: "website",
       images: [
         {
-          url: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-image.jpg",
+          url: ogImageUrl,
           width: 1200,
           height: 630,
-          alt: `${region.name} 오토바이 매입`,
+          alt: `${region.name} 오토바이 매입 | 전액 100% 선입금 안전거래`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [
+        {
+          url: ogImageUrl,
+          alt: `${region.name} 오토바이 매입 | 전액 100% 선입금 안전거래`,
         },
       ],
     },
@@ -416,6 +429,39 @@ export default function RegionPage({ params }: Props) {
         </div>
       </div>
     </section>
+
+      {/* ================= 1.5. 100% 선입금 안심 안전거래 보증 배너 (네이버 썸네일 & 신뢰도 극대화) ================= */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="relative overflow-hidden rounded-2xl border border-border/80 bg-gradient-to-r from-[#0c121a] via-[#101824] to-[#0c121a] p-4 sm:p-6 shadow-xl flex flex-col md:flex-row items-center gap-6">
+          <div className="relative w-full md:w-80 h-48 sm:h-52 rounded-xl overflow-hidden shrink-0 border border-brand-yellow/30 shadow-lg">
+            <Image
+              src="/images/og-safe-pay.jpg"
+              alt={`${region.name} 오토바이 매입 전액 100% 선입금 안전거래`}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 320px"
+            />
+          </div>
+          <div className="space-y-3 text-center md:text-left flex-1">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-yellow/10 border border-brand-yellow/30 text-brand-yellow text-xs font-bold">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>넥스트바이크 100% 안심 거래 보증제</span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+              {region.name} 오토바이 매입, <span className="text-brand-yellow">상차 전 100% 선입금</span>으로 안전하게
+            </h2>
+            <p className="text-xs sm:text-sm text-gray-300 leading-relaxed break-keep">
+              바이크를 용달차에 묶어놓고 말을 바꾸거나 가격을 깎는 악덕 감가 상술은 절대 없습니다. 
+              {region.name} 전역 전문 기사 방문 시, 실차 확인 즉시 고객님 계좌로 <strong>100% 전액 송금을 먼저 완료</strong>한 후 안전하게 상차를 진행합니다.
+            </p>
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs font-bold text-gray-300 pt-1">
+              <span className="flex items-center gap-1.5 text-brand-cyan">✓ 현장 부당 감가 0건 보증</span>
+              <span className="flex items-center gap-1.5 text-brand-cyan">✓ 바이크 상차 전 전액 송금</span>
+              <span className="flex items-center gap-1.5 text-brand-cyan">✓ {region.name} 전역 출장비 무료</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* ================= 2. moto02 스타일: 상세 전문 칼럼 설명글 섹션 ================= */}
       {region.editorialArticles && region.editorialArticles.length > 0 && (

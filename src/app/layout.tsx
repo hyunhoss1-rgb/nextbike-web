@@ -69,7 +69,7 @@ export const metadata: Metadata = {
         url: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-safe-pay.jpg",
         width: 1200,
         height: 630,
-        alt: "중고오토바이매입 | 전액 100% 선입금 안전거래 넥스트바이크",
+        alt: "중고오토바이매입 | 전액 100% 선입금 안전거래",
       },
     ],
   },

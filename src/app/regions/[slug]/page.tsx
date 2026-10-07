@@ -94,10 +94,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-function formatRegionBreadcrumb(name: string): string {
-  const clean = name.trim();
-  if (clean.endsWith("오토바이매입") || clean.endsWith("오토바이 매입")) return clean;
-  return `${clean} 오토바이매입`;
+function getCleanBreadcrumbName(name: string, fullName?: string, parentName?: string): string {
+  if (parentName) {
+    const stripped = name.replace(parentName, "").trim();
+    if (stripped) return stripped;
+  }
+  const tokens = name.trim().split(/\s+/);
+  if (tokens.length > 1) {
+    return tokens[tokens.length - 1];
+  }
+  return fullName || name;
 }
 
 export default function RegionPage({ params }: Props) {
@@ -204,23 +210,31 @@ export default function RegionPage({ params }: Props) {
     );
   };
 
+  const grandParentName = grandParentRegion
+    ? getCleanBreadcrumbName(grandParentRegion.name, grandParentRegion.fullName)
+    : "";
+  const parentName = parentRegion
+    ? getCleanBreadcrumbName(parentRegion.name, parentRegion.fullName, grandParentRegion?.name)
+    : "";
+  const currentName = getCleanBreadcrumbName(region.name, region.fullName, parentRegion?.name);
+
   const breadcrumbItems = [
     { name: "홈", item: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr" },
-    { name: "전국 오토바이매입", item: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions" },
+    { name: "지역별 매입", item: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions" },
     ...(grandParentRegion
       ? [{
-          name: formatRegionBreadcrumb(grandParentRegion.name),
+          name: grandParentName,
           item: `https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions/${grandParentRegion.slug}`,
         }]
       : []),
     ...(parentRegion
       ? [{
-          name: formatRegionBreadcrumb(parentRegion.name),
+          name: parentName,
           item: `https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions/${parentRegion.slug}`,
         }]
       : []),
     {
-      name: formatRegionBreadcrumb(region.name),
+      name: currentName,
       item: canonicalUrl,
     },
   ];
@@ -229,7 +243,7 @@ export default function RegionPage({ params }: Props) {
     <div className="py-6 sm:py-10 space-y-16">
       <JsonLd
         type="region"
-        regionName={formatRegionBreadcrumb(region.name)}
+        regionName={region.fullName || region.name}
         canonicalUrl={canonicalUrl}
         breadcrumbItems={breadcrumbItems}
       />
@@ -250,7 +264,7 @@ export default function RegionPage({ params }: Props) {
         </div>
 
         <div className="relative z-10">
-          {/* 브레드크럼: 홈 > 전국 오토바이매입 > [조부모 오토바이매입] > [상위도시 오토바이매입] > [지역 오토바이매입] */}
+          {/* 브레드크럼: 홈 > 지역별 매입 > [도/특별시] > [시/구] > [동/읍/면] */}
           <nav className="flex items-center gap-1.5 text-xs text-gray-400 mb-6 flex-wrap">
             <Link href="/" className="hover:text-white flex items-center gap-1">
               <Home className="w-3.5 h-3.5" />
@@ -258,13 +272,13 @@ export default function RegionPage({ params }: Props) {
             </Link>
             <ChevronRight className="w-3.5 h-3.5 text-gray-600" />
             <Link href="/regions" className="hover:text-white">
-              전국 오토바이매입
+              지역별 매입
             </Link>
             {grandParentRegion && (
               <>
                 <ChevronRight className="w-3.5 h-3.5 text-gray-600" />
                 <Link href={`/regions/${grandParentRegion.slug}`} className="hover:text-white">
-                  {formatRegionBreadcrumb(grandParentRegion.name)}
+                  {grandParentName}
                 </Link>
               </>
             )}
@@ -272,12 +286,12 @@ export default function RegionPage({ params }: Props) {
               <>
                 <ChevronRight className="w-3.5 h-3.5 text-gray-600" />
                 <Link href={`/regions/${parentRegion.slug}`} className="hover:text-white">
-                  {formatRegionBreadcrumb(parentRegion.name)}
+                  {parentName}
                 </Link>
               </>
             )}
             <ChevronRight className="w-3.5 h-3.5 text-gray-600" />
-            <span className="text-brand-cyan font-bold">{formatRegionBreadcrumb(region.name)}</span>
+            <span className="text-brand-cyan font-bold">{currentName}</span>
           </nav>
 
         {/* 2열 히어로: 좌측(헤드라인/체크리스트/CTA/4단계) vs 우측(인접·세부 지역 박스) */}

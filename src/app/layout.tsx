@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     template: "%s",
   },
   description:
-    "전국 중고 오토바이 당일 출장 매입 전문 넥스트바이크! 전 차종 최고가 시세, 현장 즉시 전액 입금. 30초 간편 견적 신청하세요.",
+    "전국 중고 오토바이 당일 출장 매입 전문! 상차 전 당일 100% 선입금 안전거래, 현장 부당 감가 없이 약속된 금액 즉시 전액 입금. 방치차·사고차 전 차종 최고가 시세 30초 간편 견적.",
   keywords: [
     "오토바이매입",
     "중고오토바이",
@@ -31,11 +31,12 @@ export const metadata: Metadata = {
     "슈퍼커브110",
     "BMW바이크",
     "할리데이비슨",
-    "넥스트바이크",
+    "당일선입금",
+    "오토바이선입금",
   ],
-  authors: [{ name: "넥스트바이크", url: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr" }],
-  creator: "넥스트바이크",
-  publisher: "넥스트바이크",
+  authors: [{ name: "전국중고오토바이매입", url: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr" }],
+  creator: "전국중고오토바이매입",
+  publisher: "전국중고오토바이매입",
   robots: {
     index: true,
     follow: true,
@@ -63,7 +64,7 @@ export const metadata: Metadata = {
     siteName: "중고오토바이매입",
     title: "중고오토바이매입 | 전국 출장 최고가 당일 현금 매입",
     description:
-      "전국 중고 오토바이 당일 출장 매입 전문 넥스트바이크! 전 차종 최고가 시세, 현장 즉시 전액 입금. 30초 간편 견적 신청하세요.",
+      "전국 중고 오토바이 당일 출장 매입 전문! 상차 전 당일 100% 선입금 안전거래, 현장 부당 감가 없이 약속된 금액 즉시 전액 입금. 방치차·사고차 전 차종 최고가 시세 30초 간편 견적.",
     images: [
       {
         url: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-safe-pay.jpg",
@@ -77,7 +78,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "중고오토바이매입 | 전국 출장 최고가 당일 현금 매입",
     description:
-      "전국 중고 오토바이 당일 출장 매입 전문 넥스트바이크! 전 차종 최고가 시세, 현장 즉시 전액 입금. 30초 간편 견적 신청하세요.",
+      "전국 중고 오토바이 당일 출장 매입 전문! 상차 전 당일 100% 선입금 안전거래, 현장 부당 감가 없이 약속된 금액 즉시 전액 입금. 방치차·사고차 전 차종 최고가 시세 30초 간편 견적.",
     images: ["https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-safe-pay.jpg"],
   },
   verification: {

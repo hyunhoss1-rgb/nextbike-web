@@ -8,7 +8,7 @@ import { Bike, ChevronRight, Phone, CheckCircle2 } from "lucide-react";
 export const metadata: Metadata = {
   title: "인기 기종별 오토바이 매입 | 혼다·야마하·BMW·할리 중고 시세",
   description:
-    "혼다 PCX125, 야마하 NMAX, 포르자350, XMAX300, 슈퍼커브, BMW R1250GS, 할리데이비슨, 베스파 등 인기 바이크 최고가 당일 매입 넥스트바이크.",
+    "혼다 PCX125, 야마하 NMAX, 포르자350, XMAX300, 슈퍼커브, BMW R1250GS, 할리데이비슨, 베스파 등 전 기종 상차 전 당일 100% 선입금 최고가 출장 매입.",
   keywords: [
     "PCX125매입",
     "NMAX매입",

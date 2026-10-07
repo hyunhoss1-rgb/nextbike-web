@@ -53,7 +53,7 @@ export default function HomePage() {
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
           <Image
             src="/images/hero-bike.jpg"
-            alt="넥스트바이크 전국 중고오토바이 출장 매입"
+            alt="전국 중고오토바이 당일 출장 매입 | 상차 전 100% 선입금"
             fill
             priority
             className="object-cover object-[75%_center] md:object-center opacity-30 md:opacity-35 mix-blend-screen scale-105"
@@ -683,7 +683,7 @@ export default function HomePage() {
         <div className="absolute inset-0 z-0 pointer-events-none">
           <Image
             src="/images/bike-banner.jpg"
-            alt="넥스트바이크 전국 바이크 안심 매입"
+            alt="전국 중고오토바이 당일 출장 매입 | 상차 전 100% 선입금"
             fill
             className="object-cover object-center opacity-25 mix-blend-screen scale-105"
           />

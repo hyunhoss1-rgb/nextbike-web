@@ -36,8 +36,8 @@ export default function JsonLd({
     "@context": "https://schema.org",
     "@type": "Organization",
     "@id": "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/#organization",
-    name: "넥스트바이크",
-    alternateName: "NEXTBIKE",
+    name: "전국중고오토바이매입",
+    alternateName: "중고오토바이출장매입",
     url: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr",
     telephone: "010-4895-2487",
     address: {
@@ -53,14 +53,14 @@ export default function JsonLd({
     ],
     areaServed: "KR",
     description:
-      "중고 오토바이 출장 매입 전문 넥스트바이크. 당일 집 앞 방문, 실차 확인 후 전액 즉시 계좌입금. 스쿠터, 수입 바이크, 사고차, 방치차 전 차종 매입 상담.",
+      "전국 중고 오토바이 당일 출장 매입 전문. 상차 전 당일 100% 선입금 안전거래, 실차 확인 후 전액 즉시 계좌입금. 스쿠터, 수입 바이크, 사고차, 방치차 전 차종 매입 상담.",
   };
 
   // 2. WebSite Schema
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "넥스트바이크",
+    name: "전국중고오토바이매입",
     url: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr",
     inLanguage: "ko-KR",
   };
@@ -199,12 +199,12 @@ export default function JsonLd({
         },
         author: {
           "@type": "Organization",
-          name: articleAuthor || "넥스트바이크",
+          name: articleAuthor || "전국중고오토바이매입",
           url: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr",
         },
         publisher: {
           "@type": "Organization",
-          name: "넥스트바이크",
+          name: "전국중고오토바이매입",
           logo: {
             "@type": "ImageObject",
             url: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-safe-pay.jpg",

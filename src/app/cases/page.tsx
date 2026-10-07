@@ -8,7 +8,7 @@ import { MapPin, Calendar, ArrowRight, CheckCircle2, Phone, ShieldCheck } from "
 export const metadata: Metadata = {
   title: "오토바이 매입 실거래 내역 | 전국 출장 매입 리포트",
   description:
-    "혼다 PCX125, 야마하 NMAX, 포르자350, XMAX300, BMW R1250GS, 할리데이비슨 등 넥스트바이크의 실제 전국 출장 매입 및 정산 완료 내역 확인.",
+    "혼다 PCX125, 야마하 NMAX, 포르자350, XMAX300, BMW R1250GS, 할리데이비슨 등 상차 전 100% 선입금 완료된 실제 전국 출장 매입 및 정산 내역 확인.",
 };
 
 export default function CasesPage() {

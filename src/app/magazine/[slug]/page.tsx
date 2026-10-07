@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const article = getArticleBySlug(params.slug);
   if (!article) return {};
 
-  const title = `${article.title} | 넥스트바이크 매거진`;
+  const title = `${article.title} | 오토바이 매거진`;
   const description = article.excerpt;
   const canonical = `https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/magazine/${article.slug}`;
 
@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ...article.tags,
       "오토바이매입",
       "중고바이크시세",
-      "넥스트바이크",
+      "당일선입금",
       "바이크매거진",
     ],
     alternates: {
@@ -65,7 +65,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description,
       url: canonical,
-      siteName: "넥스트바이크 매거진",
+      siteName: "오토바이 매거진",
       locale: "ko_KR",
       type: "article",
       publishedTime: article.publishDate,

@@ -7,7 +7,7 @@ import { Star, MapPin, CheckCircle2, Phone, MessageCircle } from "lucide-react";
 export const metadata: Metadata = {
   title: "고객 매입 후기 | 100% 실거래 만족 리뷰",
   description:
-    "넥스트바이크를 통해 바이크를 판매하신 실제 고객님들의 생생한 거래 후기. 당일 즉시 계좌입금, 친절한 출장 상담, 서류 대행 만족도 1위.",
+    "실제 고객님들의 생생한 거래 후기. 상차 전 100% 선입금, 현장 부당 감가 제로, 친절한 무료 출장 및 당일 사용폐지 서류 대행 만족도 1위.",
 };
 
 export default function ReviewsPage() {
@@ -22,7 +22,7 @@ export default function ReviewsPage() {
             고객 만족도 99.8% 달성
           </div>
           <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-            넥스트바이크 <span className="text-brand-cyan">실제 매입 후기</span>
+            전국 라이더 <span className="text-brand-cyan">실제 매입 후기</span>
           </h1>
           <p className="text-sm sm:text-base text-gray-400 leading-relaxed">
             허위 후기 없는 100% 실거래 고객님들의 소중한 리뷰입니다. 불필요한 현장 감가 없이 약속된 금액을 그대로 전액 입금해 드립니다.

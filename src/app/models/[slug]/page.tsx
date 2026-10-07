@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!model) return {};
 
   const title = `${model.name} 매입 | 중고 시세 최고가 당일 현금 매입`;
-  const description = `${model.name} 중고 오토바이 출장 매입 전문. ${model.summary} 배기량 ${model.displacement}, 연식·적산거리 무관 최고가 감정 및 당일 전액 입금.`;
+  const description = `${model.name} 중고 오토바이 출장 매입 전문. ${model.summary} 배기량 ${model.displacement}, 연식·적산거리 무관 최고가 감정 및 상차 전 100% 선입금 당일 즉시 송금.`;
   const canonical = `https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/models/${model.slug}`;
 
   return {
@@ -49,7 +49,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       `${model.name} 가격`,
       `${model.name} 판매`,
       `${model.brand} 매입`,
-      "넥스트바이크",
+      "당일선입금",
+      "오토바이선입금",
     ],
     alternates: {
       canonical,
@@ -58,7 +59,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description,
       url: canonical,
-      siteName: "넥스트바이크",
+      siteName: "전국중고오토바이매입",
       locale: "ko_KR",
       type: "website",
       images: [

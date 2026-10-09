@@ -25,6 +25,12 @@ import {
   Share2,
   Sparkles,
   ArrowLeft,
+  Wrench,
+  Battery,
+  MapPin,
+  Timer,
+  Zap,
+  ShieldCheck,
 } from "lucide-react";
 
 interface Props {
@@ -176,12 +182,132 @@ export default function MagazineDetailPage({ params }: Props) {
               </div>
             </header>
 
-            {/* 칼럼 본문 섹션들 */}
+            {/* 1. 작업 전 핵심 퀵 인포 대시보드 (난이도·시간·규격·위치) */}
+            {article.quickInfo && (
+              <div className="rounded-2xl bg-gradient-to-br from-card via-surface to-surface border border-brand-cyan/30 p-5 sm:p-6 shadow-xl space-y-4">
+                <div className="flex items-center justify-between pb-3 border-b border-border/80">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-lg bg-brand-cyan/20 border border-brand-cyan/40 flex items-center justify-center text-brand-cyan">
+                      <Zap className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <span className="text-[11px] text-brand-cyan font-extrabold uppercase tracking-wider block">
+                        정비 매뉴얼 팩트체크
+                      </span>
+                      <span className="text-sm sm:text-base font-black text-white">
+                        작업 전 핵심 요약 대시보드
+                      </span>
+                    </div>
+                  </div>
+                  <span className="text-xs px-2.5 py-1 rounded-full bg-brand-cyan/15 text-brand-cyan font-bold border border-brand-cyan/30">
+                    1분 요약
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                  <div className="p-3.5 rounded-xl bg-card/80 border border-border/60 space-y-1">
+                    <span className="text-[11px] text-gray-400 flex items-center gap-1 font-medium">
+                      <Wrench className="w-3.5 h-3.5 text-brand-cyan" />
+                      작업 난이도
+                    </span>
+                    <p className="text-xs sm:text-sm font-black text-white break-keep">
+                      {article.quickInfo.difficulty}
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-card/80 border border-border/60 space-y-1">
+                    <span className="text-[11px] text-gray-400 flex items-center gap-1 font-medium">
+                      <Timer className="w-3.5 h-3.5 text-amber-400" />
+                      예상 시간
+                    </span>
+                    <p className="text-xs sm:text-sm font-black text-white">
+                      {article.quickInfo.timeRequired}
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-card/80 border border-border/60 space-y-1">
+                    <span className="text-[11px] text-gray-400 flex items-center gap-1 font-medium">
+                      <Battery className="w-3.5 h-3.5 text-emerald-400" />
+                      순정 규격
+                    </span>
+                    <p className="text-xs sm:text-sm font-black text-brand-cyan break-all">
+                      {article.quickInfo.batteryModel}
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-card/80 border border-border/60 space-y-1">
+                    <span className="text-[11px] text-gray-400 flex items-center gap-1 font-medium">
+                      <MapPin className="w-3.5 h-3.5 text-rose-400" />
+                      장착 위치
+                    </span>
+                    <p className="text-xs sm:text-sm font-black text-white line-clamp-2">
+                      {article.quickInfo.locationSummary}
+                    </p>
+                  </div>
+                </div>
+
+                {article.quickInfo.keyTools && article.quickInfo.keyTools.length > 0 && (
+                  <div className="pt-2 flex flex-wrap items-center gap-2 text-xs">
+                    <span className="text-gray-400 font-bold shrink-0">필요 공구:</span>
+                    {article.quickInfo.keyTools.map((tool, tIdx) => (
+                      <span
+                        key={tIdx}
+                        className="px-2.5 py-0.5 rounded-md bg-surface text-gray-200 border border-border/80 text-[11px] font-medium"
+                      >
+                        {tool}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* 2. 작업 전 준비물 & 추천 공구 체크리스트 */}
+            {article.toolsChecklist && article.toolsChecklist.length > 0 && (
+              <div className="p-5 sm:p-6 rounded-2xl bg-surface border border-border space-y-4">
+                <div className="flex items-center gap-2">
+                  <Wrench className="w-5 h-5 text-brand-cyan" />
+                  <h3 className="text-base sm:text-lg font-black text-white">
+                    작업 전 필수 준비물 &amp; 추천 공구 가이드
+                  </h3>
+                </div>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  {article.toolsChecklist.map((tool, tIdx) => (
+                    <div
+                      key={tIdx}
+                      className="p-3 rounded-xl bg-card/80 border border-border/60 flex items-start gap-2.5"
+                    >
+                      <div className="pt-0.5 shrink-0">
+                        {tool.essential ? (
+                          <span className="text-[10px] font-black px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                            필수
+                          </span>
+                        ) : (
+                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-gray-700 text-gray-300">
+                            권장
+                          </span>
+                        )}
+                      </div>
+                      <div className="space-y-0.5">
+                        <span className="text-xs sm:text-sm font-bold text-white block">
+                          {tool.name}
+                        </span>
+                        <span className="text-xs text-gray-400 block">
+                          {tool.purpose}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* 3. 칼럼 본문 섹션들 */}
             <div className="space-y-8 text-gray-200 leading-relaxed text-sm sm:text-base">
               {article.sections.map((section, idx) => (
                 <section key={idx} className="space-y-3.5">
                   <h2 className="text-lg sm:text-2xl font-black text-white tracking-tight pt-2 flex items-center gap-2">
-                    <span className="w-1.5 h-5 bg-brand-cyan rounded-full inline-block" />
+                    <span className="w-1.5 h-5 bg-brand-cyan rounded-full inline-block shrink-0" />
                     <span>{section.heading}</span>
                   </h2>
 
@@ -222,7 +348,126 @@ export default function MagazineDetailPage({ params }: Props) {
                 </section>
               ))}
 
-              {/* FAQ 섹션 (있을 경우) */}
+              {/* 4. 배터리 규격 및 호환 제품 상세 비교표 (있을 경우) */}
+              {article.specTable && (
+                <section className="space-y-3 pt-4">
+                  <div className="flex items-center gap-2">
+                    <Battery className="w-5 h-5 text-brand-cyan" />
+                    <h3 className="text-lg sm:text-xl font-black text-white">
+                      {article.specTable.title}
+                    </h3>
+                  </div>
+                  <div className="overflow-x-auto rounded-2xl border border-border shadow-lg">
+                    <table className="w-full text-left text-xs sm:text-sm text-gray-300">
+                      <thead className="bg-card text-brand-cyan border-b border-border">
+                        <tr>
+                          {article.specTable.headers.map((th, hIdx) => (
+                            <th key={hIdx} className="px-4 py-3 font-bold whitespace-nowrap">
+                              {th}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-border/60 bg-surface">
+                        {article.specTable.rows.map((row, rIdx) => (
+                          <tr
+                            key={rIdx}
+                            className={
+                              rIdx % 2 === 0
+                                ? "bg-surface/50 hover:bg-card/50"
+                                : "bg-card/20 hover:bg-card/50"
+                            }
+                          >
+                            {row.map((cell, cIdx) => (
+                              <td
+                                key={cIdx}
+                                className={`px-4 py-3 whitespace-nowrap ${
+                                  cIdx === 0 ? "font-bold text-white" : ""
+                                }`}
+                              >
+                                {cell}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  {article.specTable.note && (
+                    <p className="text-xs text-gray-400 pl-1 leading-relaxed">
+                      * {article.specTable.note}
+                    </p>
+                  )}
+                </section>
+              )}
+
+              {/* 5. 정비·관리 칼럼 전용: 배터리 수명 2배 연장 골든룰 */}
+              {article.category === "정비·관리" && (
+                <div className="p-5 sm:p-6 rounded-2xl bg-surface border border-brand-cyan/30 space-y-3">
+                  <div className="flex items-center gap-2 font-black text-sm sm:text-base text-white">
+                    <ShieldCheck className="w-5 h-5 text-brand-cyan" />
+                    <span>엔지니어가 전하는 배터리 수명 2배 연장 4대 골든룰</span>
+                  </div>
+                  <div className="grid sm:grid-cols-2 gap-3 text-xs text-gray-300 pt-1">
+                    <div className="p-3 rounded-xl bg-card border border-border/60 space-y-1">
+                      <span className="font-bold text-brand-cyan block">1. 주 1회 이상 실주행 충전</span>
+                      <p className="text-gray-400">
+                        제자리 공회전은 발전 전압이 낮아 충전되지 않습니다. 3,000rpm 이상 실주행 20분 이상이 권장됩니다.
+                      </p>
+                    </div>
+                    <div className="p-3 rounded-xl bg-card border border-border/60 space-y-1">
+                      <span className="font-bold text-brand-cyan block">2. 블랙박스 상시 차단 전압</span>
+                      <p className="text-gray-400">
+                        주차 녹화 저전압 차단을 최소 12.3V~12.4V 이상으로 설정하여 암전류 완전 방전을 사전 차단하세요.
+                      </p>
+                    </div>
+                    <div className="p-3 rounded-xl bg-card border border-border/60 space-y-1">
+                      <span className="font-bold text-brand-cyan block">3. 2주 이상 주차 시 마이너스 분리</span>
+                      <p className="text-gray-400">
+                        장기 출장이나 동절기 봉인 시 마이너스(-) 단자만 풀어 절연 테이프로 감아두면 자연 방전을 90% 방지합니다.
+                      </p>
+                    </div>
+                    <div className="p-3 rounded-xl bg-card border border-border/60 space-y-1">
+                      <span className="font-bold text-brand-cyan block">4. 방전 2회 누적 시 셀 영구 손상</span>
+                      <p className="text-gray-400">
+                        완전 방전(10.5V 이하)이 2회 이상 발생한 납산 배터리는 극판 황산화로 충전해도 며칠 내 재방전됩니다.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* 6. 방치 바이크 처분 실익 비교 가이드 */}
+              {article.category === "정비·관리" && (
+                <div className="p-5 sm:p-6 rounded-2xl bg-card border border-border space-y-3">
+                  <h3 className="text-base font-black text-white flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-brand-yellow" />
+                    오래 방치된 바이크, 배터리 교체 vs 당일 100% 선입금 처분 실익 비교
+                  </h3>
+                  <div className="grid sm:grid-cols-2 gap-3 text-xs">
+                    <div className="p-3.5 rounded-xl bg-surface border border-red-500/30 space-y-1.5">
+                      <span className="font-bold text-red-400 block">직접 수리 후 유지/개인거래 시</span>
+                      <ul className="text-gray-400 space-y-1 list-disc pl-4">
+                        <li>순정 AGM 배터리 신품 구입 및 공임: 약 8~15만 원</li>
+                        <li>방치로 인한 엔진오일·타이어 경화 교체비: 10~25만 원</li>
+                        <li>구청 방문 사용폐지 및 번호판 반납 시간 소요</li>
+                        <li>개인거래 후 시동 불량 재발 시 구매자 환불 갈등 위험</li>
+                      </ul>
+                    </div>
+                    <div className="p-3.5 rounded-xl bg-surface border border-brand-cyan/40 space-y-1.5">
+                      <span className="font-bold text-brand-cyan block">24시 직영 당일 100% 선입금 처분 시</span>
+                      <ul className="text-gray-300 space-y-1 list-disc pl-4 font-medium">
+                        <li>배터리 방전·시동 불능 상태 그대로 추가 감가 없이 매입</li>
+                        <li>집 앞 전문 유압 리프트 트럭 당일 무료 출장 (출장비 0원)</li>
+                        <li>상차 전 현장 100% 전액 즉시 계좌 입금 원칙 준수</li>
+                        <li>관공서 이륜차 사용폐지 신고 증명서 발급 100% 무료 대행</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* 7. FAQ 섹션 (있을 경우) */}
               {article.faq && article.faq.length > 0 && (
                 <section className="pt-6 border-t border-border/80 space-y-4">
                   <h2 className="text-xl font-black text-white flex items-center gap-2">
@@ -234,13 +479,13 @@ export default function MagazineDetailPage({ params }: Props) {
                     {article.faq.map((item, fIdx) => (
                       <div
                         key={fIdx}
-                        className="p-4 rounded-xl bg-surface border border-border space-y-1.5"
+                        className="p-4 sm:p-5 rounded-xl bg-surface border border-border space-y-2"
                       >
-                        <div className="font-bold text-sm text-brand-cyan flex items-start gap-2">
-                          <span className="font-black">Q.</span>
+                        <div className="font-bold text-sm sm:text-base text-brand-cyan flex items-start gap-2">
+                          <span className="font-black text-base">Q.</span>
                           <span>{item.question}</span>
                         </div>
-                        <p className="text-xs sm:text-sm text-gray-300 pl-5 leading-relaxed">
+                        <p className="text-xs sm:text-sm text-gray-300 pl-6 leading-relaxed">
                           {item.answer}
                         </p>
                       </div>
@@ -254,13 +499,13 @@ export default function MagazineDetailPage({ params }: Props) {
             <div className="p-6 sm:p-7 rounded-2xl bg-gradient-to-r from-brand-cyan/20 via-surface to-brand-cyan/10 border border-brand-cyan/50 space-y-3">
               <div className="flex items-center gap-2 text-xs font-bold text-brand-cyan">
                 <Sparkles className="w-4 h-4" />
-                <span>넥스트바이크 24시 직영 출장 매입</span>
+                <span>24시 직영 무료 출장 매입</span>
               </div>
               <h3 className="text-lg sm:text-xl font-black text-white">
-                타시던 바이크, 복잡한 서류 없이 당일 현금화하세요!
+                타시던 바이크, 배터리 방전·시동 불능차도 당일 100% 선입금 처분!
               </h3>
               <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
-                전국 집 앞 당일 방문 · 현장 100% 즉시 계좌입금 · 구청 무료 폐지 대행까지 한 번에 완료됩니다.
+                전국 집 앞 당일 방문 · 상차 전 100% 즉시 계좌입금 · 구청 무료 폐지 대행까지 한 번에 완료됩니다.
               </p>
               <div className="pt-2 flex flex-wrap gap-3">
                 <a
@@ -330,7 +575,7 @@ export default function MagazineDetailPage({ params }: Props) {
             {/* 안심 보증 4대 약속 */}
             <div className="rounded-2xl bg-card border border-border/80 p-5 space-y-3 text-xs">
               <span className="font-bold text-white block pb-2 border-b border-border/60">
-                넥스트바이크 4대 안심 거래 보증
+                24시 직영 4대 안심 거래 보증
               </span>
               <ul className="space-y-2 text-gray-300">
                 <li className="flex items-center gap-2">

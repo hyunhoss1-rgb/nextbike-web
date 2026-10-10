@@ -69,7 +69,7 @@ export default function JsonLd({
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    name: regionName ? `${regionName} 당일 출장 매입` : "전국중고오토바이매입",
+    name: regionName ? `${regionName} 오토바이·중고바이크 당일 출장 매입` : "전국중고오토바이매입",
     telephone: "010-4895-2487",
     url: canonicalUrl,
     address: {
@@ -90,10 +90,10 @@ export default function JsonLd({
     "@context": "https://schema.org",
     "@type": "Service",
     serviceType: regionName
-      ? `${regionName} 오토바이 매입 및 무료 출장 견적`
+      ? `${regionName} 오토바이·중고바이크 매입 및 무료 출장 견적`
       : modelName
       ? `${modelName} 중고 매입 및 최고가 시세 감정`
-      : "중고 오토바이 전국 출장 매입",
+      : "중고 오토바이·중고바이크 전국 출장 매입",
     provider: {
       "@type": "Organization",
       name: "전국중고오토바이매입",

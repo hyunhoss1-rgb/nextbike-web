@@ -43,8 +43,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const region = getRegionBySlug(params.slug);
   if (!region) return {};
 
-  const title = `${region.name} 오토바이매입 | 당일 최고가 출장 매입`;
-  const description = `${region.fullName} 전지역 중고 오토바이·스쿠터 당일 최고가 출장 매입. 방치차·사고차·고장차 전 차종 현장 부당 감가 없이 상차 전 100% 전액 즉시 입금 안전거래. 번호판 폐지 및 서류 대행 무료 지원.`;
+  const title = `${region.name} 오토바이매입 | 중고바이크 당일 출장매입`;
+  const description = `${region.fullName} 전지역 중고 오토바이·중고바이크 출장매입 전문. 스쿠터부터 레저용 바이크까지 방치차·사고차·고장차 현장 감가 없이 상차 전 100% 당일 선입금. 번호판 폐지 및 서류 대행 무료 지원.`;
   const canonical = `https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions/${region.slug}`;
   const ogImageUrl = "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-safe-pay.jpg";
 
@@ -53,13 +53,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     keywords: [
       `${region.name}오토바이매입`,
-      `${region.name} 중고오토바이매입`,
       `${region.name}바이크매입`,
+      `${region.name} 중고오토바이매입`,
+      `${region.name} 중고바이크매입`,
+      `${region.name} 바이크출장매입`,
       `${region.name}스쿠터매입`,
       `${region.fullName} 오토바이 출장매입`,
+      `${region.fullName} 바이크 매입`,
       `${region.name} 중고바이크`,
+      "중고바이크출장매입",
+      "바이크당일매입",
       "오토바이당일매입",
-      "중고오토바이출장매입",
     ],
     alternates: {
       canonical,
@@ -76,7 +80,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           url: ogImageUrl,
           width: 1200,
           height: 630,
-          alt: `${region.name} 오토바이 매입 | 전액 100% 선입금 안전거래`,
+          alt: `${region.name} 오토바이·중고바이크 매입 | 전액 100% 선입금 안전거래`,
         },
       ],
     },
@@ -87,7 +91,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: [
         {
           url: ogImageUrl,
-          alt: `${region.name} 오토바이 매입 | 전액 100% 선입금 안전거래`,
+          alt: `${region.name} 오토바이·중고바이크 매입 | 전액 100% 선입금 안전거래`,
         },
       ],
     },
@@ -301,17 +305,17 @@ export default function RegionPage({ params }: Props) {
             {/* 지역 배지 */}
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan text-xs font-bold">
               <MapPin className="w-3.5 h-3.5" />
-              <span>{region.fullName} 오토바이 매입 전문</span>
+              <span>{region.fullName} 오토바이·중고바이크 출장 매입 전문</span>
             </div>
 
             {/* H1 메인 타이틀 */}
             <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight break-keep">
-              {region.name} <span className="text-brand-cyan">오토바이 매입</span>
+              {region.name} <span className="text-brand-cyan">오토바이매입</span> · <span className="text-brand-yellow">중고바이크 출장매입</span>
             </h1>
 
             {/* 상세 소개글 */}
             <p className="text-sm sm:text-base text-gray-300 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-              {region.fullName} 전지역 상차 전 100% 즉시 전액 입금. 더 이상 교묘한 현장 감가 상술에 스트레스받지 마세요. 사전 합의된 견적 그대로 정직하게 당일 출장 매입합니다.
+              {region.fullName} 전지역 중고 오토바이 및 바이크 출장 매입 전문! 상차 전 100% 당일 선입금 안전거래를 보장합니다. 더 이상 교묘한 현장 감가 상술에 스트레스받지 마세요. 사전 협의된 견적 그대로 정직하게 당일 출장 매입합니다.
             </p>
 
             {/* 4대 체크포인트 (사진 3의 4개 체크 불릿) */}
@@ -463,7 +467,7 @@ export default function RegionPage({ params }: Props) {
               <span>100% 안심 안전거래 보증제</span>
             </div>
             <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-              {region.name} 오토바이 매입, <span className="text-brand-yellow">상차 전 100% 선입금</span>으로 안전하게
+              {region.name} 오토바이·바이크 매입, <span className="text-brand-yellow">상차 전 100% 선입금</span>으로 안전하게
             </h2>
             <p className="text-xs sm:text-sm text-gray-300 leading-relaxed break-keep">
               바이크를 용달차에 묶어놓고 말을 바꾸거나 가격을 깎는 악덕 감가 상술은 절대 없습니다. 
@@ -488,7 +492,7 @@ export default function RegionPage({ params }: Props) {
                 전문 출장 매입 가이드
               </div>
               <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-                {region.editorialTitle || `${region.name} 오토바이 매입 안내`}
+                {region.editorialTitle || `${region.name} 오토바이·중고바이크 출장 매입 가이드`}
               </h2>
             </div>
 
@@ -560,16 +564,16 @@ export default function RegionPage({ params }: Props) {
 
       {/* ================= 4. [지역명] 세부 동별 매입 안내 키워드 그리드 (사진 3 하단 네이버 노출 핵심) ================= */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        <div className="border-t border-border/60 pt-10 text-center sm:text-left">
+      <div className="border-t border-border/60 pt-10 text-center sm:text-left">
           <div className="inline-flex items-center gap-2 text-xs font-bold text-brand-cyan uppercase tracking-wider mb-1.5">
             <MapPin className="w-4 h-4" />
             <span>세부 행정구역 매입 안내</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-white">
-            {`${region.name} 세부 동별 매입 안내`}
+            {`${region.name} 세부 동별 오토바이·바이크 매입 안내`}
           </h2>
           <p className="text-xs sm:text-sm text-gray-400 mt-1">
-            {`${region.name} 관내 모든 행정동 및 세부 지역 어디든 전화 한 통으로 당일 신속 방문 매입을 약속드립니다.`}
+            {`${region.name} 관내 모든 행정동 및 세부 지역 어디든 전화 한 통으로 오토바이 및 중고바이크 당일 신속 방문 매입을 약속드립니다.`}
           </p>
         </div>
 
@@ -586,8 +590,9 @@ export default function RegionPage({ params }: Props) {
                 key={idx}
                 href={href}
                 className="p-3 rounded-lg bg-surface border border-border hover:border-brand-cyan hover:text-brand-cyan text-xs font-semibold text-gray-300 transition-colors flex items-center justify-between group shadow-sm"
+                title={`${region.name} ${sub} 오토바이 및 중고바이크 매입`}
               >
-                <span className="truncate">{`${region.name} ${sub} 오토바이매입`}</span>
+                <span className="truncate">{`${region.name} ${sub} 오토바이·바이크매입`}</span>
                 <ChevronRight className="w-3.5 h-3.5 text-gray-500 group-hover:text-brand-cyan shrink-0" />
               </Link>
             );
@@ -602,7 +607,7 @@ export default function RegionPage({ params }: Props) {
             30초 간편 신청
           </div>
           <h2 className="text-2xl sm:text-3xl font-black text-white">
-            {region.name} 실시간 오토바이 매입 견적 신청
+            {region.name} 실시간 오토바이·중고바이크 매입 견적 신청
           </h2>
           <p className="text-xs sm:text-sm text-gray-400 mt-1">
             정보를 남겨주시면 5분 이내에 최고가 예상 견적을 즉시 회신해 드립니다.

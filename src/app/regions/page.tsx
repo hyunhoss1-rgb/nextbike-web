@@ -6,12 +6,14 @@ import JsonLd from "@/components/JsonLd";
 import { MapPin, Phone, ChevronRight, Home } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "지역별 오토바이매입 출장 상담 | 전국 24시 출장 전문",
+  title: "전국 지역별 오토바이매입·바이크매입 | 중고바이크 당일 출장 매입",
   description:
-    "서울·경기·부산·대구·인천 등 전국 시·도 및 주요 시군구 오토바이매입 상담 안내. 지역명을 눌러 해당 지역의 상세 매입 안내를 확인하세요.",
+    "서울·경기·인천·부산·대구 등 전국 시·도 및 시군구 오토바이매입 및 중고바이크 출장매입 상담 안내. 상차 전 당일 100% 선입금 안전거래.",
   keywords: [
     "지역별오토바이매입",
+    "지역별바이크매입",
     "전국오토바이매입",
+    "전국바이크매입",
     "서울오토바이매입",
     "경기오토바이매입",
     "인천오토바이매입",
@@ -21,6 +23,7 @@ export const metadata: Metadata = {
     "천안오토바이매입",
     "대전오토바이매입",
     "부산오토바이매입",
+    "중고바이크출장매입",
   ],
 };
 
@@ -39,15 +42,15 @@ export default function RegionsIndexPage() {
             <span>홈</span>
           </Link>
           <ChevronRight className="w-3.5 h-3.5 text-gray-600" />
-          <span className="text-brand-cyan font-bold">전국 지역별 오토바이매입</span>
+          <span className="text-brand-cyan font-bold">전국 지역별 오토바이·바이크매입</span>
         </nav>
 
         <div className="space-y-4 max-w-4xl">
           <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-            전국 <span className="text-brand-cyan">지역별 오토바이매입</span>
+            전국 <span className="text-brand-cyan">지역별 오토바이매입</span> · <span className="text-brand-yellow">중고바이크 매입</span>
           </h1>
           <p className="text-sm sm:text-base text-gray-300 leading-relaxed">
-            서울·경기·부산·대구·인천 광역시부터 주요 시·군까지 지역별 오토바이매입 상담 페이지입니다. 지역명을 눌러 해당 지역의 상세 매입 안내와 세부 동(洞) 정보를 확인하세요.
+            서울·경기·부산·대구·인천 광역시부터 전국 주요 시·군·구까지 지역별 오토바이 및 중고바이크 출장 매입 상담 페이지입니다. 상차 전 100% 당일 선입금 원칙으로 안전하게 매입합니다.
           </p>
         </div>
       </div>
@@ -66,7 +69,7 @@ export default function RegionsIndexPage() {
                 REGION
               </div>
               <div className="mt-2 text-base sm:text-lg font-bold tracking-tight text-white group-hover:text-brand-cyan transition-colors truncate">
-                {reg.name} 오토바이매입
+                {reg.name} 오토바이·바이크매입
               </div>
               <div className="text-[11px] text-gray-400 mt-1 truncate">
                 {reg.fullName}

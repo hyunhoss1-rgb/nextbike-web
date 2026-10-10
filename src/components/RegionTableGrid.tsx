@@ -48,7 +48,7 @@ export default function RegionTableGrid({
               key={region.slug}
               href={`/regions/${region.slug}`}
               className="py-3 px-2 text-center text-xs sm:text-sm font-medium text-gray-300 hover:text-brand-cyan hover:bg-brand-cyan/10 transition-colors duration-150 flex items-center justify-center min-h-[46px]"
-              title={`${region.fullName} 오토바이 매입`}
+              title={`${region.fullName} 오토바이·중고바이크 출장 매입`}
             >
               <span>{region.name}</span>
             </Link>

@@ -79,16 +79,18 @@ export default function HomePage() {
 
               <ScrollReveal animation="fade-up" delay={200}>
                 <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.18] break-keep">
-                  <span className="block">상차 전 100% 즉시 전액 입금</span>
+                  <span className="block text-2xl sm:text-4xl lg:text-5xl text-gray-200 font-extrabold mb-1">
+                    전국 중고오토바이매입 · 바이크매입
+                  </span>
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan via-teal-300 to-blue-400">
-                    더 이상 교묘한 감가 상술에 당하지 마세요
+                    상차 전 100% 당일 선입금 안전거래
                   </span>
                 </h1>
               </ScrollReveal>
 
               <ScrollReveal animation="fade-up" delay={300}>
                 <p className="text-sm sm:text-lg text-gray-300 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                  전화로 높게 부르고 현장에서 깎아내리는 불투명한 거래는 그만. 고객님 계좌에 1원 한 장 빠짐없이 입금된 것을 직접 확인하신 뒤에만 바이크를 싣습니다.
+                  중고오토바이 및 바이크 매입 시 전화로 높게 부르고 현장에서 깎아내리는 불투명한 거래는 그만. 고객님 계좌에 1원 한 장 빠짐없이 전액 입금된 것을 직접 확인하신 뒤에만 바이크를 싣습니다.
                 </p>
               </ScrollReveal>
 

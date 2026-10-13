@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FloatingCta from "@/components/FloatingCta";
+import AntiCopyProtection from "@/components/AntiCopyProtection";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr"),
@@ -97,6 +98,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className="bg-background text-gray-100 flex flex-col min-h-screen">
+        <AntiCopyProtection />
         <Header />
         <main className="flex-1 pt-24 sm:pt-28 pb-16 lg:pb-0">{children}</main>
         <Footer />

@@ -43,7 +43,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const region = getRegionBySlug(params.slug);
   if (!region) return {};
 
-  const title = `${region.name} 오토바이매입 | 중고바이크 당일 출장매입`;
+  const tokens = region.name.split(/\s+/);
+  const lastToken = tokens[tokens.length - 1];
+  const baseName = lastToken.startsWith("일산") ? "일산" : lastToken.replace(/(구|시|군)$/, "");
+  const hasDistinctBase = Boolean(baseName && baseName !== region.name && !region.name.startsWith(baseName));
+
+  const displayTarget = hasDistinctBase ? `${region.name}·${baseName}` : region.name;
+  const title = `${displayTarget} 오토바이매입·바이크매입 | 당일 100% 선입금 중고오토바이 출장매입`;
   const description = `${region.fullName} 전지역 중고 오토바이·중고바이크 출장매입 전문. 스쿠터부터 레저용 바이크까지 방치차·사고차·고장차 현장 감가 없이 상차 전 100% 당일 선입금. 번호판 폐지 및 서류 대행 무료 지원.`;
   const canonical = `https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions/${region.slug}`;
   const ogImageUrl = "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-safe-pay.jpg";
@@ -54,14 +60,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     keywords: [
       `${region.name}오토바이매입`,
       `${region.name}바이크매입`,
+      `${baseName}오토바이매입`,
+      `${baseName}바이크매입`,
+      `${baseName} 오토바이매입`,
+      `${baseName} 바이크매입`,
       `${region.name} 중고오토바이매입`,
       `${region.name} 중고바이크매입`,
       `${region.name} 바이크출장매입`,
       `${region.name}스쿠터매입`,
       `${region.fullName} 오토바이 출장매입`,
       `${region.fullName} 바이크 매입`,
-      `${region.name} 중고바이크`,
       "중고바이크출장매입",
+      "중고오토바이매입",
       "바이크당일매입",
       "오토바이당일매입",
     ],

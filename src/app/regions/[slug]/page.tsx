@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const displayTarget = hasDistinctBase ? `${region.name}·${baseName}` : region.name;
   const title = `${displayTarget} 오토바이매입·바이크매입 | 당일 100% 선입금 중고오토바이 출장매입`;
-  const description = `${region.fullName} 전지역 중고 오토바이·중고바이크 출장매입 전문. 스쿠터부터 레저용 바이크까지 방치차·사고차·고장차 현장 감가 없이 상차 전 100% 당일 선입금. 번호판 폐지 및 서류 대행 무료 지원.`;
+  const description = `${region.fullName} 전지역 중고 오토바이·중고바이크 출장매입 및 아파트 지하 방치차 당일 처분 전문. 스쿠터부터 레저용 바이크까지 방치차·사고차·고장차 현장 감가 없이 상차 전 100% 당일 선입금. 번호판 폐지 및 서류 대행 무료 지원.`;
   const canonical = `https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions/${region.slug}`;
   const ogImageUrl = "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-safe-pay.jpg";
 
@@ -64,12 +64,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       `${baseName}바이크매입`,
       `${baseName} 오토바이매입`,
       `${baseName} 바이크매입`,
+      `${region.name}오토바이처분`,
+      `${baseName}오토바이처분`,
+      `${region.name} 오토바이처분`,
+      `${baseName} 오토바이처분`,
       `${region.name} 중고오토바이매입`,
       `${region.name} 중고바이크매입`,
       `${region.name} 바이크출장매입`,
       `${region.name}스쿠터매입`,
       `${region.fullName} 오토바이 출장매입`,
       `${region.fullName} 바이크 매입`,
+      "방치오토바이처분",
+      "오토바이폐지대행",
       "중고바이크출장매입",
       "중고오토바이매입",
       "바이크당일매입",
@@ -325,7 +331,7 @@ export default function RegionPage({ params }: Props) {
 
             {/* 상세 소개글 */}
             <p className="text-sm sm:text-base text-gray-300 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-              {region.fullName} 전지역 중고 오토바이 및 바이크 출장 매입 전문! 상차 전 100% 당일 선입금 안전거래를 보장합니다. 더 이상 교묘한 현장 감가 상술에 스트레스받지 마세요. 사전 협의된 견적 그대로 정직하게 당일 출장 매입합니다.
+              {region.fullName} 전지역 중고 오토바이 및 바이크 출장 매입 전문! 군입대·취업으로 아파트 지하주차장에 장기 방치된 바이크부터 배터리 방전·시동불능 차량까지 당일 무상 출장 처분을 약속합니다. 상차 전 100% 당일 선입금과 번호판 폐지 서류 무료 대행으로 학부모님과 라이더 모두 안심하고 거래하실 수 있습니다.
             </p>
 
             {/* 4대 체크포인트 (사진 3의 4개 체크 불릿) */}

@@ -244,17 +244,36 @@ function renderTable() {
     const actRank = act?.naverMobileRank;
     const compRank = comp?.naverMobileRank;
 
-    // Naver Mobile Badge
+    // Naver Mobile Badge (실질 순위: 파워링크 광고 제외, 파워링크 바로 밑 = 1위)
     let naverBadge = `<span class="px-2 py-0.5 rounded text-[11px] font-bold bg-gray-800 text-gray-400">순위밖</span>`;
     if (actRank) {
-      if (actRank <= 3) {
-        naverBadge = `<span class="px-2.5 py-1 rounded-lg text-xs font-black bg-gradient-to-r from-amber-500/20 to-yellow-500/20 text-amber-300 border border-amber-500/40 shadow-sm flex items-center justify-center gap-1 mx-auto w-16">
-          <i data-lucide="crown" class="w-3 h-3 text-amber-400"></i> ${actRank}위
-        </span>`;
+      if (actRank === 1) {
+        naverBadge = `
+          <div class="inline-flex flex-col items-center">
+            <span class="px-2.5 py-1 rounded-lg text-xs font-black bg-gradient-to-r from-amber-500/25 to-yellow-500/25 text-amber-300 border border-amber-500/50 shadow-md shadow-amber-500/20 flex items-center justify-center gap-1 mx-auto">
+              <i data-lucide="crown" class="w-3.5 h-3.5 text-amber-400 fill-amber-400"></i> 1위
+            </span>
+            <span class="text-[10px] text-amber-400/90 font-bold tracking-tight mt-0.5">파워링크 직하단</span>
+          </div>
+        `;
+      } else if (actRank <= 3) {
+        naverBadge = `
+          <div class="inline-flex flex-col items-center">
+            <span class="px-2.5 py-0.5 rounded-lg text-xs font-extrabold bg-amber-500/15 text-amber-300 border border-amber-500/30 flex items-center justify-center gap-1 mx-auto">
+              ${actRank}위
+            </span>
+            <span class="text-[10px] text-gray-400 mt-0.5">최상단 골드존</span>
+          </div>
+        `;
       } else {
-        naverBadge = `<span class="px-2.5 py-1 rounded-lg text-xs font-extrabold bg-brand-cyan/15 text-brand-cyan border border-brand-cyan/30 text-center block mx-auto w-16">
-          ${actRank}위
-        </span>`;
+        naverBadge = `
+          <div class="inline-flex flex-col items-center">
+            <span class="px-2.5 py-0.5 rounded-lg text-xs font-extrabold bg-brand-cyan/15 text-brand-cyan border border-brand-cyan/30 text-center block mx-auto">
+              ${actRank}위
+            </span>
+            <span class="text-[10px] text-gray-400 mt-0.5">1페이지 노출</span>
+          </div>
+        `;
       }
     }
 

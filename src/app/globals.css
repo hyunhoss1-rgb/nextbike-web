@@ -14,6 +14,8 @@
 
 html {
   scroll-behavior: smooth;
+  max-width: 100vw;
+  overflow-x: hidden;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -25,6 +27,7 @@ body {
   background-color: var(--background);
   color: #f3f4f6;
   font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+  max-width: 100vw;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;

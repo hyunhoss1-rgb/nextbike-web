@@ -130,9 +130,9 @@ export default function MagazineDetailPage({ params }: Props) {
         </nav>
 
         {/* 2열 메인 레이아웃: 좌측 본문 vs 우측 견적/상담 사이드바 */}
-        <div className="grid lg:grid-cols-12 gap-10 items-start">
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-start w-full min-w-0 max-w-full">
           {/* ================= 좌측: 칼럼 본문 (8열) ================= */}
-          <main className="lg:col-span-8 space-y-8">
+          <main className="lg:col-span-8 space-y-8 w-full min-w-0 max-w-full">
             {/* 칼럼 헤더 */}
             <header className="space-y-4 pb-6 border-b border-border/80">
               <div className="flex flex-wrap items-center gap-2">
@@ -184,30 +184,30 @@ export default function MagazineDetailPage({ params }: Props) {
 
             {/* 1. 작업 전 핵심 퀵 인포 대시보드 (난이도·시간·규격·위치) */}
             {article.quickInfo && (
-              <div className="rounded-2xl bg-gradient-to-br from-card via-surface to-surface border border-brand-cyan/30 p-5 sm:p-6 shadow-xl space-y-4">
+              <div className="rounded-2xl bg-gradient-to-br from-card via-surface to-surface border border-brand-cyan/30 p-4 sm:p-6 shadow-xl space-y-4 w-full max-w-full overflow-hidden">
                 <div className="flex items-center justify-between pb-3 border-b border-border/80">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-lg bg-brand-cyan/20 border border-brand-cyan/40 flex items-center justify-center text-brand-cyan">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className="w-8 h-8 rounded-lg bg-brand-cyan/20 border border-brand-cyan/40 flex items-center justify-center text-brand-cyan shrink-0">
                       <Zap className="w-4 h-4" />
                     </div>
-                    <div>
-                      <span className="text-[11px] text-brand-cyan font-extrabold uppercase tracking-wider block">
+                    <div className="min-w-0">
+                      <span className="text-[10px] sm:text-[11px] text-brand-cyan font-extrabold uppercase tracking-wider block truncate">
                         정비 매뉴얼 팩트체크
                       </span>
-                      <span className="text-sm sm:text-base font-black text-white">
+                      <span className="text-xs sm:text-base font-black text-white truncate block">
                         작업 전 핵심 요약 대시보드
                       </span>
                     </div>
                   </div>
-                  <span className="text-xs px-2.5 py-1 rounded-full bg-brand-cyan/15 text-brand-cyan font-bold border border-brand-cyan/30">
+                  <span className="text-[11px] sm:text-xs px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-brand-cyan/15 text-brand-cyan font-bold border border-brand-cyan/30 shrink-0">
                     1분 요약
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-                  <div className="p-3.5 rounded-xl bg-card/80 border border-border/60 space-y-1">
-                    <span className="text-[11px] text-gray-400 flex items-center gap-1 font-medium">
-                      <Wrench className="w-3.5 h-3.5 text-brand-cyan" />
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4 w-full">
+                  <div className="p-2.5 sm:p-3.5 rounded-xl bg-card/80 border border-border/60 space-y-1 min-w-0 overflow-hidden">
+                    <span className="text-[10px] sm:text-[11px] text-gray-400 flex items-center gap-1 font-medium truncate">
+                      <Wrench className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
                       작업 난이도
                     </span>
                     <p className="text-xs sm:text-sm font-black text-white break-keep">
@@ -215,9 +215,9 @@ export default function MagazineDetailPage({ params }: Props) {
                     </p>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-card/80 border border-border/60 space-y-1">
-                    <span className="text-[11px] text-gray-400 flex items-center gap-1 font-medium">
-                      <Timer className="w-3.5 h-3.5 text-amber-400" />
+                  <div className="p-2.5 sm:p-3.5 rounded-xl bg-card/80 border border-border/60 space-y-1 min-w-0 overflow-hidden">
+                    <span className="text-[10px] sm:text-[11px] text-gray-400 flex items-center gap-1 font-medium truncate">
+                      <Timer className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                       예상 시간
                     </span>
                     <p className="text-xs sm:text-sm font-black text-white">
@@ -225,9 +225,9 @@ export default function MagazineDetailPage({ params }: Props) {
                     </p>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-card/80 border border-border/60 space-y-1">
-                    <span className="text-[11px] text-gray-400 flex items-center gap-1 font-medium">
-                      <Battery className="w-3.5 h-3.5 text-emerald-400" />
+                  <div className="p-2.5 sm:p-3.5 rounded-xl bg-card/80 border border-border/60 space-y-1 min-w-0 overflow-hidden">
+                    <span className="text-[10px] sm:text-[11px] text-gray-400 flex items-center gap-1 font-medium truncate">
+                      <Battery className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                       순정 규격
                     </span>
                     <p className="text-xs sm:text-sm font-black text-brand-cyan break-all">
@@ -235,12 +235,12 @@ export default function MagazineDetailPage({ params }: Props) {
                     </p>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-card/80 border border-border/60 space-y-1">
-                    <span className="text-[11px] text-gray-400 flex items-center gap-1 font-medium">
-                      <MapPin className="w-3.5 h-3.5 text-rose-400" />
+                  <div className="p-2.5 sm:p-3.5 rounded-xl bg-card/80 border border-border/60 space-y-1 min-w-0 overflow-hidden">
+                    <span className="text-[10px] sm:text-[11px] text-gray-400 flex items-center gap-1 font-medium truncate">
+                      <MapPin className="w-3.5 h-3.5 text-rose-400 shrink-0" />
                       장착 위치
                     </span>
-                    <p className="text-xs sm:text-sm font-black text-white line-clamp-2">
+                    <p className="text-xs sm:text-sm font-black text-white line-clamp-2 break-keep">
                       {article.quickInfo.locationSummary}
                     </p>
                   </div>
@@ -357,8 +357,12 @@ export default function MagazineDetailPage({ params }: Props) {
                       {article.specTable.title}
                     </h3>
                   </div>
-                  <div className="overflow-x-auto rounded-2xl border border-border shadow-lg">
-                    <table className="w-full text-left text-xs sm:text-sm text-gray-300">
+                  <div className="w-full max-w-full overflow-x-auto rounded-2xl border border-border shadow-lg">
+                    <div className="px-3 py-1.5 bg-card/80 border-b border-border/80 text-[11px] text-gray-400 flex items-center justify-between sm:hidden">
+                      <span className="font-semibold text-gray-300">비교표 전체보기</span>
+                      <span className="text-brand-cyan font-bold">👉 표를 좌우로 밀어서 확인</span>
+                    </div>
+                    <table className="w-full min-w-[520px] text-left text-xs sm:text-sm text-gray-300">
                       <thead className="bg-card text-brand-cyan border-b border-border">
                         <tr>
                           {article.specTable.headers.map((th, hIdx) => (
@@ -554,7 +558,7 @@ export default function MagazineDetailPage({ params }: Props) {
           </main>
 
           {/* ================= 우측: 30초 견적 사이드바 (4열, sticky) ================= */}
-          <aside className="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
+          <aside className="lg:col-span-4 space-y-6 lg:sticky lg:top-24 w-full min-w-0 max-w-full">
             <div className="rounded-2xl bg-surface border border-border p-5 space-y-4 shadow-xl">
               <div className="text-center space-y-1">
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan text-xs font-bold">

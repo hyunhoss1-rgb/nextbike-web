@@ -36,24 +36,29 @@ function sleep(ms) {
   return new Promise(r => setTimeout(r, ms));
 }
 
-// Check Naver Mobile Search - 실질 순위 (파워링크 광고 제외, 파워링크 바로 밑 = 1위)
+// Check Naver Mobile Search - 100% 팩트 기반 실질 순위 측정
 async function checkNaverMobile(query) {
   const url = 'https://m.search.naver.com/search.naver?query=' + encodeURIComponent(query);
   const { status, html } = await fetchHttp(url);
-  if (status !== 200 || !html) return { exposed: false, rank: null, rankDesc: '순위밖', link: '', title: '' };
+  if (status !== 200 || !html) return { exposed: false, rank: null, rankDesc: '순위밖', link: '', title: '', competitorsBefore: [] };
 
   const ourDomain = 'xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr';
   const pos = html.indexOf(ourDomain);
   if (pos === -1 && !html.includes('전국중고오토바이매입.kr')) {
-    return { exposed: false, rank: null, rankDesc: '순위밖', link: '', title: '' };
+    return { exposed: false, rank: null, rankDesc: '순위밖', link: '', title: '', competitorsBefore: [] };
   }
 
   // Parse link
   const linkMatch = html.match(/href=["'](https?:\/\/[^"']*(?:xn--299alk823a88b8ztw1bpdu7bh3ec67a\.kr|전국중고오토바이매입\.kr)[^"']*)["']/i);
   const topLink = linkMatch ? linkMatch[1] : 'https://www.전국중고오토바이매입.kr/';
 
-  // Extract all organic competitor domains before our site
   const preHtml = html.substring(0, pos > 0 ? pos : html.length);
+
+  // 1. Check if Place (지도) or Smartblock (인기글) appears above website section
+  const hasPlaceAbove = preHtml.includes('거리순') || preHtml.includes('관련도순') || preHtml.includes('지도에서 더보기') || preHtml.includes('nmap');
+  const hasSmartBlockAbove = preHtml.includes('인기글');
+
+  // 2. Extract competitor website domains strictly appearing BEFORE our site
   const externalDomains = [];
   const linkRe = /href=["'](https?:\/\/[^"'\s]+)["']/gi;
   let m;
@@ -79,22 +84,29 @@ async function checkNaverMobile(query) {
     } catch (e) {}
   }
 
-  // 실질 순위 = 1 (파워링크 바로 밑) + 앞선 유기적 경쟁 사이트 수
+  // Real rank = 1 + number of competitor websites ahead
   const rank = 1 + externalDomains.length;
 
-  let rankDesc = `${rank}위`;
+  let rankDesc = '';
   if (rank === 1) {
-    rankDesc = '파워링크 직하단 1위 (최상단)';
-  } else if (rank <= 3) {
-    rankDesc = `최상단 골드존 ${rank}위`;
+    if (hasPlaceAbove) {
+      rankDesc = '지도 하단 1위';
+    } else if (hasSmartBlockAbove) {
+      rankDesc = '인기글 하단 1위';
+    } else {
+      rankDesc = '파워링크 직하단 1위 (최상단)';
+    }
   } else {
-    rankDesc = `1페이지 ${rank}위`;
+    rankDesc = `웹사이트 ${rank}위 (상위 ${externalDomains.length}개사 뒤)`;
   }
 
   return {
     exposed: true,
     rank,
     rankDesc,
+    hasPlaceAbove,
+    hasSmartBlockAbove,
+    competitorsBefore: externalDomains,
     competitorsBeforeCount: externalDomains.length,
     link: topLink,
     title: `전국중고오토바이매입.kr`
@@ -164,6 +176,9 @@ async function scanKeyword(item) {
     exposed: naverMobile.exposed,
     naverMobileRank: naverMobile.rank,
     rankDesc: naverMobile.rankDesc || (naverMobile.rank ? `${naverMobile.rank}위` : '순위밖'),
+    hasPlaceAbove: naverMobile.hasPlaceAbove,
+    hasSmartBlockAbove: naverMobile.hasSmartBlockAbove,
+    competitorsBefore: naverMobile.competitorsBefore || [],
     naverPcRank: naverPc.rank,
     googleRank: google.rank,
     link: naverMobile.link,

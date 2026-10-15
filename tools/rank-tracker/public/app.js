@@ -244,34 +244,38 @@ function renderTable() {
     const actRank = act?.naverMobileRank;
     const compRank = comp?.naverMobileRank;
 
-    // Naver Mobile Badge (실질 순위: 파워링크 광고 제외, 파워링크 바로 밑 = 1위)
+    // Naver Mobile Badge (실질 순위: 파워링크 광고 제외, 100% 팩트 순위)
     let naverBadge = `<span class="px-2 py-0.5 rounded text-[11px] font-bold bg-gray-800 text-gray-400">순위밖</span>`;
     if (actRank) {
+      const comps = (act.competitorsBefore || []).slice(0, 2).map(c => c.replace('.com','').replace('.kr','').replace('xn--9i1br4kwvav7u81sd9bjl','트리니티')).join(', ');
+      const compCount = act.competitorsBefore?.length || (actRank - 1);
+
       if (actRank === 1) {
+        const subLabel = act.hasPlaceAbove ? '지도 하단 1위' : '파워링크 직하단';
         naverBadge = `
           <div class="inline-flex flex-col items-center">
             <span class="px-2.5 py-1 rounded-lg text-xs font-black bg-gradient-to-r from-amber-500/25 to-yellow-500/25 text-amber-300 border border-amber-500/50 shadow-md shadow-amber-500/20 flex items-center justify-center gap-1 mx-auto">
               <i data-lucide="crown" class="w-3.5 h-3.5 text-amber-400 fill-amber-400"></i> 1위
             </span>
-            <span class="text-[10px] text-amber-400/90 font-bold tracking-tight mt-0.5">파워링크 직하단</span>
-          </div>
-        `;
-      } else if (actRank <= 3) {
-        naverBadge = `
-          <div class="inline-flex flex-col items-center">
-            <span class="px-2.5 py-0.5 rounded-lg text-xs font-extrabold bg-amber-500/15 text-amber-300 border border-amber-500/30 flex items-center justify-center gap-1 mx-auto">
-              ${actRank}위
-            </span>
-            <span class="text-[10px] text-gray-400 mt-0.5">최상단 골드존</span>
+            <span class="text-[10px] text-amber-400/90 font-bold tracking-tight mt-0.5">${subLabel}</span>
           </div>
         `;
       } else {
+        const badgeColor = actRank <= 3 
+          ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30' 
+          : 'bg-brand-cyan/15 text-brand-cyan border border-brand-cyan/30';
+        
+        const compTip = (act.competitorsBefore || []).join(', ');
+        const subText = compCount > 0 ? `웹사이트 ${actRank}위 (상위 ${compCount}개사)` : `웹사이트 ${actRank}위`;
+
         naverBadge = `
-          <div class="inline-flex flex-col items-center">
-            <span class="px-2.5 py-0.5 rounded-lg text-xs font-extrabold bg-brand-cyan/15 text-brand-cyan border border-brand-cyan/30 text-center block mx-auto">
+          <div class="inline-flex flex-col items-center max-w-[130px] mx-auto text-center" title="상위 경쟁사: ${compTip}">
+            <span class="px-2.5 py-0.5 rounded-lg text-xs font-extrabold ${badgeColor}">
               ${actRank}위
             </span>
-            <span class="text-[10px] text-gray-400 mt-0.5">1페이지 노출</span>
+            <span class="text-[10px] text-gray-400 mt-0.5 leading-tight truncate w-full" title="${compTip}">
+              ${subText}
+            </span>
           </div>
         `;
       }

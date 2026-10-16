@@ -58,27 +58,36 @@ async function checkNaverMobile(query) {
   const hasPlaceAbove = preHtml.includes('거리순') || preHtml.includes('관련도순') || preHtml.includes('지도에서 더보기') || preHtml.includes('nmap');
   const hasSmartBlockAbove = preHtml.includes('인기글');
 
-  // 2. Extract competitor website domains strictly appearing BEFORE our site
+  // 2. Extract competitor website domains strictly appearing BEFORE our site (excluding news, video, portals)
+  const NON_COMPETITOR_HOST_RE = /(?:naver\.com|pstatic\.net|navercorp\.com|youtube\.com|youtu\.be|daum\.net|kakao\.com|tistory\.com|namu\.wiki|novawiki\.app|114\.co\.kr|instagram\.com|facebook\.com|businesspost\.co\.kr|hankooki\.com|newdaily\.co\.kr|getnews\.co\.kr|cnbnews\.com|ziksir\.com|ilyosisa\.co\.kr|mdilbo\.com|vmspace\.com)/i;
   const externalDomains = [];
   const linkRe = /href=["'](https?:\/\/[^"'\s]+)["']/gi;
   let m;
 
   while ((m = linkRe.exec(preHtml)) !== null) {
     const rawUrl = m[1];
-    // Exclude ads and naver internal system URLs
+    // Exclude ads, news articles, and naver internal system URLs
     if (
       rawUrl.includes('naver.com') ||
       rawUrl.includes('pstatic.net') ||
       rawUrl.includes('javascript:') ||
       rawUrl.includes('ad.search.naver') ||
       rawUrl.includes('adcr.naver') ||
-      rawUrl.includes('search.naver.com')
+      rawUrl.includes('search.naver.com') ||
+      rawUrl.includes('/news/') ||
+      rawUrl.includes('articleView') ||
+      rawUrl.includes('idxno=')
     ) continue;
 
     try {
       const u = new URL(rawUrl);
-      const host = u.hostname.replace('www.', '');
-      if (host && host !== ourDomain && !externalDomains.includes(host)) {
+      const host = u.hostname.replace(/^(?:www\.|m\.)/i, '');
+      if (
+        host &&
+        host !== ourDomain &&
+        !NON_COMPETITOR_HOST_RE.test(host) &&
+        !externalDomains.includes(host)
+      ) {
         externalDomains.push(host);
       }
     } catch (e) {}
@@ -126,15 +135,26 @@ async function checkNaverPC(query) {
 
   const pos = html.indexOf('xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr');
   const preHtml = html.substring(0, pos);
+  const NON_COMPETITOR_HOST_RE = /(?:naver\.com|pstatic\.net|navercorp\.com|youtube\.com|youtu\.be|daum\.net|kakao\.com|tistory\.com|namu\.wiki|novawiki\.app|114\.co\.kr|instagram\.com|facebook\.com|businesspost\.co\.kr|hankooki\.com|newdaily\.co\.kr|getnews\.co\.kr|cnbnews\.com|ziksir\.com|ilyosisa\.co\.kr|mdilbo\.com|vmspace\.com)/i;
   const externalDomains = [];
   const linkRe = /href=["'](https?:\/\/[^"'\s]+)["']/gi;
   let m;
   while ((m = linkRe.exec(preHtml)) !== null) {
     const rawUrl = m[1];
-    if (rawUrl.includes('naver.com') || rawUrl.includes('pstatic.net') || rawUrl.includes('ad.') || rawUrl.includes('adcr.')) continue;
+    if (
+      rawUrl.includes('naver.com') ||
+      rawUrl.includes('pstatic.net') ||
+      rawUrl.includes('ad.') ||
+      rawUrl.includes('adcr.') ||
+      rawUrl.includes('/news/') ||
+      rawUrl.includes('articleView') ||
+      rawUrl.includes('idxno=')
+    ) continue;
     try {
-      const host = new URL(rawUrl).hostname.replace('www.', '');
-      if (host && !externalDomains.includes(host)) externalDomains.push(host);
+      const host = new URL(rawUrl).hostname.replace(/^(?:www\.|m\.)/i, '');
+      if (host && !NON_COMPETITOR_HOST_RE.test(host) && !externalDomains.includes(host)) {
+        externalDomains.push(host);
+      }
     } catch(e) {}
   }
 

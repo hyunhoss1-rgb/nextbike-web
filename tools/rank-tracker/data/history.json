@@ -82,7 +82,7 @@
           "kw": "바이크매입",
           "category": "1. 브랜드·대표",
           "exposed": true,
-          "naverMobileRank": 16,
+          "naverMobileRank": 11,
           "rankDesc": "웹사이트 16위 (상위 15개사 뒤)",
           "hasPlaceAbove": true,
           "hasSmartBlockAbove": false,
@@ -91,11 +91,6 @@
             "joonggobike.com",
             "honest-bike.com",
             "xn--9z2b13b1zppkbqcs98e.com",
-            "tk.newdaily.co.kr",
-            "newdaily.co.kr",
-            "getnews.co.kr",
-            "cnbnews.com",
-            "ziksir.com",
             "xn--299a74kba495f81lbgdhsv.kr",
             "xn--9g3b17p32at7w.com",
             "xn--b60bj1s89e3pf91mzkd.com",
@@ -106,7 +101,8 @@
           "naverPcRank": 10,
           "googleRank": null,
           "link": "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/",
-          "title": "전국중고오토바이매입.kr"
+          "title": "전국중고오토바이매입.kr",
+          "competitorsBeforeCount": 10
         },
         "노원구 오토바이 매입": {
           "kw": "노원구 오토바이 매입",
@@ -1020,23 +1016,20 @@
           "kw": "남양주 오토바이 매입",
           "category": "4. 수도권 주요 시",
           "exposed": true,
-          "naverMobileRank": 8,
+          "naverMobileRank": 4,
           "rankDesc": "웹사이트 8위 (상위 7개사 뒤)",
           "hasPlaceAbove": true,
           "hasSmartBlockAbove": false,
           "competitorsBefore": [
             "joonggobike.com",
             "moto02.com",
-            "gtbikemall.com",
-            "m.businesspost.co.kr",
-            "businesspost.co.kr",
-            "vmspace.com",
-            "ilyosisa.co.kr"
+            "gtbikemall.com"
           ],
           "naverPcRank": 7,
           "googleRank": null,
           "link": "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions/namyangju-wabueup",
-          "title": "전국중고오토바이매입.kr"
+          "title": "전국중고오토바이매입.kr",
+          "competitorsBeforeCount": 3
         },
         "하남 오토바이 매입": {
           "kw": "하남 오토바이 매입",
@@ -1495,18 +1488,18 @@
           "kw": "군대 오토바이 처분",
           "category": "7. 처분·학부모 롱테일",
           "exposed": true,
-          "naverMobileRank": 3,
+          "naverMobileRank": 2,
           "rankDesc": "웹사이트 3위 (상위 2개사 뒤)",
           "hasPlaceAbove": true,
           "hasSmartBlockAbove": false,
           "competitorsBefore": [
-            "novawiki.app",
             "daeryunlaw-military.com"
           ],
           "naverPcRank": 3,
           "googleRank": null,
           "link": "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions/daegu",
-          "title": "전국중고오토바이매입.kr"
+          "title": "전국중고오토바이매입.kr",
+          "competitorsBeforeCount": 1
         },
         "방치 오토바이 처분": {
           "kw": "방치 오토바이 처분",
@@ -1627,7 +1620,7 @@
           "kw": "바이크매입",
           "category": "1. 브랜드·대표",
           "exposed": true,
-          "naverMobileRank": 14,
+          "naverMobileRank": 9,
           "rankDesc": "웹사이트 14위 (상위 13개사 뒤)",
           "hasPlaceAbove": true,
           "hasSmartBlockAbove": false,
@@ -1636,11 +1629,6 @@
             "xn--9z2b13b1zppkbqcs98e.com",
             "joonggobike.com",
             "honest-bike.com",
-            "tk.newdaily.co.kr",
-            "newdaily.co.kr",
-            "getnews.co.kr",
-            "cnbnews.com",
-            "ziksir.com",
             "xn--299a74kba495f81lbgdhsv.kr",
             "xn--b60bj1s89e3pf91mzkd.com",
             "xn--248-y27l686bohz.com",
@@ -1649,7 +1637,8 @@
           "naverPcRank": 10,
           "googleRank": null,
           "link": "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/",
-          "title": "전국중고오토바이매입.kr"
+          "title": "전국중고오토바이매입.kr",
+          "competitorsBeforeCount": 8
         },
         "노원구 오토바이 매입": {
           "kw": "노원구 오토바이 매입",
@@ -2553,23 +2542,20 @@
           "kw": "남양주 오토바이 매입",
           "category": "4. 수도권 주요 시",
           "exposed": true,
-          "naverMobileRank": 8,
+          "naverMobileRank": 4,
           "rankDesc": "웹사이트 8위 (상위 7개사 뒤)",
           "hasPlaceAbove": true,
           "hasSmartBlockAbove": false,
           "competitorsBefore": [
             "joonggobike.com",
             "moto02.com",
-            "m.businesspost.co.kr",
-            "businesspost.co.kr",
-            "vmspace.com",
-            "ilyosisa.co.kr",
             "gtbikemall.com"
           ],
           "naverPcRank": 7,
           "googleRank": null,
           "link": "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions/namyangju-jinjeopeup",
-          "title": "전국중고오토바이매입.kr"
+          "title": "전국중고오토바이매입.kr",
+          "competitorsBeforeCount": 3
         },
         "하남 오토바이 매입": {
           "kw": "하남 오토바이 매입",
@@ -3136,7 +3122,7 @@
           "kw": "바이크매입",
           "category": "1. 브랜드·대표",
           "exposed": true,
-          "naverMobileRank": 17,
+          "naverMobileRank": 12,
           "rankDesc": "웹사이트 17위 (상위 16개사 뒤)",
           "hasPlaceAbove": true,
           "hasSmartBlockAbove": false,
@@ -3145,11 +3131,6 @@
             "xn--9z2b13b1zppkbqcs98e.com",
             "joonggobike.com",
             "honest-bike.com",
-            "tk.newdaily.co.kr",
-            "newdaily.co.kr",
-            "getnews.co.kr",
-            "cnbnews.com",
-            "ziksir.com",
             "xn--299a74kba495f81lbgdhsv.kr",
             "xn--b60bj1s89e3pf91mzkd.com",
             "xn--248-y27l686bohz.com",
@@ -3161,7 +3142,8 @@
           "naverPcRank": 10,
           "googleRank": null,
           "link": "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/",
-          "title": "전국중고오토바이매입.kr"
+          "title": "전국중고오토바이매입.kr",
+          "competitorsBeforeCount": 11
         },
         "노원구 오토바이 매입": {
           "kw": "노원구 오토바이 매입",
@@ -4026,23 +4008,20 @@
           "kw": "남양주 오토바이 매입",
           "category": "4. 수도권 주요 시",
           "exposed": true,
-          "naverMobileRank": 8,
+          "naverMobileRank": 4,
           "rankDesc": "웹사이트 8위 (상위 7개사 뒤)",
           "hasPlaceAbove": true,
           "hasSmartBlockAbove": false,
           "competitorsBefore": [
             "joonggobike.com",
             "moto02.com",
-            "m.businesspost.co.kr",
-            "businesspost.co.kr",
-            "vmspace.com",
-            "ilyosisa.co.kr",
             "gtbikemall.com"
           ],
           "naverPcRank": 7,
           "googleRank": null,
           "link": "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions/namyangju-jinjeopeup",
-          "title": "전국중고오토바이매입.kr"
+          "title": "전국중고오토바이매입.kr",
+          "competitorsBeforeCount": 3
         },
         "하남 오토바이 매입": {
           "kw": "하남 오토바이 매입",
@@ -4501,7 +4480,7 @@
           "kw": "바이크매입",
           "category": "1. 브랜드·대표",
           "exposed": true,
-          "naverMobileRank": 17,
+          "naverMobileRank": 12,
           "rankDesc": "웹사이트 17위 (상위 16개사 뒤)",
           "hasPlaceAbove": true,
           "hasSmartBlockAbove": false,
@@ -4510,11 +4489,6 @@
             "xn--9z2b13b1zppkbqcs98e.com",
             "joonggobike.com",
             "honest-bike.com",
-            "tk.newdaily.co.kr",
-            "newdaily.co.kr",
-            "getnews.co.kr",
-            "cnbnews.com",
-            "ziksir.com",
             "xn--299a74kba495f81lbgdhsv.kr",
             "xn--b60bj1s89e3pf91mzkd.com",
             "xn--248-y27l686bohz.com",
@@ -4526,7 +4500,8 @@
           "naverPcRank": 10,
           "googleRank": null,
           "link": "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/",
-          "title": "전국중고오토바이매입.kr"
+          "title": "전국중고오토바이매입.kr",
+          "competitorsBeforeCount": 11
         },
         "노원구 오토바이 매입": {
           "kw": "노원구 오토바이 매입",
@@ -5391,23 +5366,20 @@
           "kw": "남양주 오토바이 매입",
           "category": "4. 수도권 주요 시",
           "exposed": true,
-          "naverMobileRank": 8,
+          "naverMobileRank": 4,
           "rankDesc": "웹사이트 8위 (상위 7개사 뒤)",
           "hasPlaceAbove": true,
           "hasSmartBlockAbove": false,
           "competitorsBefore": [
             "joonggobike.com",
             "moto02.com",
-            "m.businesspost.co.kr",
-            "businesspost.co.kr",
-            "vmspace.com",
-            "ilyosisa.co.kr",
             "gtbikemall.com"
           ],
           "naverPcRank": 7,
           "googleRank": null,
           "link": "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions/namyangju-jinjeopeup",
-          "title": "전국중고오토바이매입.kr"
+          "title": "전국중고오토바이매입.kr",
+          "competitorsBeforeCount": 3
         },
         "하남 오토바이 매입": {
           "kw": "하남 오토바이 매입",

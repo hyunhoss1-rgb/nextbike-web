@@ -49,8 +49,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const hasDistinctBase = Boolean(baseName && baseName !== region.name && !region.name.startsWith(baseName));
 
   const displayTarget = hasDistinctBase ? `${region.name}·${baseName}` : region.name;
-  const title = `${displayTarget} 오토바이매입·바이크매입 | 당일 100% 선입금 중고오토바이 출장매입`;
-  const description = `${region.fullName} 전지역 중고 오토바이·중고바이크 출장매입 및 아파트 지하 방치차 당일 처분 전문. 스쿠터부터 레저용 바이크까지 방치차·사고차·고장차 현장 감가 없이 상차 전 100% 당일 선입금. 번호판 폐지 및 서류 대행 무료 지원.`;
+  const title = `${displayTarget} 오토바이매입 | 중고바이크 당일 출장매입`;
+
+  const subDistrictText =
+    region.subDistricts && region.subDistricts.length > 0
+      ? `(${region.subDistricts.slice(0, 6).join("·")}) `
+      : "";
+  const trafficText = region.trafficNote ? `${region.trafficNote} ` : "";
+  const dispatchText = region.dispatchTime ? `${region.dispatchTime} 무료 출장. ` : "";
+  const description = `${region.fullName} ${subDistrictText}오토바이매입·중고바이크 당일 출장매입 전문. ${trafficText}${dispatchText}스쿠터·방치차·사고차 현장 감가 없이 상차 전 100% 선입금 및 폐지 서류 무료 대행.`;
   const canonical = `https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions/${region.slug}`;
   const ogImageUrl = "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-safe-pay.jpg";
 
@@ -326,12 +333,18 @@ export default function RegionPage({ params }: Props) {
 
             {/* H1 메인 타이틀 */}
             <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight break-keep">
-              {region.name} <span className="text-brand-cyan">오토바이매입</span> · <span className="text-brand-yellow">중고바이크 출장매입</span>
+              {region.name} <span className="text-brand-cyan">오토바이 매입</span> · <span className="text-brand-yellow">중고바이크 출장매입</span>
             </h1>
 
-            {/* 상세 소개글 */}
+            {/* 상세 소개글 (지역별 고유 행정구역 및 도로망 반영) */}
             <p className="text-sm sm:text-base text-gray-300 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-              {region.fullName} 전지역 중고 오토바이 및 바이크 출장 매입 전문! 군입대·취업으로 아파트 지하주차장에 장기 방치된 바이크부터 배터리 방전·시동불능 차량까지 당일 무상 출장 처분을 약속합니다. 상차 전 100% 당일 선입금과 번호판 폐지 서류 무료 대행으로 학부모님과 라이더 모두 안심하고 거래하실 수 있습니다.
+              {region.fullName}
+              {region.subDistricts && region.subDistricts.length > 0
+                ? `(${region.subDistricts.slice(0, 5).join("·")} 등)`
+                : ""}{" "}
+              전지역 오토바이매입 및 중고바이크 당일 출장매입 전문!{" "}
+              {region.trafficNote ? `${region.trafficNote} ` : ""}
+              배터리 방전·시동불능·장기 방치 바이크까지 {region.dispatchTime || "당일 신속"} 무상 방문하여 상차 전 100% 당일 선입금과 구청 폐지·명의이전 서류 무료 대행을 보장합니다.
             </p>
 
             {/* 4대 체크포인트 (사진 3의 4개 체크 불릿) */}

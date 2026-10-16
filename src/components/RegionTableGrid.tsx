@@ -62,7 +62,7 @@ export default function RegionTableGrid({
           href="/regions"
           className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-gray-400 hover:text-brand-cyan transition-colors group"
         >
-          <span>대한민국 70+ 전 지역 출장 상세 안내 보기</span>
+          <span>대한민국 230+ 전 시·군·구 출장 상세 안내 보기</span>
           <ArrowRight className="w-4 h-4 text-gray-500 group-hover:text-brand-cyan group-hover:translate-x-0.5 transition-all" />
         </Link>
       </div>

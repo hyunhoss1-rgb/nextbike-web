@@ -104,6 +104,69 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
+      <head>
+        {/* 네이버·구글·다음 검색엔진 봇은 모든 메인·세부페이지 100% 정상 색인 허용 */}
+        <meta name="Yeti" content="index, follow" />
+        <meta
+          name="Googlebot"
+          content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+        />
+        <meta name="Daumoa" content="index, follow" />
+        <meta name="bingbot" content="index, follow" />
+        {/* AI 학습·실시간 요약·스크래핑 봇은 메인 및 전 세부페이지 수집 원천 금지 */}
+        <meta
+          name="Google-Extended"
+          content="noindex, nofollow, noarchive, nosnippet, noai, noimageai"
+        />
+        <meta
+          name="GoogleOther"
+          content="noindex, nofollow, noarchive, nosnippet, noai, noimageai"
+        />
+        <meta
+          name="GPTBot"
+          content="noindex, nofollow, noarchive, nosnippet, noai, noimageai"
+        />
+        <meta
+          name="ChatGPT-User"
+          content="noindex, nofollow, noarchive, nosnippet, noai, noimageai"
+        />
+        <meta
+          name="OAI-SearchBot"
+          content="noindex, nofollow, noarchive, nosnippet, noai, noimageai"
+        />
+        <meta
+          name="ClaudeBot"
+          content="noindex, nofollow, noarchive, nosnippet, noai, noimageai"
+        />
+        <meta
+          name="Claude-Web"
+          content="noindex, nofollow, noarchive, nosnippet, noai, noimageai"
+        />
+        <meta
+          name="Claude-SearchBot"
+          content="noindex, nofollow, noarchive, nosnippet, noai, noimageai"
+        />
+        <meta
+          name="PerplexityBot"
+          content="noindex, nofollow, noarchive, nosnippet, noai, noimageai"
+        />
+        <meta
+          name="Perplexity-User"
+          content="noindex, nofollow, noarchive, nosnippet, noai, noimageai"
+        />
+        <meta
+          name="CCBot"
+          content="noindex, nofollow, noarchive, nosnippet, noai, noimageai"
+        />
+        <meta
+          name="Bytespider"
+          content="noindex, nofollow, noarchive, nosnippet, noai, noimageai"
+        />
+        <meta
+          name="Meta-ExternalAgent"
+          content="noindex, nofollow, noarchive, nosnippet, noai, noimageai"
+        />
+      </head>
       <body className="bg-background text-gray-100 flex flex-col min-h-screen">
         <AntiCopyProtection />
         <Header />

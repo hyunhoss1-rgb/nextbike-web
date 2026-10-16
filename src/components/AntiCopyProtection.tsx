@@ -80,15 +80,33 @@ export default function AntiCopyProtection() {
       }
     };
 
+    // 5. 클립보드 복사(copy) 및 잘라내기(cut) 이벤트 직접 차단 (모바일 메뉴 및 스크립트 우회 복사 방지)
+    const handleClipboard = (e: ClipboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+      e.preventDefault();
+    };
+
     document.addEventListener("contextmenu", handleContextMenu);
     document.addEventListener("dragstart", handleDragStart);
     document.addEventListener("selectstart", handleSelectStart);
+    document.addEventListener("copy", handleClipboard);
+    document.addEventListener("cut", handleClipboard);
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       document.removeEventListener("contextmenu", handleContextMenu);
       document.removeEventListener("dragstart", handleDragStart);
       document.removeEventListener("selectstart", handleSelectStart);
+      document.removeEventListener("copy", handleClipboard);
+      document.removeEventListener("cut", handleClipboard);
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);

@@ -333,7 +333,7 @@ export default function HomePage() {
               {
                 num: "05",
                 title: "24시간 내 행정 이전 완결",
-                desc: "정식 매매계약서 작성 후 24시간 내 구청 명의이전을 완료하고 전산 서류 사진을 전송합니다.",
+                desc: "정식 매매계약서 작성 후 24시간 내 관할 구청 명의이전 및 서류 처리를 깔끔하게 완료합니다.",
               },
             ].map((item, idx) => (
               <ScrollReveal

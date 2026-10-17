@@ -488,9 +488,10 @@ export default function RegionPage({ params }: Props) {
             <Image
               src="/images/og-safe-pay.jpg"
               alt={`${region.name} 오토바이 매입 전액 100% 선입금 안전거래`}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 320px"
+              width={1200}
+              height={630}
+              priority
+              className="w-full h-full object-cover"
             />
           </div>
           <div className="space-y-3 text-center md:text-left flex-1">

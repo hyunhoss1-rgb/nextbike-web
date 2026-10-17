@@ -52,17 +52,31 @@ export default function JsonLd({
       "https://www.instagram.com/next___bike",
     ],
     areaServed: "KR",
+    image: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-safe-pay.jpg",
+    logo: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-safe-pay.jpg",
     description:
       "전국 중고 오토바이 당일 출장 매입 전문. 상차 전 당일 100% 선입금 안전거래, 실차 확인 후 전액 즉시 계좌입금. 스쿠터, 수입 바이크, 사고차, 방치차 전 차종 매입 상담.",
   };
 
-  // 2. WebSite Schema
+  // 2. WebSite & WebPage Schema
   const websiteSchema = {
     "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "전국중고오토바이매입",
-    url: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr",
+    "@type": "WebPage",
+    "@id": canonicalUrl,
+    name: regionName
+      ? `${regionName} 오토바이매입 | 중고바이크 당일 출장매입`
+      : modelName
+      ? `${modelName} 중고 오토바이 매입`
+      : articleTitle || "전국중고오토바이매입",
+    url: canonicalUrl,
     inLanguage: "ko-KR",
+    primaryImageOfPage: {
+      "@type": "ImageObject",
+      url: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-safe-pay.jpg",
+      width: 1200,
+      height: 630,
+    },
+    image: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-safe-pay.jpg",
   };
 
   // 3. LocalBusiness Schema

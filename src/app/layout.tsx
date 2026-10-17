@@ -105,14 +105,14 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
-        {/* 네이버·구글·다음 검색엔진 봇은 모든 메인·세부페이지 100% 정상 색인 허용 */}
-        <meta name="Yeti" content="index, follow" />
+        {/* 네이버·구글·다음 검색엔진 봇은 모든 메인·세부페이지 100% 정상 색인 및 썸네일 이미지 허용 */}
+        <meta name="Yeti" content="index, follow, max-image-preview:large" />
         <meta
           name="Googlebot"
           content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
         />
-        <meta name="Daumoa" content="index, follow" />
-        <meta name="bingbot" content="index, follow" />
+        <meta name="Daumoa" content="index, follow, max-image-preview:large" />
+        <meta name="bingbot" content="index, follow, max-image-preview:large" />
         {/* AI 학습·실시간 요약·스크래핑 봇은 메인 및 전 세부페이지 수집 원천 금지 */}
         <meta
           name="Google-Extended"

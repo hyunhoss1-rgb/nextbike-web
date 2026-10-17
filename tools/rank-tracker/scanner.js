@@ -55,7 +55,7 @@ async function checkNaverMobile(query) {
   const preHtml = html.substring(0, pos > 0 ? pos : html.length);
 
   // 1. Check if Place (지도) or Smartblock (인기글) appears above website section
-  const hasPlaceAbove = preHtml.includes('거리순') || preHtml.includes('관련도순') || preHtml.includes('지도에서 더보기') || preHtml.includes('nmap');
+  const hasPlaceAbove = preHtml.includes('거리순') || preHtml.includes('지도에서 더보기') || preHtml.includes('place.naver.com');
   const hasSmartBlockAbove = preHtml.includes('인기글');
 
   // 2. Extract competitor website domains strictly appearing BEFORE our site (excluding news, video, portals)

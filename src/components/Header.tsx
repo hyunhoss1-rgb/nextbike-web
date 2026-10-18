@@ -29,14 +29,14 @@ const MOBILE_MENU_ITEMS = [
   },
   {
     href: "/regions",
-    title: "전국 1,100+ 지역별 출장 매입",
-    desc: "전국 집 앞 1시간 당일 무료 출장",
+    title: "전국 1,290+ 지역별 출장 매입",
+    desc: "전국 집 앞 당일 무료 출장 · 지역 검색",
     icon: MapPin,
   },
   {
     href: "/models",
-    title: "인기 70+ 기종별 최고가 매입",
-    desc: "스쿠터부터 수입 대형 바이크 전 차종",
+    title: "인기 120+ 기종별 최고가 매입",
+    desc: "스쿠터부터 수입 대형 바이크 전 차종 검색",
     icon: Bike,
   },
   {

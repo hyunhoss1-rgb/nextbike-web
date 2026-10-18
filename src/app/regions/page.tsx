@@ -1,14 +1,17 @@
 import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getMainRegions } from "@/data/regions";
+import { REGIONS, getMainRegions } from "@/data/regions";
 import JsonLd from "@/components/JsonLd";
-import { MapPin, Phone, ChevronRight, Home } from "lucide-react";
+import RegionSearchBrowser, {
+  type SearchableRegionItem,
+} from "@/components/RegionSearchBrowser";
+import { Phone, ChevronRight, Home } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "전국 지역별 오토바이매입·바이크매입 | 중고바이크 당일 출장 매입",
   description:
-    "서울·경기·인천·부산·대구 등 전국 시·도 및 시군구 오토바이매입 및 중고바이크 출장매입 상담 안내. 상차 전 당일 100% 선입금 안전거래.",
+    "서울·경기·인천·부산·대구·경남·경북·충청·호남·강원·제주 등 전국 전 시·군·구·읍·면·동 오토바이매입 및 중고바이크 출장매입 검색 안내. 상차 전 당일 100% 선입금 안전거래.",
   keywords: [
     "지역별오토바이매입",
     "지역별바이크매입",
@@ -20,6 +23,7 @@ export const metadata: Metadata = {
     "시흥오토바이매입",
     "부천오토바이매입",
     "수원오토바이매입",
+    "함안오토바이매입",
     "천안오토바이매입",
     "대전오토바이매입",
     "부산오토바이매입",
@@ -28,10 +32,30 @@ export const metadata: Metadata = {
 };
 
 export default function RegionsIndexPage() {
-  const mainRegions = getMainRegions();
+  const mainRegions: SearchableRegionItem[] = getMainRegions().map((r) => ({
+    slug: r.slug,
+    name: r.name,
+    fullName: r.fullName,
+    province: r.province,
+    dispatchTime: r.dispatchTime,
+    isDong: r.isDong,
+    isSubDong: r.isSubDong,
+    subDistricts: r.subDistricts || [],
+  }));
+
+  const allRegions: SearchableRegionItem[] = REGIONS.map((r) => ({
+    slug: r.slug,
+    name: r.name,
+    fullName: r.fullName,
+    province: r.province,
+    dispatchTime: r.dispatchTime,
+    isDong: r.isDong,
+    isSubDong: r.isSubDong,
+    subDistricts: r.subDistricts || [],
+  }));
 
   return (
-    <div className="py-8 sm:py-14 space-y-12">
+    <div className="py-8 sm:py-14 space-y-10">
       <JsonLd type="main" canonicalUrl="https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions" />
 
       {/* 상단 브레드크럼 & 타이틀 */}
@@ -50,33 +74,14 @@ export default function RegionsIndexPage() {
             전국 <span className="text-brand-cyan">지역별 오토바이매입</span> · <span className="text-brand-yellow">중고바이크 매입</span>
           </h1>
           <p className="text-sm sm:text-base text-gray-300 leading-relaxed">
-            서울·경기·부산·대구·인천 광역시부터 전국 주요 시·군·구까지 지역별 오토바이 및 중고바이크 출장 매입 상담 페이지입니다. 상차 전 100% 당일 선입금 원칙으로 안전하게 매입합니다.
+            서울·경기·인천 수도권부터 부산·대구·대전·광주 및 전국 모든 시·군·구·읍·면·동까지 검색창에 우리 동네 이름을 입력해 보세요. 상차 전 100% 당일 선입금 원칙으로 안전하게 방문 매입합니다.
           </p>
         </div>
       </div>
 
-      {/* moto02 스타일의 극도로 깔끔한 5열 카드 그리드 (동 단위 난잡한 나열 100% 제거) */}
+      {/* 실시간 전국 지역 통합 검색 + 권역별 필터 + 5열 지역 그리드 */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
-          {mainRegions.map((reg) => (
-            <Link
-              key={reg.slug}
-              href={`/regions/${reg.slug}`}
-              className="group block p-4 sm:p-5 rounded-2xl bg-surface border border-border hover:border-brand-cyan hover:-translate-y-1 transition-all shadow-md"
-            >
-              <div className="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-[0.2em] text-brand-cyan uppercase">
-                <MapPin className="w-3 h-3" />
-                REGION
-              </div>
-              <div className="mt-2 text-base sm:text-lg font-bold tracking-tight text-white group-hover:text-brand-cyan transition-colors truncate">
-                {reg.name} 오토바이·바이크매입
-              </div>
-              <div className="text-[11px] text-gray-400 mt-1 truncate">
-                {reg.fullName}
-              </div>
-            </Link>
-          ))}
-        </div>
+        <RegionSearchBrowser mainRegions={mainRegions} allRegions={allRegions} />
       </div>
 
       {/* 하단 전화 상담 배너 */}
@@ -84,7 +89,7 @@ export default function RegionsIndexPage() {
         <div className="p-6 sm:p-8 rounded-2xl bg-card border border-border flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <h3 className="text-base sm:text-lg font-bold text-white">
-              목록에 없는 외곽 지역도 전국 당일 출장 매입이 가능합니다
+              목록에 없는 외곽 읍·면·리 지역도 전국 당일 출장 매입이 가능합니다
             </h3>
             <p className="text-xs text-gray-400 mt-1">
               차량 사진과 위치만 알려주시면 신속하게 방문 일정을 조율해 드립니다.
@@ -102,3 +107,4 @@ export default function RegionsIndexPage() {
     </div>
   );
 }
+

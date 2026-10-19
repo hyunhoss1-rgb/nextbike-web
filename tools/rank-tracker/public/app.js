@@ -36,23 +36,18 @@ async function loadData() {
   }
 }
 
-// Render Comparison Preset Buttons
+// Render Comparison Preset Buttons dynamically from snapshots
 function renderComparisonButtons() {
   const container = document.getElementById('comparisonButtonGroup');
   if (!container) return;
 
-  const presets = [
-    { label: '어제 (10월 14일)와 비교', matchDaysAgo: 1, dateStr: '2026-10-14' },
-    { label: '그제 (10월 13일)와 비교', matchDaysAgo: 2, dateStr: '2026-10-13' },
-    { label: '2주 전 (10월 1일)과 비교', matchDaysAgo: 14, dateStr: '2026-10-01' },
-    { label: '한 달 전 (9월 15일)과 비교', matchDaysAgo: 30, dateStr: '2026-09-15' }
-  ];
+  const compareCandidates = state.snapshots.slice(1, 6);
 
-  container.innerHTML = presets.map((p, idx) => {
-    const isSelected = state.compareSnapshot?.date === p.dateStr || (!state.compareSnapshot && idx === 0);
+  container.innerHTML = compareCandidates.map((s, idx) => {
+    const isSelected = state.compareSnapshot?.date === s.date || (!state.compareSnapshot && idx === 0);
     return `
       <button 
-        onclick="setCompareDate('${p.dateStr}')" 
+        onclick="setCompareDate('${s.date}')" 
         class="compare-pill px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
           isSelected 
             ? 'bg-brand-cyan text-black shadow-md shadow-brand-cyan/20 ring-2 ring-brand-cyan/40' 
@@ -60,7 +55,7 @@ function renderComparisonButtons() {
         }"
       >
         <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
-        <span>${p.label}</span>
+        <span>${s.label || s.date}와 비교</span>
       </button>
     `;
   }).join('');
@@ -244,20 +239,23 @@ function renderTable() {
     const actRank = act?.naverMobileRank;
     const compRank = comp?.naverMobileRank;
 
-    // Naver Mobile Badge (실질 순위: 파워링크 광고 제외, 100% 팩트 순위)
+    // Naver Mobile Badge (실질 통합 순위: 블로그·카페·인기글·타사웹 전부 합산)
     let naverBadge = `<span class="px-2 py-0.5 rounded text-[11px] font-bold bg-gray-800 text-gray-400">순위밖</span>`;
     if (actRank) {
-      const comps = (act.competitorsBefore || []).slice(0, 2).map(c => c.replace('.com','').replace('.kr','').replace('xn--9i1br4kwvav7u81sd9bjl','트리니티')).join(', ');
       const compCount = act.competitorsBefore?.length || (actRank - 1);
+      const webRank = act.webOnlyRank || actRank;
+      const blogCount = act.blogOrCafeCount || 0;
+      const aiTag = act.inAiBriefing ? `<span class="text-[9px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40 font-bold mt-0.5">AI브리핑 인용</span>` : '';
 
       if (actRank === 1) {
-        const subLabel = act.hasPlaceAbove ? '지도 하단 1위' : '파워링크 직하단';
+        const subLabel = act.hasPlaceAbove ? '플레이스 직하단 1순위' : '파워링크 직하단 1순위';
         naverBadge = `
           <div class="inline-flex flex-col items-center">
             <span class="px-2.5 py-1 rounded-lg text-xs font-black bg-gradient-to-r from-amber-500/25 to-yellow-500/25 text-amber-300 border border-amber-500/50 shadow-md shadow-amber-500/20 flex items-center justify-center gap-1 mx-auto">
-              <i data-lucide="crown" class="w-3.5 h-3.5 text-amber-400 fill-amber-400"></i> 1위
+              <i data-lucide="crown" class="w-3.5 h-3.5 text-amber-400 fill-amber-400"></i> 통합 1순위
             </span>
             <span class="text-[10px] text-amber-400/90 font-bold tracking-tight mt-0.5">${subLabel}</span>
+            ${aiTag}
           </div>
         `;
       } else {
@@ -266,16 +264,19 @@ function renderTable() {
           : 'bg-brand-cyan/15 text-brand-cyan border border-brand-cyan/30';
         
         const compTip = (act.competitorsBefore || []).join(', ');
-        const subText = compCount > 0 ? `웹사이트 ${actRank}위 (상위 ${compCount}개사)` : `웹사이트 ${actRank}위`;
+        const subText = blogCount > 0
+          ? `웹 ${webRank}위 + 앞선블로그 ${blogCount}개`
+          : `앞선 타사웹 ${compCount}개 (블로그 0개)`;
 
         naverBadge = `
-          <div class="inline-flex flex-col items-center max-w-[130px] mx-auto text-center" title="상위 경쟁사: ${compTip}">
+          <div class="inline-flex flex-col items-center max-w-[155px] mx-auto text-center" title="앞선 노출 문서: ${compTip}">
             <span class="px-2.5 py-0.5 rounded-lg text-xs font-extrabold ${badgeColor}">
-              ${actRank}위
+              통합 ${actRank}순위
             </span>
             <span class="text-[10px] text-gray-400 mt-0.5 leading-tight truncate w-full" title="${compTip}">
               ${subText}
             </span>
+            ${aiTag}
           </div>
         `;
       }

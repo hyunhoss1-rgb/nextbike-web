@@ -43,31 +43,43 @@
           "kw": "넥스트바이크",
           "category": "1. 브랜드·대표",
           "exposed": true,
-          "naverMobileRank": 8,
-          "rankDesc": "통합 8위 (앞: 타사홈페이지 5개 + 블로그·인기글 2개)",
+          "naverMobileRank": 15,
+          "rankDesc": "통합 15위 (앞: 타사홈페이지 10개 + 블로그·인기글 4개)",
           "hasPlaceAbove": true,
           "hasSmartBlockAbove": true,
           "competitorsBefore": [
             "xn--b60bj1s89e3pf91mzkd.com",
-            "블로그(soapbike)",
-            "블로그(sbinism)",
             "daangn.com",
             "plaza.codethetrack.com",
+            "블로그(soapbike)",
+            "블로그(sbinism)",
+            "bigvalue.ai",
+            "hellomarket.com",
             "newploy.com",
-            "bigvalue.ai"
+            "bikecabin.co.kr",
+            "bikeok.co.kr",
+            "카페(bikecargogo)",
+            "misobike.com",
+            "afrobike.co.kr",
+            "블로그(mygoaway)"
           ],
           "naverPcRank": null,
           "googleRank": null,
           "link": "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/",
           "title": "전국중고오토바이매입.kr",
-          "webOnlyRank": 6,
-          "blogOrCafeCount": 2,
+          "webOnlyRank": 11,
+          "blogOrCafeCount": 4,
           "webCompetitorsBefore": [
             "xn--b60bj1s89e3pf91mzkd.com",
             "daangn.com",
             "plaza.codethetrack.com",
+            "bigvalue.ai",
+            "hellomarket.com",
             "newploy.com",
-            "bigvalue.ai"
+            "bikecabin.co.kr",
+            "bikeok.co.kr",
+            "misobike.com",
+            "afrobike.co.kr"
           ]
         },
         "중고오토바이매입": {
@@ -219,24 +231,33 @@
           "kw": "관악구 오토바이 매입",
           "category": "2. 서울 25개구",
           "exposed": true,
-          "naverMobileRank": 4,
-          "rankDesc": "통합 4위 (앞: 타사홈페이지 2개 + 블로그·인기글 1개)",
-          "hasPlaceAbove": false,
+          "naverMobileRank": 11,
+          "rankDesc": "통합 11위 (앞: 타사홈페이지 4개 + 블로그·인기글 6개)",
+          "hasPlaceAbove": true,
           "hasSmartBlockAbove": true,
           "competitorsBefore": [
+            "gtbikemall.com",
             "moto02.com",
             "joonggobike.com",
-            "블로그(ranslato60851)"
+            "블로그(ranslato60851)",
+            "블로그(ryusin85)",
+            "블로그(loudrider57n)",
+            "블로그(blackbag718)",
+            "bikebuy.speedbikebuy.com",
+            "카페(bikecargogo)",
+            "카페(bikecargogo)"
           ],
           "naverPcRank": null,
           "googleRank": null,
           "link": "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions/seoul-gwanak-sinrimdong",
           "title": "전국중고오토바이매입.kr",
-          "webOnlyRank": 3,
-          "blogOrCafeCount": 1,
+          "webOnlyRank": 5,
+          "blogOrCafeCount": 6,
           "webCompetitorsBefore": [
+            "gtbikemall.com",
             "moto02.com",
-            "joonggobike.com"
+            "joonggobike.com",
+            "bikebuy.speedbikebuy.com"
           ]
         },
         "강동구 오토바이 매입": {
@@ -527,22 +548,18 @@
           "kw": "동작구 오토바이 매입",
           "category": "2. 서울 25개구",
           "exposed": true,
-          "naverMobileRank": 2,
-          "rankDesc": "통합 2위 (앞: 타사홈페이지 1개)",
+          "naverMobileRank": 1,
+          "rankDesc": "플레이스 직하단 통합 1위 (최상단)",
           "hasPlaceAbove": true,
           "hasSmartBlockAbove": false,
-          "competitorsBefore": [
-            "moto02.com"
-          ],
+          "competitorsBefore": [],
           "naverPcRank": 2,
           "googleRank": null,
           "link": "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions/seoul-dongjak",
           "title": "전국중고오토바이매입.kr",
-          "webOnlyRank": 2,
+          "webOnlyRank": 1,
           "blogOrCafeCount": 0,
-          "webCompetitorsBefore": [
-            "moto02.com"
-          ]
+          "webCompetitorsBefore": []
         },
         "금천구 오토바이 매입": {
           "kw": "금천구 오토바이 매입",
@@ -831,21 +848,28 @@
           "kw": "대야동 오토바이 매입",
           "category": "3. 경기 거점·동단위",
           "exposed": true,
-          "naverMobileRank": 4,
-          "rankDesc": "통합 4위 (앞: 타사홈페이지 3개)",
+          "naverMobileRank": 11,
+          "rankDesc": "통합 11위 (앞: 타사홈페이지 3개 + 블로그·인기글 7개)",
           "hasPlaceAbove": true,
-          "hasSmartBlockAbove": false,
+          "hasSmartBlockAbove": true,
           "competitorsBefore": [
             "gtbikemall.com",
             "moto02.com",
-            "joonggobike.com"
+            "joonggobike.com",
+            "블로그(skc467)",
+            "블로그(motorcycle937)",
+            "카페(bikecargogo)",
+            "카페(bikecargogo)",
+            "카페(bikecargogo)",
+            "카페(bikecargogo)",
+            "카페(bikecargogo)"
           ],
           "naverPcRank": null,
           "googleRank": null,
           "link": "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions/siheung-eungye-eungyejigu",
           "title": "전국중고오토바이매입.kr",
           "webOnlyRank": 4,
-          "blogOrCafeCount": 0,
+          "blogOrCafeCount": 7,
           "webCompetitorsBefore": [
             "gtbikemall.com",
             "moto02.com",
@@ -873,28 +897,29 @@
           "kw": "부천 중동 오토바이 매입",
           "category": "3. 경기 거점·동단위",
           "exposed": true,
-          "naverMobileRank": 11,
-          "rankDesc": "통합 11위 (앞: 타사홈페이지 1개 + 블로그·인기글 9개)",
+          "naverMobileRank": 12,
+          "rankDesc": "통합 12위 (앞: 타사홈페이지 1개 + 블로그·인기글 10개)",
           "hasPlaceAbove": true,
           "hasSmartBlockAbove": true,
           "competitorsBefore": [
             "joonggobike.com",
             "블로그(bungae_bike0)",
+            "블로그(dlzmfflqtmv)",
             "블로그(bike-24t)",
             "블로그(bike-bike)",
-            "블로그(e2qeee2)",
-            "블로그(dlzmfflqtmv)",
             "블로그(zzdydrhkd)",
+            "블로그(e2qeee2)",
             "블로그(motors0483)",
             "블로그(bungae_bike)",
-            "블로그(e2qeee1)"
+            "블로그(e2qeee1)",
+            "카페(bikecargogo)"
           ],
           "naverPcRank": null,
           "googleRank": null,
           "link": "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions/bucheon",
           "title": "전국중고오토바이매입.kr",
           "webOnlyRank": 2,
-          "blogOrCafeCount": 9,
+          "blogOrCafeCount": 10,
           "webCompetitorsBefore": [
             "joonggobike.com"
           ]
@@ -1188,22 +1213,21 @@
           "kw": "안양 오토바이 매입",
           "category": "4. 수도권 주요 시",
           "exposed": true,
-          "naverMobileRank": 5,
-          "rankDesc": "통합 5위 (앞: 타사홈페이지 2개 + 블로그·인기글 2개)",
+          "naverMobileRank": 4,
+          "rankDesc": "통합 4위 (앞: 타사홈페이지 2개 + 블로그·인기글 1개)",
           "hasPlaceAbove": true,
           "hasSmartBlockAbove": true,
           "competitorsBefore": [
             "joonggobike.com",
             "moto02.com",
-            "블로그(125_1000)",
-            "블로그(tripledia94t)"
+            "블로그(125_1000)"
           ],
           "naverPcRank": null,
           "googleRank": null,
           "link": "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions/anyang",
           "title": "전국중고오토바이매입.kr",
           "webOnlyRank": 3,
-          "blogOrCafeCount": 2,
+          "blogOrCafeCount": 1,
           "webCompetitorsBefore": [
             "joonggobike.com",
             "moto02.com"
@@ -1265,18 +1289,25 @@
           "kw": "일산 오토바이 매입",
           "category": "4. 수도권 주요 시",
           "exposed": true,
-          "naverMobileRank": 1,
-          "rankDesc": "파워링크 직하단 통합 1위 (최상단)",
+          "naverMobileRank": 4,
+          "rankDesc": "통합 4위 (앞: 타사홈페이지 2개 + 블로그·인기글 1개)",
           "hasPlaceAbove": false,
-          "hasSmartBlockAbove": false,
-          "competitorsBefore": [],
+          "hasSmartBlockAbove": true,
+          "competitorsBefore": [
+            "moto02.com",
+            "joonggobike.com",
+            "블로그(bikedamda)"
+          ],
           "naverPcRank": null,
           "googleRank": null,
           "link": "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions/goyang-ilsanseo-ilsandong",
           "title": "전국중고오토바이매입.kr",
-          "webOnlyRank": 1,
-          "blogOrCafeCount": 0,
-          "webCompetitorsBefore": []
+          "webOnlyRank": 3,
+          "blogOrCafeCount": 1,
+          "webCompetitorsBefore": [
+            "moto02.com",
+            "joonggobike.com"
+          ]
         },
         "화성 오토바이 매입": {
           "kw": "화성 오토바이 매입",
@@ -1354,7 +1385,7 @@
             "motorcyclebuy.speedbikebuy.com",
             "gtbikemall.com",
             "블로그(gloomyschool14d)",
-            "블로그(rinbike89)"
+            "블로그(singlecard61)"
           ],
           "naverPcRank": 5,
           "googleRank": null,
@@ -1673,18 +1704,31 @@
           "kw": "대구 오토바이 매입",
           "category": "5. 전국 광역시·핵심도시",
           "exposed": true,
-          "naverMobileRank": 1,
-          "rankDesc": "파워링크 직하단 통합 1위 (최상단)",
-          "hasPlaceAbove": false,
-          "hasSmartBlockAbove": false,
-          "competitorsBefore": [],
+          "naverMobileRank": 9,
+          "rankDesc": "통합 9위 (앞: 타사홈페이지 3개 + 블로그·인기글 5개) [AI브리핑 상단인용]",
+          "hasPlaceAbove": true,
+          "hasSmartBlockAbove": true,
+          "competitorsBefore": [
+            "moto02.com",
+            "joonggobike.com",
+            "블로그(oldboss89b)",
+            "블로그(lookbreak89)",
+            "블로그(dkdlelwlq1324)",
+            "블로그(bhh0820)",
+            "블로그(warmzebra71l)",
+            "gtbikemall.com"
+          ],
           "naverPcRank": 1,
           "googleRank": null,
           "link": "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions/daegu",
           "title": "전국중고오토바이매입.kr",
-          "webOnlyRank": 1,
-          "blogOrCafeCount": 0,
-          "webCompetitorsBefore": []
+          "webOnlyRank": 4,
+          "blogOrCafeCount": 5,
+          "webCompetitorsBefore": [
+            "moto02.com",
+            "joonggobike.com",
+            "gtbikemall.com"
+          ]
         },
         "대전 오토바이 매입": {
           "kw": "대전 오토바이 매입",
@@ -1729,14 +1773,14 @@
           "hasSmartBlockAbove": true,
           "competitorsBefore": [
             "bike02.com",
-            "joonggobike.com",
             "bike92.com",
+            "joonggobike.com",
             "bike05.com",
             "moto02.com",
             "xn--9z2b13b1zppkbqcs98e.com",
             "블로그(southoa84)",
-            "gtbikemall.com",
-            "블로그(dkdlelwlq1324)"
+            "블로그(dkdlelwlq1324)",
+            "gtbikemall.com"
           ],
           "naverPcRank": 8,
           "googleRank": null,
@@ -1746,8 +1790,8 @@
           "blogOrCafeCount": 2,
           "webCompetitorsBefore": [
             "bike02.com",
-            "joonggobike.com",
             "bike92.com",
+            "joonggobike.com",
             "bike05.com",
             "moto02.com",
             "xn--9z2b13b1zppkbqcs98e.com",
@@ -1758,18 +1802,33 @@
           "kw": "울산 오토바이 매입",
           "category": "5. 전국 광역시·핵심도시",
           "exposed": true,
-          "naverMobileRank": 1,
-          "rankDesc": "파워링크 직하단 통합 1위 (최상단)",
-          "hasPlaceAbove": false,
-          "hasSmartBlockAbove": false,
-          "competitorsBefore": [],
+          "naverMobileRank": 9,
+          "rankDesc": "통합 9위 (앞: 타사홈페이지 5개 + 블로그·인기글 3개) [AI브리핑 상단인용]",
+          "hasPlaceAbove": true,
+          "hasSmartBlockAbove": true,
+          "competitorsBefore": [
+            "bike02.com",
+            "moto02.com",
+            "블로그(quietboss36o)",
+            "gtbikemall.com",
+            "블로그(skc467)",
+            "블로그(bossyi32)",
+            "xn--b60bj1s89e3pf91mzkd.com",
+            "joonggobike.com"
+          ],
           "naverPcRank": 1,
           "googleRank": null,
           "link": "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions/ulsan",
           "title": "전국중고오토바이매입.kr",
-          "webOnlyRank": 1,
-          "blogOrCafeCount": 0,
-          "webCompetitorsBefore": []
+          "webOnlyRank": 6,
+          "blogOrCafeCount": 3,
+          "webCompetitorsBefore": [
+            "bike02.com",
+            "moto02.com",
+            "gtbikemall.com",
+            "xn--b60bj1s89e3pf91mzkd.com",
+            "joonggobike.com"
+          ]
         },
         "세종 오토바이 매입": {
           "kw": "세종 오토바이 매입",
@@ -1987,12 +2046,12 @@
           "hasSmartBlockAbove": true,
           "competitorsBefore": [
             "블로그(tmdeosms6)",
+            "카페(nds07)",
             "카페(bikecargogo)",
             "카페(supercub)",
-            "카페(nds07)",
-            "카페(nds07)",
+            "블로그(acejumin1)",
             "블로그(monel)",
-            "블로그(acejumin1)"
+            "카페(nds07)"
           ],
           "naverPcRank": 1,
           "googleRank": null,
@@ -2007,7 +2066,7 @@
           "category": "6. 기종·배터리 칼럼",
           "exposed": true,
           "naverMobileRank": 1,
-          "rankDesc": "파워링크 직하단 통합 1위 (최상단)",
+          "rankDesc": "파워링크 직하단 통합 1위 (최상단) [AI브리핑 상단인용]",
           "hasPlaceAbove": false,
           "hasSmartBlockAbove": false,
           "competitorsBefore": [],
@@ -2023,34 +2082,39 @@
           "kw": "슈퍼커브 배터리 위치",
           "category": "6. 기종·배터리 칼럼",
           "exposed": true,
-          "naverMobileRank": 1,
-          "rankDesc": "파워링크 직하단 통합 1위 (최상단)",
+          "naverMobileRank": 2,
+          "rankDesc": "통합 2위 (앞: 블로그·인기글 1개) [AI브리핑 상단인용]",
           "hasPlaceAbove": false,
-          "hasSmartBlockAbove": false,
-          "competitorsBefore": [],
+          "hasSmartBlockAbove": true,
+          "competitorsBefore": [
+            "카페(bikecargogo)"
+          ],
           "naverPcRank": 1,
           "googleRank": null,
           "link": "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/magazine/honda-supercub110-battery-location-guide",
           "title": "전국중고오토바이매입.kr",
           "webOnlyRank": 1,
-          "blogOrCafeCount": 0,
+          "blogOrCafeCount": 1,
           "webCompetitorsBefore": []
         },
         "포르자350 배터리 위치": {
           "kw": "포르자350 배터리 위치",
           "category": "6. 기종·배터리 칼럼",
           "exposed": true,
-          "naverMobileRank": 1,
-          "rankDesc": "파워링크 직하단 통합 1위 (최상단)",
+          "naverMobileRank": 3,
+          "rankDesc": "통합 3위 (앞: 블로그·인기글 2개) [AI브리핑 상단인용]",
           "hasPlaceAbove": false,
-          "hasSmartBlockAbove": false,
-          "competitorsBefore": [],
+          "hasSmartBlockAbove": true,
+          "competitorsBefore": [
+            "카페(bikecargogo)",
+            "블로그(motorcycletour)"
+          ],
           "naverPcRank": 1,
           "googleRank": null,
           "link": "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/magazine/honda-forza350-battery-location-guide",
           "title": "전국중고오토바이매입.kr",
           "webOnlyRank": 1,
-          "blogOrCafeCount": 0,
+          "blogOrCafeCount": 2,
           "webCompetitorsBefore": []
         },
         "비전110 배터리 위치": {

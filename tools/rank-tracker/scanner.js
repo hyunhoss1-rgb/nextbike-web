@@ -54,13 +54,44 @@ async function checkNaverMobile(query) {
   }
 
   const ourDomain = 'xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr';
-  const pos = html.indexOf(ourDomain);
-  if (pos === -1 && !html.includes('전국중고오토바이매입.kr')) {
+
+  // AI 브리핑이나 상단 <script> 이미지 JSON이 아닌 실제 본문 클릭 링크(<a href="...">)의 위치를 찾음
+  const ourAnchorRe = /<a\b[^>]*href=["'](https?:\/\/[^"']*(?:xn--299alk823a88b8ztw1bpdu7bh3ec67a\.kr|전국중고오토바이매입\.kr)[^"']*)["'][^>]*>/gi;
+  let anchorMatch;
+  let pos = -1;
+  let topLink = '';
+  let inAiBriefing = false;
+
+  while ((anchorMatch = ourAnchorRe.exec(html)) !== null) {
+    const tag = anchorMatch[0];
+    const matchPos = anchorMatch.index;
+    // AI 브리핑 내부 출처 링크는 본문 순위에서 제외하고 별도 표기
+    if (
+      tag.includes('ai_briefing') ||
+      tag.includes('gen_ai') ||
+      tag.includes('briefing')
+    ) {
+      inAiBriefing = true;
+      continue;
+    }
+    pos = matchPos;
+    topLink = anchorMatch[1];
+    break;
+  }
+
+  // 상단 <script> JSON (AI 브리핑 / 이미지 뷰어 데이터)에 우리 도메인이 먼저 등장했는지 확인
+  const firstRawPos = html.indexOf(ourDomain);
+  if (firstRawPos !== -1 && (pos === -1 || firstRawPos < pos - 5000)) {
+    inAiBriefing = true;
+  }
+
+  if (pos === -1) {
     return {
       exposed: false,
+      inAiBriefing,
       rank: null,
       webOnlyRank: null,
-      rankDesc: '순위밖',
+      rankDesc: inAiBriefing ? '본문 순위밖 (AI브리핑에만 인용)' : '순위밖',
       link: '',
       title: '',
       itemsBefore: [],
@@ -68,10 +99,7 @@ async function checkNaverMobile(query) {
     };
   }
 
-  const linkMatch = html.match(/href=["'](https?:\/\/[^"']*(?:xn--299alk823a88b8ztw1bpdu7bh3ec67a\.kr|전국중고오토바이매입\.kr)[^"']*)["']/i);
-  const topLink = linkMatch ? linkMatch[1] : 'https://www.전국중고오토바이매입.kr/';
-
-  const preHtml = html.substring(0, pos > 0 ? pos : html.length);
+  const preHtml = html.substring(0, pos);
 
   // 플레이스(지도) 블록이 상단에 있는지 확인
   const hasPlaceAbove =
@@ -228,8 +256,13 @@ async function checkNaverMobile(query) {
     rankDesc = `통합 ${rank}위 (앞: ${parts.join(' + ')})`;
   }
 
+  if (inAiBriefing) {
+    rankDesc += ' [AI브리핑 상단인용]';
+  }
+
   return {
     exposed: true,
+    inAiBriefing,
     rank,
     webOnlyRank,
     blogOrCafeCount,

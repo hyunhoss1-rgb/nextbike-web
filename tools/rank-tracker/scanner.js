@@ -36,87 +36,209 @@ function sleep(ms) {
   return new Promise(r => setTimeout(r, ms));
 }
 
-// Check Naver Mobile Search - 100% 팩트 기반 실질 순위 측정
+// Check Naver Mobile Search - 블로그·카페·인기글·웹사이트 전부 통합한 실제 화면 노출 순위 측정
 async function checkNaverMobile(query) {
   const url = 'https://m.search.naver.com/search.naver?query=' + encodeURIComponent(query);
   const { status, html } = await fetchHttp(url);
-  if (status !== 200 || !html) return { exposed: false, rank: null, rankDesc: '순위밖', link: '', title: '', competitorsBefore: [] };
+  if (status !== 200 || !html) {
+    return {
+      exposed: false,
+      rank: null,
+      webOnlyRank: null,
+      rankDesc: '순위밖',
+      link: '',
+      title: '',
+      itemsBefore: [],
+      competitorsBefore: []
+    };
+  }
 
   const ourDomain = 'xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr';
   const pos = html.indexOf(ourDomain);
   if (pos === -1 && !html.includes('전국중고오토바이매입.kr')) {
-    return { exposed: false, rank: null, rankDesc: '순위밖', link: '', title: '', competitorsBefore: [] };
+    return {
+      exposed: false,
+      rank: null,
+      webOnlyRank: null,
+      rankDesc: '순위밖',
+      link: '',
+      title: '',
+      itemsBefore: [],
+      competitorsBefore: []
+    };
   }
 
-  // Parse link
   const linkMatch = html.match(/href=["'](https?:\/\/[^"']*(?:xn--299alk823a88b8ztw1bpdu7bh3ec67a\.kr|전국중고오토바이매입\.kr)[^"']*)["']/i);
   const topLink = linkMatch ? linkMatch[1] : 'https://www.전국중고오토바이매입.kr/';
 
   const preHtml = html.substring(0, pos > 0 ? pos : html.length);
 
-  // 1. Check if Place (지도) or Smartblock (인기글) appears above website section
-  const hasPlaceAbove = preHtml.includes('거리순') || preHtml.includes('지도에서 더보기') || preHtml.includes('place.naver.com');
-  const hasSmartBlockAbove = preHtml.includes('인기글');
+  // 플레이스(지도) 블록이 상단에 있는지 확인
+  const hasPlaceAbove =
+    preHtml.includes('거리순') ||
+    preHtml.includes('지도에서 더보기') ||
+    preHtml.includes('place.naver.com');
 
-  // 2. Extract competitor website domains strictly appearing BEFORE our site (excluding news, video, portals)
-  const NON_COMPETITOR_HOST_RE = /(?:naver\.com|pstatic\.net|navercorp\.com|youtube\.com|youtu\.be|daum\.net|kakao\.com|tistory\.com|namu\.wiki|novawiki\.app|114\.co\.kr|instagram\.com|facebook\.com|businesspost\.co\.kr|hankooki\.com|newdaily\.co\.kr|getnews\.co\.kr|cnbnews\.com|ziksir\.com|ilyosisa\.co\.kr|mdilbo\.com|vmspace\.com)/i;
-  const externalDomains = [];
-  const linkRe = /href=["'](https?:\/\/[^"'\s]+)["']/gi;
+  // 우리 홈페이지 위에 노출된 모든 실제 검색 결과물(블로그, 카페, 인플루언서, 지식iN, 티스토리, 타사 홈페이지 등)을 순서대로 추출
+  const aRe = /<a\b[^>]*href=["'](https?:\/\/[^"'\s]+)["'][^>]*>/gi;
   let m;
+  const itemsBefore = [];
+  const webCompetitors = [];
+  const seenKeys = new Set();
 
-  while ((m = linkRe.exec(preHtml)) !== null) {
+  while ((m = aRe.exec(preHtml)) !== null) {
     const rawUrl = m[1];
-    // Exclude ads, news articles, and naver internal system URLs
     if (
-      rawUrl.includes('naver.com') ||
-      rawUrl.includes('pstatic.net') ||
-      rawUrl.includes('javascript:') ||
       rawUrl.includes('ad.search.naver') ||
       rawUrl.includes('adcr.naver') ||
       rawUrl.includes('search.naver.com') ||
-      rawUrl.includes('/news/') ||
-      rawUrl.includes('articleView') ||
-      rawUrl.includes('idxno=')
-    ) continue;
+      rawUrl.includes('nid.naver.com') ||
+      rawUrl.includes('help.naver.com') ||
+      rawUrl.includes('policy.naver.com') ||
+      rawUrl.includes('map.naver.com') ||
+      rawUrl.includes('place.naver.com') ||
+      rawUrl.includes('booking.naver.com') ||
+      rawUrl.includes('talk.naver.com') ||
+      rawUrl.includes('keep.naver.com') ||
+      rawUrl.includes('pstatic.net') ||
+      rawUrl.includes('navercorp.com') ||
+      rawUrl.includes('javascript:')
+    ) {
+      continue;
+    }
 
     try {
       const u = new URL(rawUrl);
       const host = u.hostname.replace(/^(?:www\.|m\.)/i, '');
-      if (
-        host &&
-        host !== ourDomain &&
-        !NON_COMPETITOR_HOST_RE.test(host) &&
-        !externalDomains.includes(host)
-      ) {
-        externalDomains.push(host);
+      if (!host || host === ourDomain || host === '전국중고오토바이매입.kr') continue;
+
+      // 1. 네이버 블로그 게시물 (blog.naver.com/{blogId}/{logNo})
+      if (host === 'blog.naver.com') {
+        const parts = u.pathname.split('/').filter(Boolean);
+        if (parts.length < 2) continue; // 블로그 프로필 링크 제외, 실제 글만 카운트
+        const key = `블로그(${parts[0]})`;
+        const uniquePost = `blog:${parts[0]}/${parts[1]}`;
+        if (!seenKeys.has(uniquePost)) {
+          seenKeys.add(uniquePost);
+          itemsBefore.push(key);
+        }
+        continue;
+      }
+
+      // 2. 네이버 카페 게시물 (cafe.naver.com/{cafeId}/{articleId})
+      if (host === 'cafe.naver.com') {
+        const parts = u.pathname.split('/').filter(Boolean);
+        if (parts.length < 2 && !u.search.includes('articleid')) continue;
+        const key = `카페(${parts[0]})`;
+        const uniquePost = `cafe:${parts.join('/')}${u.search}`;
+        if (!seenKeys.has(uniquePost)) {
+          seenKeys.add(uniquePost);
+          itemsBefore.push(key);
+        }
+        continue;
+      }
+
+      // 3. 네이버 인플루언서 콘텐츠 (in.naver.com/{id}/contents/...)
+      if (host === 'in.naver.com') {
+        if (!u.pathname.includes('/contents/')) continue;
+        const parts = u.pathname.split('/').filter(Boolean);
+        const key = `인플루언서(${parts[0]})`;
+        const uniquePost = `in:${u.pathname}`;
+        if (!seenKeys.has(uniquePost)) {
+          seenKeys.add(uniquePost);
+          itemsBefore.push(key);
+        }
+        continue;
+      }
+
+      // 4. 네이버 지식iN (kin.naver.com/qna/detail...)
+      if (host === 'kin.naver.com') {
+        const docId = u.searchParams.get('docId');
+        if (!docId) continue;
+        const uniquePost = `kin:${docId}`;
+        if (!seenKeys.has(uniquePost)) {
+          seenKeys.add(uniquePost);
+          itemsBefore.push(`지식iN(${docId})`);
+        }
+        continue;
+      }
+
+      // 5. 네이버 뉴스 기사 (n.news.naver.com)
+      if (host === 'n.news.naver.com' || host === 'news.naver.com') {
+        if (!u.pathname.includes('/article/')) continue;
+        const uniquePost = `news:${u.pathname}`;
+        if (!seenKeys.has(uniquePost)) {
+          seenKeys.add(uniquePost);
+          itemsBefore.push('네이버뉴스');
+        }
+        continue;
+      }
+
+      // 기타 네이버 시스템 도메인 제외
+      if (host.endsWith('naver.com')) continue;
+
+      // 6. 티스토리 블로그
+      if (host === 'tistory.com' || host.endsWith('.tistory.com')) {
+        const uniquePost = `tistory:${host}${u.pathname}`;
+        if (!seenKeys.has(uniquePost)) {
+          seenKeys.add(uniquePost);
+          itemsBefore.push(`티스토리(${host.replace('.tistory.com', '')})`);
+        }
+        continue;
+      }
+
+      // 7. 유튜브 영상
+      if (host === 'youtube.com' || host === 'youtu.be') {
+        const v = u.searchParams.get('v') || u.pathname;
+        const uniquePost = `yt:${v}`;
+        if (!seenKeys.has(uniquePost)) {
+          seenKeys.add(uniquePost);
+          itemsBefore.push('유튜브영상');
+        }
+        continue;
+      }
+
+      // 8. 일반 외부 웹사이트 / 경쟁사 홈페이지 (도메인 단위 1회 카운트)
+      const uniqueSite = `web:${host}`;
+      if (!seenKeys.has(uniqueSite)) {
+        seenKeys.add(uniqueSite);
+        itemsBefore.push(host);
+        webCompetitors.push(host);
       }
     } catch (e) {}
   }
 
-  // Real rank = 1 + number of competitor websites ahead
-  const rank = 1 + externalDomains.length;
+  // 진짜 통합 순위 = 1 + 우리 위에 있는 모든(블로그+카페+인기글+웹사이트) 개수
+  const rank = 1 + itemsBefore.length;
+  const webOnlyRank = 1 + webCompetitors.length;
+  const blogOrCafeCount = itemsBefore.length - webCompetitors.length;
+  const hasSmartBlockAbove = blogOrCafeCount > 0;
 
   let rankDesc = '';
   if (rank === 1) {
     if (hasPlaceAbove) {
-      rankDesc = '지도 하단 1위';
-    } else if (hasSmartBlockAbove) {
-      rankDesc = '인기글 하단 1위';
+      rankDesc = '플레이스 직하단 통합 1위 (최상단)';
     } else {
-      rankDesc = '파워링크 직하단 1위 (최상단)';
+      rankDesc = '파워링크 직하단 통합 1위 (최상단)';
     }
   } else {
-    rankDesc = `웹사이트 ${rank}위 (상위 ${externalDomains.length}개사 뒤)`;
+    const parts = [];
+    if (webCompetitors.length > 0) parts.push(`타사홈페이지 ${webCompetitors.length}개`);
+    if (blogOrCafeCount > 0) parts.push(`블로그·인기글 ${blogOrCafeCount}개`);
+    rankDesc = `통합 ${rank}위 (앞: ${parts.join(' + ')})`;
   }
 
   return {
     exposed: true,
     rank,
+    webOnlyRank,
+    blogOrCafeCount,
     rankDesc,
     hasPlaceAbove,
     hasSmartBlockAbove,
-    competitorsBefore: externalDomains,
-    competitorsBeforeCount: externalDomains.length,
+    competitorsBefore: itemsBefore,
+    webCompetitorsBefore: webCompetitors,
+    competitorsBeforeCount: itemsBefore.length,
     link: topLink,
     title: `전국중고오토바이매입.kr`
   };
@@ -195,10 +317,13 @@ async function scanKeyword(item) {
     category: item.category,
     exposed: naverMobile.exposed,
     naverMobileRank: naverMobile.rank,
+    webOnlyRank: naverMobile.webOnlyRank || null,
+    blogOrCafeCount: naverMobile.blogOrCafeCount || 0,
     rankDesc: naverMobile.rankDesc || (naverMobile.rank ? `${naverMobile.rank}위` : '순위밖'),
     hasPlaceAbove: naverMobile.hasPlaceAbove,
     hasSmartBlockAbove: naverMobile.hasSmartBlockAbove,
     competitorsBefore: naverMobile.competitorsBefore || [],
+    webCompetitorsBefore: naverMobile.webCompetitorsBefore || [],
     naverPcRank: naverPc.rank,
     googleRank: google.rank,
     link: naverMobile.link,

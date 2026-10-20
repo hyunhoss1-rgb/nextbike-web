@@ -260,9 +260,21 @@ async function checkNaverMobile(query) {
     rankDesc += ' [AI브리핑 상단인용]';
   }
 
+  // 우측 작은 썸네일 이미지(w.simg 등) 노출 여부 확인
+  const nlogRe = /<a\b[^>]*href=["'](https?:\/\/[^"']*xn--299alk823a88b8ztw1bpdu7bh3ec67a\.kr[^"']*)["'][^>]*data-nlog-area=["']([^"']+)["'][^>]*>/gi;
+  let nm;
+  const nlogAreas = [];
+  while ((nm = nlogRe.exec(html)) !== null) {
+    nlogAreas.push(nm[2]);
+  }
+  const hasThumb =
+    nlogAreas.some((a) => a.includes('simg') || a.includes('mimg') || a.includes('img') || a.includes('thumb')) ||
+    nlogAreas.length >= 3;
+
   return {
     exposed: true,
     inAiBriefing,
+    hasThumb,
     rank,
     webOnlyRank,
     blogOrCafeCount,

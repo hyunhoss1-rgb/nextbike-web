@@ -34,9 +34,9 @@ import {
 } from "lucide-react";
 
 interface Props {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export async function generateStaticParams() {
@@ -47,7 +47,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const article = getArticleBySlug(params.slug);
+  const { slug } = await params;
+  const article = getArticleBySlug(slug);
   if (!article) return {};
 
   const title = `${article.title} | 오토바이 매거진`;
@@ -89,8 +90,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function MagazineDetailPage({ params }: Props) {
-  const article = getArticleBySlug(params.slug);
+export default async function MagazineDetailPage({ params }: Props) {
+  const { slug } = await params;
+  const article = getArticleBySlug(slug);
   if (!article) {
     notFound();
   }

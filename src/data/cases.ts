@@ -6,8 +6,8 @@ export interface PurchaseCase {
   model: string;
   category?: string;
   mileage: string;
-  date: string; // ISO date string (YYYY-MM-DD or formatted)
-  displayDate?: string; // e.g. "오늘 15:20 정산완료" or "어제 정산완료"
+  date?: string; // 실제 거래일이 확인된 사례에만 입력 (YYYY-MM-DD 등)
+  displayDate?: string;
   priceRange: string;
   statusText: string;
   description: string;
@@ -17,7 +17,7 @@ export interface PurchaseCase {
  * 전국 출장 매입 실제 데이터 마스터 풀 (인기 바이크 전 차종 42개 마스터 데이터)
  * 기종명(model)은 부수적 수식어(에디션/패키지명)를 제거하고 표준 순정 기종명으로 깔끔하게 표기
  */
-export const RAW_PURCHASE_CASES: Omit<PurchaseCase, "date" | "displayDate">[] = [
+export const RAW_PURCHASE_CASES: PurchaseCase[] = [
   {
     "slug": "pcx125-siheung-baegot",
     "region": "경기 시흥 배곧동",
@@ -525,129 +525,56 @@ export const RAW_PURCHASE_CASES: Omit<PurchaseCase, "date" | "displayDate">[] = 
 ];
 
 /**
- * 당일 날짜(YYYYMMDD) 시드 기반으로 매일 새로운 순서로 랜덤 로테이션되는 출장 매입 실거래 목록
- * - 매일 자정이 지나면 리스트 순서와 기종 조합이 자동으로 교체됩니다.
- * - 중복 기종 방지 및 최신 체감형 일자/시간 문자열이 주입됩니다.
+ * 홈 화면에 표시할 다양한 기종의 매입 사례를 선택합니다.
+ * 기존 함수 이름은 호환을 위해 유지하며, 실제 거래일이 없는 사례에 날짜를 생성하지 않습니다.
  */
 export function getDailyPurchaseCases(limit = 12): PurchaseCase[] {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth();
-  const date = now.getDate();
+  const count = Number.isFinite(limit)
+    ? Math.max(0, Math.floor(limit))
+    : RAW_PURCHASE_CASES.length;
+  if (count === 0) return [];
 
-  // YYYYMMDD 형태의 일자 시드
-  const daySeed = year * 10000 + (month + 1) * 100 + date;
-
-  // LCG 유사 난수 생성기로 배열 셔플 인덱스 생성
-  let currentSeed = daySeed;
-  const nextRandom = () => {
-    currentSeed = (currentSeed * 9301 + 49297) % 233280;
-    return currentSeed / 233280;
-  };
-
-  // 복사본 생성 후 Fisher-Yates 기반 의사 랜덤 셔플
-  const shuffled = [...RAW_PURCHASE_CASES];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(nextRandom() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-
-  // 중복 기종 방지 필터링 (동일 모델 계열이 하루에 중복 노출되지 않도록 고유 처리)
+  // 서로 다른 기종을 먼저 선택하되, 등록된 사례의 순서는 안정적으로 유지합니다.
   const usedModelKeys = new Set<string>();
   const distinctCases: typeof RAW_PURCHASE_CASES = [];
 
-  for (const item of shuffled) {
+  for (const item of RAW_PURCHASE_CASES) {
     const modelKey = item.model.trim().toLowerCase();
     if (usedModelKeys.has(modelKey)) {
       continue;
     }
     usedModelKeys.add(modelKey);
     distinctCases.push(item);
-    if (distinctCases.length >= limit) break;
+    if (distinctCases.length >= count) break;
   }
 
   // 부족한 경우 남은 항목에서 순차 보충
-  if (distinctCases.length < limit) {
-    for (const item of shuffled) {
+  if (distinctCases.length < count) {
+    for (const item of RAW_PURCHASE_CASES) {
       if (!distinctCases.some((c) => c.slug === item.slug)) {
         distinctCases.push(item);
-        if (distinctCases.length >= limit) break;
+        if (distinctCases.length >= count) break;
       }
     }
   }
 
-  // 최신 실거래 체감 시간 및 최근 일자 동적 주입
-  return distinctCases.slice(0, limit).map((item, idx) => {
-    let daysOffset = 0;
-    let timeString = "";
-
-    if (idx === 0) {
-      daysOffset = 0;
-      timeString = "오늘 정산완료";
-    } else if (idx === 1) {
-      daysOffset = 1;
-      timeString = "어제 정산완료";
-    } else if (idx === 2) {
-      daysOffset = 1;
-      timeString = "어제 정산완료";
-    } else if (idx === 3) {
-      daysOffset = 2;
-      timeString = "2일 전 정산완료";
-    } else if (idx === 4) {
-      daysOffset = 2;
-      timeString = "2일 전 정산완료";
-    } else if (idx === 5) {
-      daysOffset = 3;
-      timeString = "3일 전 정산완료";
-    } else if (idx === 6) {
-      daysOffset = 4;
-      timeString = "4일 전 정산완료";
-    } else {
-      daysOffset = idx - 2;
-      timeString = `${daysOffset}일 전 정산완료`;
-    }
-
-    const caseDate = new Date(year, month, date - daysOffset);
-    const caseYear = caseDate.getFullYear();
-    const caseMonth = String(caseDate.getMonth() + 1).padStart(2, "0");
-    const caseDay = String(caseDate.getDate()).padStart(2, "0");
-    const dateStr = `${caseYear}.${caseMonth}.${caseDay}`;
-
-    return {
-      ...item,
-      date: dateStr,
-      displayDate: timeString,
-    };
-  });
+  return distinctCases.slice(0, count).map((item) => ({
+    ...item,
+    displayDate: item.displayDate || "매입 사례",
+  }));
 }
 
 /**
- * 기본 호환용 정적 리스트 (최신 일자 주입된 12개 기본형)
+ * 기본 호환용 매입 사례 12개
  */
 export const PURCHASE_CASES: PurchaseCase[] = getDailyPurchaseCases(12);
 
 /**
- * 전체 매입 사례 페이지(/cases)용 전체 데이터 (최신 일자 순으로 정렬)
+ * 전체 매입 사례 페이지(/cases)용 등록 순서 데이터
  */
 export function getAllPurchaseCases(): PurchaseCase[] {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth();
-  const date = now.getDate();
-
-  return RAW_PURCHASE_CASES.map((item, idx) => {
-    const daysOffset = Math.floor(idx / 2);
-    const caseDate = new Date(year, month, date - daysOffset);
-    const caseYear = caseDate.getFullYear();
-    const caseMonth = String(caseDate.getMonth() + 1).padStart(2, "0");
-    const caseDay = String(caseDate.getDate()).padStart(2, "0");
-    const dateStr = `${caseYear}.${caseMonth}.${caseDay}`;
-    const displayDate = idx === 0 ? "오늘 정산완료" : idx <= 2 ? "어제 정산완료" : `${daysOffset}일 전`;
-
-    return {
-      ...item,
-      date: dateStr,
-      displayDate,
-    };
-  });
+  return RAW_PURCHASE_CASES.map((item) => ({
+    ...item,
+    displayDate: item.displayDate || "매입 사례",
+  }));
 }

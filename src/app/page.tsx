@@ -11,7 +11,6 @@ export const metadata: Metadata = {
 
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import EstimateForm from "@/components/EstimateForm";
 import RegionTableGrid from "@/components/RegionTableGrid";
 import ModelLinkGrid from "@/components/ModelLinkGrid";
@@ -62,13 +61,23 @@ export default function HomePage() {
       <section className="relative overflow-hidden pt-6 pb-16 sm:pb-24 border-b border-border/60">
         {/* 백그라운드 바이크 이미지 & 시네마틱 오버레이 */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-          <Image
-            src="/images/hero-bike.jpg"
-            alt="전국 중고오토바이 당일 출장 매입 | 상차 전 100% 선입금"
-            fill
-            priority
-            className="object-cover object-[75%_center] md:object-center opacity-30 md:opacity-35 mix-blend-screen scale-105"
-          />
+          <picture>
+            <source
+              type="image/webp"
+              srcSet="/images/hero-bike-640.webp 640w, /images/hero-bike-960.webp 960w, /images/hero-bike-1376.webp 1376w"
+              sizes="100vw"
+            />
+            <img
+              src="/images/hero-bike.jpg"
+              alt="전국 중고오토바이 당일 출장 매입 | 상차 전 100% 선입금"
+              width={1376}
+              height={768}
+              fetchPriority="high"
+              loading="eager"
+              decoding="async"
+              className="absolute inset-0 h-full w-full object-cover object-[75%_center] md:object-center opacity-30 md:opacity-35 mix-blend-screen scale-105"
+            />
+          </picture>
           {/* 가독성 보장을 위한 다중 다크 그라데이션 */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#0a0d10] via-[#0a0d10]/95 md:via-[#0a0d10]/80 to-[#0a0d10]/70 lg:to-[#0a0d10]/40" />
           <div className="absolute inset-0 bg-gradient-to-b from-[#0a0d10]/80 via-transparent to-[#0a0d10]" />
@@ -81,14 +90,14 @@ export default function HomePage() {
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             {/* 좌측 헤드라인 & 소개 */}
             <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
-              <ScrollReveal animation="fade-down" delay={100}>
+              <div>
                 <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan text-xs sm:text-sm font-bold shadow-sm backdrop-blur-sm">
                   <span className="w-2 h-2 rounded-full bg-brand-cyan animate-pulse" />
                   24시간 실시간 접수 · 수도권 30분대 · 전국 당일 무상 출장
                 </div>
-              </ScrollReveal>
+              </div>
 
-              <ScrollReveal animation="fade-up" delay={200}>
+              <div>
                 <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.18] break-keep">
                   <span className="block text-2xl sm:text-4xl lg:text-5xl text-gray-200 font-extrabold mb-1">
                     전국 중고오토바이매입 · 바이크매입
@@ -97,15 +106,15 @@ export default function HomePage() {
                     상차 전 100% 당일 선입금 안전거래
                   </span>
                 </h1>
-              </ScrollReveal>
+              </div>
 
-              <ScrollReveal animation="fade-up" delay={300}>
+              <div>
                 <p className="text-sm sm:text-lg text-gray-300 max-w-xl mx-auto lg:mx-0 leading-relaxed">
                   중고오토바이 및 바이크 매입 시 전화로 높게 부르고 현장에서 깎아내리는 불투명한 거래는 그만. 고객님 계좌에 1원 한 장 빠짐없이 전액 입금된 것을 직접 확인하신 뒤에만 바이크를 싣습니다.
                 </p>
-              </ScrollReveal>
+              </div>
 
-              <ScrollReveal animation="fade-up" delay={400}>
+              <div>
                 <div className="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs sm:text-sm text-gray-200 max-w-lg mx-auto lg:mx-0">
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-brand-cyan shrink-0" />
@@ -124,9 +133,9 @@ export default function HomePage() {
                     <span>24시간 내 구청 이전 서류 완료</span>
                   </div>
                 </div>
-              </ScrollReveal>
+              </div>
 
-              <ScrollReveal animation="fade-up" delay={500}>
+              <div>
                 <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-3 w-full max-w-md mx-auto lg:mx-0">
                   <a
                     href="tel:01048952487"
@@ -145,20 +154,20 @@ export default function HomePage() {
                     카카오톡 1:1 상담
                   </a>
                 </div>
-              </ScrollReveal>
+              </div>
             </div>
 
             {/* 우측 30초 견적 폼 */}
             <div className="lg:col-span-6">
-              <ScrollReveal animation="zoom-in" delay={300}>
+              <div>
                 <EstimateForm />
-              </ScrollReveal>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ================= 2. 최근 전국 출장 매입 실거래 현황 ================= */}
+      {/* ================= 2. 전국 출장 매입 사례 ================= */}
       <section className="py-12 md:py-16 border-b border-border/60 bg-surface/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal animation="fade-up">
@@ -166,17 +175,17 @@ export default function HomePage() {
               <div>
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan text-xs font-bold mb-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-brand-cyan animate-pulse" />
-                  실시간 실차 매입 리포트
+                  차종별 출장 매입 사례
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-black text-white">
-                  최근 전국 <span className="text-brand-cyan">출장 매입 실거래 현황</span>
+                  전국 <span className="text-brand-cyan">출장 매입 사례</span>
                 </h2>
               </div>
               <Link
                 href="/cases"
                 className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-brand-cyan hover:underline"
               >
-                실거래 매입 내역 전체보기 <ChevronRight className="w-4 h-4" />
+                매입 사례 전체보기 <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
           </ScrollReveal>
@@ -201,7 +210,7 @@ export default function HomePage() {
                         {item.region}
                       </span>
                       <span className="px-2 py-0.5 rounded bg-brand-cyan/10 text-[10px] text-brand-cyan font-bold border border-brand-cyan/30 shrink-0">
-                        {item.displayDate || "정산 완료"}
+                        {item.displayDate || "매입 사례"}
                       </span>
                     </div>
                     <div className="text-base font-bold text-white leading-snug group-hover:text-brand-cyan transition-colors">
@@ -209,14 +218,16 @@ export default function HomePage() {
                     </div>
                     <div className="mt-1 text-xs text-gray-400 flex items-center justify-between">
                       <span>적산 {item.mileage}</span>
-                      <span className="text-[11px] text-gray-500">{item.date}</span>
+                      {item.date && (
+                        <span className="text-[11px] text-gray-500">{item.date}</span>
+                      )}
                     </div>
                     <p className="mt-2.5 text-xs text-gray-300 line-clamp-2 bg-card/60 p-2 rounded-lg border border-border/40 leading-relaxed">
                       {item.statusText}
                     </p>
                   </div>
                   <div className="mt-4 pt-3 border-t border-border/60 text-xs font-bold text-gray-300 flex items-center justify-between">
-                    <span className="text-gray-400">실거래 정산가</span>
+                    <span className="text-gray-400">사례 안내 금액</span>
                     <span className="text-brand-cyan font-black text-sm">{item.priceRange}</span>
                   </div>
                 </Link>
@@ -224,7 +235,7 @@ export default function HomePage() {
             ))}
           </div>
           <p className="mt-3 text-[11px] text-gray-500">
-            ※ 실제 매입 완료된 차종별 정산 사례이며, 정비 상태 및 옵션 장착 여부에 따라 최고가 맞춤 견적이 산출됩니다.
+            ※ 차종별 매입 사례이며, 차량의 정비 상태 및 옵션 장착 여부에 따라 실제 견적이 달라질 수 있습니다.
           </p>
         </div>
       </section>
@@ -694,12 +705,23 @@ export default function HomePage() {
       <section className="relative overflow-hidden py-16 sm:py-24 border-b border-border/60">
         {/* 바이크 배경 이미지 */}
         <div className="absolute inset-0 z-0 pointer-events-none">
-          <Image
-            src="/images/bike-banner.jpg"
-            alt="전국 중고오토바이 당일 출장 매입 | 상차 전 100% 선입금"
-            fill
-            className="object-cover object-center opacity-25 mix-blend-screen scale-105"
-          />
+          <picture>
+            <source
+              type="image/webp"
+              srcSet="/images/bike-banner-640.webp 640w, /images/bike-banner-960.webp 960w, /images/bike-banner-1376.webp 1376w"
+              sizes="100vw"
+            />
+            <img
+              src="/images/bike-banner.jpg"
+              alt="전국 중고오토바이 당일 출장 매입 | 상차 전 100% 선입금"
+              width={1376}
+              height={768}
+              fetchPriority="low"
+              loading="lazy"
+              decoding="async"
+              className="absolute inset-0 h-full w-full object-cover object-center opacity-25 mix-blend-screen scale-105"
+            />
+          </picture>
           <div className="absolute inset-0 bg-gradient-to-r from-[#0a0d10] via-[#0a0d10]/90 to-[#0a0d10]/80" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0a0d10] via-transparent to-[#0a0d10]" />
         </div>

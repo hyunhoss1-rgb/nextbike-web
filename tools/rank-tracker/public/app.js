@@ -44,10 +44,12 @@ function renderComparisonButtons() {
   const compareCandidates = state.snapshots.slice(1, 6);
 
   container.innerHTML = compareCandidates.map((s, idx) => {
-    const isSelected = state.compareSnapshot?.date === s.date || (!state.compareSnapshot && idx === 0);
+    const key = s.timestamp || s.date;
+    const selectedKey = state.compareSnapshot?.timestamp || state.compareSnapshot?.date;
+    const isSelected = selectedKey === key || (!state.compareSnapshot && idx === 0);
     return `
       <button 
-        onclick="setCompareDate('${s.date}')" 
+        onclick="setCompareDate('${key}')"
         class="compare-pill px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
           isSelected 
             ? 'bg-brand-cyan text-black shadow-md shadow-brand-cyan/20 ring-2 ring-brand-cyan/40' 
@@ -63,8 +65,8 @@ function renderComparisonButtons() {
   lucide.createIcons();
 }
 
-function setCompareDate(dateStr) {
-  const target = state.snapshots.find(s => s.date === dateStr);
+function setCompareDate(key) {
+  const target = state.snapshots.find(s => (s.timestamp || s.date) === key);
   if (target) {
     state.compareSnapshot = target;
     renderComparisonButtons();
@@ -132,6 +134,18 @@ function updateView() {
   }
 }
 
+function measured(item) {
+  return item?.exposed === true || item?.exposed === false;
+}
+
+function comparable(a, b) {
+  return !!a?.measurementMethod && a.measurementMethod === b?.measurementMethod && measured(a) && measured(b);
+}
+
+function escapeLabel(value) {
+  return String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
 // Render KPI Cards
 function renderKPIs() {
   if (!state.activeSnapshot) return;
@@ -141,6 +155,7 @@ function renderKPIs() {
 
   const total = state.keywords.length;
   let exposed = 0;
+  let measuredCount = 0;
   let gold = 0; // 1~3 rank
   let google = 0;
   let up = 0;
@@ -151,6 +166,7 @@ function renderKPIs() {
     const act = activeItems[k.kw];
     const comp = compareItems[k.kw];
 
+    if (measured(act)) measuredCount++;
     if (act?.naverMobileRank) {
       exposed++;
       if (act.naverMobileRank <= 3) gold++;
@@ -161,18 +177,18 @@ function renderKPIs() {
     const actRank = act?.naverMobileRank;
     const compRank = comp?.naverMobileRank;
 
-    if (actRank && !compRank) {
+    if (comparable(act, comp) && actRank && !compRank) {
       newEntrants++;
-    } else if (actRank && compRank) {
+    } else if (comparable(act, comp) && actRank && compRank) {
       if (actRank < compRank) up++; // Rank number decreased = position climbed
       else if (actRank > compRank) down++;
     }
   });
 
-  const rate = total > 0 ? ((exposed / total) * 100).toFixed(1) : '0';
+  const rate = measuredCount > 0 ? ((exposed / measuredCount) * 100).toFixed(1) : null;
 
-  document.getElementById('kpiExposedRate').textContent = `${rate}%`;
-  document.getElementById('kpiExposedCount').textContent = `(${exposed} / ${total}개)`;
+  document.getElementById('kpiExposedRate').textContent = rate === null ? '미확인' : `${rate}%`;
+  document.getElementById('kpiExposedCount').textContent = `(${exposed} / 판독 ${measuredCount}개 · 미확인 ${total - measuredCount}개)`;
   document.getElementById('kpiGoldCount').textContent = gold;
   document.getElementById('kpiGoogleCount').textContent = google;
   document.getElementById('kpiUpCount').textContent = up;
@@ -209,9 +225,10 @@ function renderTable() {
     // Status Filter
     if (state.selectedStatus === 'GOLD') return actRank && actRank <= 3;
     if (state.selectedStatus === 'PAGE1') return !!actRank;
-    if (state.selectedStatus === 'UP') return actRank && compRank && actRank < compRank;
-    if (state.selectedStatus === 'DOWN') return actRank && compRank && actRank > compRank;
-    if (state.selectedStatus === 'OUT') return !actRank;
+    if (state.selectedStatus === 'UP') return comparable(act, comp) && actRank && compRank && actRank < compRank;
+    if (state.selectedStatus === 'DOWN') return comparable(act, comp) && actRank && compRank && actRank > compRank;
+    if (state.selectedStatus === 'OUT') return act?.exposed === false;
+    if (state.selectedStatus === 'UNKNOWN') return !measured(act);
 
     return true;
   });
@@ -239,74 +256,28 @@ function renderTable() {
     const actRank = act?.naverMobileRank;
     const compRank = comp?.naverMobileRank;
 
-    // Naver Mobile Badge (실질 통합 순위: 블로그·카페·인기글·타사웹 전부 합산)
-    let naverBadge = `<span class="px-2 py-0.5 rounded text-[11px] font-bold bg-gray-800 text-gray-400">순위밖</span>`;
+    // New observations use parsed web-result cards, never a full-screen rank.
+    const currentMethod = act?.measurementMethod === 'naver_web_cards_v1';
+    let naverBadge = `<span class="text-xs text-gray-400">${measured(act) ? '결과 내 미확인' : '조회·판독 미확인'}</span>`;
     if (actRank) {
-      const compCount = act.competitorsBefore?.length || (actRank - 1);
-      const webRank = act.webOnlyRank || actRank;
-      const blogCount = act.blogOrCafeCount || 0;
-      const aiTag = act.inAiBriefing ? `<span class="text-[9px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40 font-bold mt-0.5">AI브리핑 인용</span>` : '';
-
-      if (actRank === 1) {
-        const subLabel = act.hasPlaceAbove ? '플레이스 직하단 1순위' : '파워링크 직하단 1순위';
-        naverBadge = `
-          <div class="inline-flex flex-col items-center">
-            <span class="px-2.5 py-1 rounded-lg text-xs font-black bg-gradient-to-r from-amber-500/25 to-yellow-500/25 text-amber-300 border border-amber-500/50 shadow-md shadow-amber-500/20 flex items-center justify-center gap-1 mx-auto">
-              <i data-lucide="crown" class="w-3.5 h-3.5 text-amber-400 fill-amber-400"></i> 통합 1순위
-            </span>
-            <span class="text-[10px] text-amber-400/90 font-bold tracking-tight mt-0.5">${subLabel}</span>
-            ${aiTag}
-          </div>
-        `;
-      } else {
-        const badgeColor = actRank <= 3 
-          ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30' 
-          : 'bg-brand-cyan/15 text-brand-cyan border border-brand-cyan/30';
-        
-        const compTip = (act.competitorsBefore || []).join(', ');
-        const subText = blogCount > 0
-          ? `웹 ${webRank}위 + 앞선블로그 ${blogCount}개`
-          : `앞선 타사웹 ${compCount}개 (블로그 0개)`;
-
-        naverBadge = `
-          <div class="inline-flex flex-col items-center max-w-[155px] mx-auto text-center" title="앞선 노출 문서: ${compTip}">
-            <span class="px-2.5 py-0.5 rounded-lg text-xs font-extrabold ${badgeColor}">
-              통합 ${actRank}순위
-            </span>
-            <span class="text-[10px] text-gray-400 mt-0.5 leading-tight truncate w-full" title="${compTip}">
-              ${subText}
-            </span>
-            ${aiTag}
-          </div>
-        `;
-      }
+      naverBadge = `<div class="text-brand-cyan font-bold text-xs" title="${escapeLabel(act.rankDesc)}">${currentMethod ? `웹문서 ${actRank}번째` : `기존 기록 ${actRank}위`}</div><div class="text-[10px] text-gray-400">${currentMethod ? '광고·지도 제외 카드 순서' : '산정 기준 미확인'}</div>`;
     }
-
-    // Naver PC Badge
-    let naverPcBadge = `<span class="text-xs text-gray-500">-</span>`;
-    if (act?.naverPcRank) {
-      naverPcBadge = `<span class="text-xs font-bold text-gray-300">${act.naverPcRank}위</span>`;
-    }
-
-    // Google Badge
-    let googleBadge = `<span class="text-xs text-gray-500">-</span>`;
-    if (act?.googleRank) {
-      googleBadge = `<span class="px-2 py-0.5 rounded text-xs font-bold bg-blue-500/15 text-blue-400 border border-blue-500/30">
-        ${act.googleRank}위
-      </span>`;
-    }
+    let naverPcBadge = `<span class="text-xs text-gray-500">${act?.naverPcStatus === 'not_found' ? '결과 내 미확인' : '미확인'}</span>`;
+    if (act?.naverPcRank) naverPcBadge = `<span class="text-xs text-gray-300">${act.naverPcRank}${currentMethod ? '번째' : '위 (기존)'}</span>`;
+    let googleBadge = `<span class="text-xs text-gray-500">${act?.googleStatus === 'not_found' ? '결과 내 미확인' : '미확인'}</span>`;
+    if (act?.googleRank) googleBadge = `<span class="text-xs text-blue-400">${act.googleRank}${currentMethod ? '번째 제목 카드' : '위 (기존)'}</span>`;
 
     // Compare Badge
-    let compBadge = `<span class="text-xs text-gray-500">순위밖</span>`;
+    let compBadge = `<span class="text-xs text-gray-500">미확인</span>`;
     if (compRank) {
-      compBadge = `<span class="text-xs font-bold text-gray-300">${compRank}위</span>`;
+      compBadge = `<span class="text-xs font-bold text-gray-300">${compRank}${comp.measurementMethod ? '번째' : '위 (기존)'}</span>`;
     }
 
     // Delta Badge
     let deltaBadge = `<span class="text-gray-500 font-mono text-xs">─</span>`;
-    if (actRank && !compRank) {
+    if (comparable(act, comp) && actRank && !compRank) {
       deltaBadge = `<span class="px-1.5 py-0.5 rounded bg-brand-cyan/20 text-brand-cyan text-[11px] font-extrabold">NEW</span>`;
-    } else if (actRank && compRank) {
+    } else if (comparable(act, comp) && actRank && compRank) {
       const diff = compRank - actRank;
       if (diff > 0) {
         deltaBadge = `<span class="text-emerald-400 font-bold text-xs flex items-center justify-center gap-0.5">▲ +${diff}</span>`;
@@ -315,7 +286,7 @@ function renderTable() {
       } else {
         deltaBadge = `<span class="text-gray-400 text-xs">유지</span>`;
       }
-    } else if (!actRank && compRank) {
+    } else if (comparable(act, comp) && !actRank && compRank) {
       deltaBadge = `<span class="text-rose-500 text-[11px] font-bold">이탈</span>`;
     }
 
@@ -392,7 +363,7 @@ function startScan() {
         countText.textContent = `${data.current} / ${data.total}`;
         percentText.textContent = `${percent}%`;
 
-        const rankText = data.item.naverMobileRank ? `[네이버 ${data.item.naverMobileRank}위]` : `[미노출]`;
+        const rankText = data.item.naverMobileRank ? `[웹문서 ${data.item.naverMobileRank}번째]` : data.item.exposed === false ? `[가져온 결과 내 미확인]` : `[조회·판독 미확인]`;
         const googleText = data.item.googleRank ? `[구글 ${data.item.googleRank}위]` : '';
         ticker.textContent = `▶ [${data.current}/${data.total}] "${data.item.kw}" -> ${rankText} ${googleText}`;
 
@@ -403,7 +374,7 @@ function startScan() {
           renderTable();
         }
       } else if (data.type === 'complete') {
-        ticker.textContent = `✅ 전수조사 완료! 총 ${data.snapshot.totalKeywords}개 중 ${data.snapshot.exposedCount}개(${data.snapshot.exposedRate}) 1페이지 노출 확인!`;
+        ticker.textContent = `✅ 전수조사 완료! 판독 ${data.snapshot.measuredCount}개 중 ${data.snapshot.exposedCount}개 웹문서 발견 · 미확인 ${data.snapshot.unknownCount}개`;
         finishScan();
         loadData().then(() => updateView());
       } else if (data.type === 'aborted') {
@@ -486,7 +457,8 @@ async function deleteKeyword(kw) {
 // Download CSV
 function downloadCSV() {
   const dateStr = state.activeSnapshot?.date || 'latest';
-  window.location.href = `/api/export-csv?date=${dateStr}`;
+  const timestamp = state.activeSnapshot?.timestamp || '';
+  window.location.href = `/api/export-csv?date=${dateStr}&timestamp=${encodeURIComponent(timestamp)}`;
 }
 
 // Start on load

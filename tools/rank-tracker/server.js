@@ -2,6 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const { scanKeyword, sleep } = require('./scanner');
+const { summarizeItems, exportRow } = require('./measurement');
 
 const PORT = 3800;
 const DATA_DIR = path.join(__dirname, 'data');
@@ -152,8 +153,9 @@ const server = http.createServer(async (req, res) => {
         scannedItems[item.kw] = {
           kw: item.kw,
           category: item.category,
-          exposed: false,
-          error: err.message
+          exposed: null,
+          status: 'request_error',
+          rankDesc: '조회 실패 — 노출 여부 미확인'
         };
       }
 
@@ -163,25 +165,19 @@ const server = http.createServer(async (req, res) => {
     if (!abortScan) {
       // Save new snapshot to history
       const history = getHistory();
-      const exposedCount = Object.values(scannedItems).filter(i => i.exposed).length;
+      const summary = summarizeItems(scannedItems, total);
       
       const newSnapshot = {
         date: todayStr,
         timestamp: new Date().toISOString(),
         label: `오늘 실시간 (${todayStr})`,
-        totalKeywords: total,
-        exposedCount,
-        exposedRate: ((exposedCount / total) * 100).toFixed(1) + '%',
+        ...summary,
+        measurementMethod: 'naver_web_cards_v1',
         items: scannedItems
       };
 
-      // Replace or add today's snapshot
-      const existingIdx = history.snapshots.findIndex(s => s.date === todayStr);
-      if (existingIdx >= 0) {
-        history.snapshots[existingIdx] = newSnapshot;
-      } else {
-        history.snapshots.unshift(newSnapshot);
-      }
+      // Keep previous observations, including earlier runs on the same date.
+      history.snapshots.unshift(newSnapshot);
 
       saveHistory(history);
 
@@ -201,7 +197,9 @@ const server = http.createServer(async (req, res) => {
   if (pathname === '/api/export-csv') {
     const history = getHistory();
     const dateParam = parsedUrl.searchParams.get('date');
-    const snapshot = history.snapshots.find(s => s.date === dateParam) || history.snapshots[0];
+    const timestampParam = parsedUrl.searchParams.get('timestamp');
+    const snapshot = (timestampParam ? history.snapshots.find(s => s.timestamp === timestampParam) : null)
+      || history.snapshots.find(s => s.date === dateParam) || history.snapshots[0];
 
     if (!snapshot) {
       res.writeHead(404, { 'Content-Type': 'text/plain' });
@@ -210,19 +208,11 @@ const server = http.createServer(async (req, res) => {
     }
 
     const rows = [
-      ['분류', '키워드', '네이버 모바일 순위', '네이버 PC 순위', '구글 순위', '노출 상태', '노출 URL']
+      ['분류', '키워드', '네이버 모바일 웹문서 카드', '네이버 PC 웹문서 카드', '구글 제목 카드', '노출 상태', '노출 URL', '산정 기준', '측정 시각']
     ];
 
     for (const [kw, data] of Object.entries(snapshot.items)) {
-      rows.push([
-        `"${data.category || ''}"`,
-        `"${kw}"`,
-        data.naverMobileRank ? `"${data.naverMobileRank}위"` : '"순위밖"',
-        data.naverPcRank ? `"${data.naverPcRank}위"` : '"순위밖"',
-        data.googleRank ? `"${data.googleRank}위"` : '"순위밖"',
-        data.exposed ? '"1페이지 노출"' : '"미노출"',
-        `"${data.link || ''}"`
-      ]);
+      rows.push(exportRow(kw, data));
     }
 
     const csvContent = '\uFEFF' + rows.map(r => r.join(',')).join('\r\n');

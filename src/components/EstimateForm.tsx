@@ -99,6 +99,7 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [photoItems, setPhotoItems] = useState<PhotoItem[]>([]);
   const [submitted, setSubmitted] = useState(false);
+  const [photosDelivered, setPhotosDelivered] = useState(true);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -300,6 +301,7 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
 
     setLoading(true);
     setErrorMessage(null);
+    setPhotosDelivered(true);
     try {
       const formData = new FormData();
       formData.append("phone", phone);
@@ -323,24 +325,21 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
         body: formData,
       });
 
-      if (!res.ok) {
-        let errorDetail = "서버 통신 장애가 발생했습니다.";
-        try {
-          const data = await res.json();
-          if (data?.error) errorDetail = data.error;
-        } catch {}
-        throw new Error(errorDetail);
+      const result = await res.json();
+      if (!res.ok || result?.success !== true) {
+        throw new Error("견적 신청을 전달하지 못했습니다.");
       }
+
+      setPhotosDelivered(result.photosDelivered !== false);
 
       try {
         sessionStorage.removeItem("nextbike_estimate_draft");
       } catch {}
 
       setSubmitted(true);
-    } catch (err) {
-      console.error("견적 전송 에러:", err);
+    } catch {
       setErrorMessage(
-        "일시적인 네트워크 지연으로 온라인 신청이 완료되지 못했습니다. 작성하신 정보는 모두 안전하게 보존되어 있으니, 아래 [전화 바로 연결] 또는 [카카오톡 사진 문의]를 누르시면 기다림 없이 즉시 1:1 최고가 견적 상담을 받으실 수 있습니다."
+        "견적 신청이 완료되지 않았습니다. 입력 내용은 이 화면에 남아 있으니 잠시 후 다시 신청하거나, 아래 전화 또는 카카오톡으로 문의해 주세요."
       );
     } finally {
       setLoading(false);
@@ -469,6 +468,19 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
           <p className="text-gray-300 text-sm max-w-md mx-auto leading-relaxed">
             남겨주신 번호(<span className="text-brand-cyan font-bold">{phone}</span>)로 넥스트바이크 전문 상담사가 차량 시세 확인 후 순차적으로 빠르게 회신드리겠습니다.
           </p>
+          {!photosDelivered && (
+            <div role="status" className="rounded-xl border border-brand-yellow/50 bg-brand-yellow/10 p-4 text-sm text-brand-yellow">
+              <p>연락처와 견적 내용은 전달됐지만 사진은 전달되지 않았습니다.</p>
+              <a
+                href="https://open.kakao.com/o/skSUkiHg"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-2 inline-flex underline underline-offset-4 font-bold"
+              >
+                카카오톡으로 사진 보내기
+              </a>
+            </div>
+          )}
           <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
             <a
               href="tel:01048952487"
@@ -481,6 +493,7 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
               onClick={() => {
                 setSubmitted(false);
                 setPhotoItems([]);
+                setPhotosDelivered(true);
               }}
               className="w-full sm:w-auto px-5 py-3.5 rounded-xl border border-border text-gray-400 hover:text-white text-sm"
             >
@@ -794,7 +807,7 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
 
           {/* 전송 실패 시 비상 안내 박스 */}
           {errorMessage && (
-            <div className="p-4 sm:p-5 rounded-xl bg-red-950/70 border-2 border-red-500/80 text-white space-y-3.5 shadow-xl animate-in fade-in">
+            <div role="alert" className="p-4 sm:p-5 rounded-xl bg-red-950/70 border-2 border-red-500/80 text-white space-y-3.5 shadow-xl animate-in fade-in">
               <div className="flex items-start gap-2.5 text-red-100 text-xs sm:text-sm font-semibold leading-relaxed">
                 <AlertCircle className="w-5 h-5 text-brand-red shrink-0 mt-0.5 animate-pulse" />
                 <span>{errorMessage}</span>

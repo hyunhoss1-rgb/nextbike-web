@@ -14,9 +14,6 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr"),
-  alternates: {
-    canonical: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr",
-  },
   title: {
     default: "오토바이매입 · 중고오토바이매입 | 전국 중고바이크 당일 출장매입",
     template: "%s",

@@ -5,6 +5,9 @@ import { ShieldCheck, ArrowLeft, Phone, Lock, FileText, CheckCircle2 } from "luc
 import JsonLd from "@/components/JsonLd";
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/privacy",
+  },
   title: "개인정보처리방침 | 넥스트바이크 (NEXTBIKE)",
   description:
     "넥스트바이크는 정보통신망법 및 개인정보보호법에 의거하여 고객님의 소중한 개인정보를 안전하게 보호하고 관리합니다. 공식 개인정보처리방침 전문을 확인하세요.",

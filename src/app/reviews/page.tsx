@@ -5,6 +5,9 @@ import JsonLd from "@/components/JsonLd";
 import { Star, MapPin, CheckCircle2, Phone, MessageCircle } from "lucide-react";
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/reviews",
+  },
   title: "고객 매입 후기 | 100% 실거래 만족 리뷰",
   description:
     "실제 고객님들의 생생한 거래 후기. 상차 전 100% 선입금, 현장 부당 감가 제로, 친절한 무료 출장 및 당일 사용폐지 서류 대행 만족도 1위.",

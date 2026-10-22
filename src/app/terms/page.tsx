@@ -5,6 +5,9 @@ import { FileText, ArrowLeft, ShieldCheck, Scale, CheckCircle2 } from "lucide-re
 import JsonLd from "@/components/JsonLd";
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/terms",
+  },
   title: "서비스 이용약관 | 넥스트바이크 (NEXTBIKE)",
   description:
     "넥스트바이크의 중고 오토바이 출장 매입 서비스 이용 조건, 권리·의무, 투명한 거래 절차 및 차대 결함 환불 특약에 관한 공식 이용약관입니다.",

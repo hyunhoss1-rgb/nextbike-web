@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
-import { Phone, CheckCircle2, ArrowRight, Camera, ImagePlus, X, ShieldCheck } from "lucide-react";
+import { Phone, CheckCircle2, ArrowRight, Camera, ImagePlus, X, ShieldCheck, AlertCircle, MessageCircle } from "lucide-react";
 
 interface EstimateFormProps {
   initialRegion?: string;
@@ -100,6 +100,7 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
   const [photoItems, setPhotoItems] = useState<PhotoItem[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
 
   // 실시간 웹 내장 카메라 뷰파인더 상태 (아이폰/갤럭시 브라우저 튕김 0%)
@@ -298,6 +299,7 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
     }
 
     setLoading(true);
+    setErrorMessage(null);
     try {
       const formData = new FormData();
       formData.append("phone", phone);
@@ -316,10 +318,19 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
         });
       }
 
-      await fetch("/api/estimate", {
+      const res = await fetch("/api/estimate", {
         method: "POST",
         body: formData,
       });
+
+      if (!res.ok) {
+        let errorDetail = "서버 통신 장애가 발생했습니다.";
+        try {
+          const data = await res.json();
+          if (data?.error) errorDetail = data.error;
+        } catch {}
+        throw new Error(errorDetail);
+      }
 
       try {
         sessionStorage.removeItem("nextbike_estimate_draft");
@@ -328,7 +339,9 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
       setSubmitted(true);
     } catch (err) {
       console.error("견적 전송 에러:", err);
-      setSubmitted(true);
+      setErrorMessage(
+        "일시적인 네트워크 지연으로 온라인 신청이 완료되지 못했습니다. 작성하신 정보는 모두 안전하게 보존되어 있으니, 아래 [전화 바로 연결] 또는 [카카오톡 사진 문의]를 누르시면 기다림 없이 즉시 1:1 최고가 견적 상담을 받으실 수 있습니다."
+      );
     } finally {
       setLoading(false);
     }
@@ -775,6 +788,34 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
                     확인 및 동의하기
                   </button>
                 </div>
+              </div>
+            </div>
+          )}
+
+          {/* 전송 실패 시 비상 안내 박스 */}
+          {errorMessage && (
+            <div className="p-4 sm:p-5 rounded-xl bg-red-950/70 border-2 border-red-500/80 text-white space-y-3.5 shadow-xl animate-in fade-in">
+              <div className="flex items-start gap-2.5 text-red-100 text-xs sm:text-sm font-semibold leading-relaxed">
+                <AlertCircle className="w-5 h-5 text-brand-red shrink-0 mt-0.5 animate-pulse" />
+                <span>{errorMessage}</span>
+              </div>
+              <div className="grid sm:grid-cols-2 gap-2.5 pt-1">
+                <a
+                  href="tel:01048952487"
+                  className="flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl bg-brand-cyan hover:bg-brand-cyanHover text-black font-black text-xs sm:text-sm shadow-md active:scale-95 transition-all"
+                >
+                  <Phone className="w-4 h-4" />
+                  전화 바로 연결 (010-4895-2487)
+                </a>
+                <a
+                  href="https://open.kakao.com/o/skSUkiHg"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl bg-brand-yellow hover:brightness-105 text-[#191600] font-black text-xs sm:text-sm shadow-md active:scale-95 transition-all"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  카카오톡 1:1 사진 견적 문의
+                </a>
               </div>
             </div>
           )}

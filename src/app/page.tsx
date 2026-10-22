@@ -1,3 +1,14 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "오토바이매입 · 중고오토바이매입 | 전국 중고바이크 당일 출장매입",
+  description:
+    "전국 오토바이매입·중고오토바이매입·중고바이크 당일 출장매입 전문! 상차 전 100% 당일 선입금 안전거래, 현장 부당 감가 없이 약속된 금액 즉시 전액 입금. 스쿠터·방치차·사고차 전 차종 최고가 시세 30초 간편 견적.",
+  alternates: {
+    canonical: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr",
+  },
+};
+
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";

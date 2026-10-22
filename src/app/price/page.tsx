@@ -6,6 +6,9 @@ import JsonLd from "@/components/JsonLd";
 import { Calculator, Phone, CheckCircle2, ChevronRight } from "lucide-react";
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/price",
+  },
   title: "중고 오토바이 시세표 | 2024~2026 실시간 매입 시세 기준표",
   description:
     "혼다 PCX125, 야마하 NMAX, XMAX, 포르자350, 슈퍼커브, BMW, 할리데이비슨 등 전국 실거래 기준 중고 오토바이 매입 시세표 및 시세 감정 기준 안내.",

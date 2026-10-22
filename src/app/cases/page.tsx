@@ -6,6 +6,9 @@ import JsonLd from "@/components/JsonLd";
 import { MapPin, Calendar, ArrowRight, CheckCircle2, Phone, ShieldCheck } from "lucide-react";
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/cases",
+  },
   title: "오토바이 매입 실거래 내역 | 전국 출장 매입 리포트",
   description:
     "혼다 PCX125, 야마하 NMAX, 포르자350, XMAX300, BMW R1250GS, 할리데이비슨 등 상차 전 100% 선입금 완료된 실제 전국 출장 매입 및 정산 내역 확인.",

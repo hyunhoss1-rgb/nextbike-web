@@ -9,6 +9,9 @@ import RegionSearchBrowser, {
 import { Phone, ChevronRight, Home } from "lucide-react";
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/regions",
+  },
   title: "전국 지역별 오토바이매입·바이크매입 | 중고바이크 당일 출장 매입",
   description:
     "서울·경기·인천·부산·대구·경남·경북·충청·호남·강원·제주 등 전국 전 시·군·구·읍·면·동 오토바이매입 및 중고바이크 출장매입 검색 안내. 상차 전 당일 100% 선입금 안전거래.",

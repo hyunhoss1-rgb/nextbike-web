@@ -6,6 +6,9 @@ import ModelSearchGrid from "@/components/ModelSearchGrid";
 import { Bike, Phone } from "lucide-react";
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/models",
+  },
   title: "인기 기종별 오토바이 매입 | 혼다·야마하·SYM·킴코·BMW·할리 중고 시세",
   description:
     "혼다 PCX125, 야마하 NMAX, 포르자350, XMAX300, 슈퍼커브, 벤리110, SYM 크루심, BMW R1250GS, 할리데이비슨, 베스파 등 125개 전 기종 상차 전 당일 100% 선입금 최고가 출장 매입.",

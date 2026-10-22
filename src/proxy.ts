@@ -15,7 +15,7 @@ const ALLOWED_SEARCH_AND_SOCIAL_BOTS =
 const BLOCKED_AI_AND_SCRAPER_BOTS =
   /gptbot|chatgpt-user|oai-searchbot|openai|claudebot|claude-web|claude-searchbot|claude-user|anthropic-ai|perplexitybot|perplexity-user|google-extended|googleother|google-cloudvertexbot|vertexai|applebot-extended|bytespider|ccbot|diffbot|facebookbot|meta-externalagent|meta-externalfetcher|cohere-ai|cohere-training-data-crawler|amazonbot|youbot|omgilibot|omgili|ai2bot|ai2bot-dolma|duckassistbot|timpibot|webzio-extended|imagesiftbot|kangaroo bot|petalbot|pangubot|sentibot|velenpublicwebcrawler|turnitinbot|img2dataset|icc-crawler|ahrefsbot|semrushbot|mj12bot|dotbot|blexbot|dataforseobot|rogerbot|screaming frog|siteauditbot|serpstatbot|zoominfobot|barkrowler|seekportbot|scrapy|python-requests|python-urllib|python-httpx|aiohttp|curl\/|wget\/|libwww-perl|mechanize|httrack|webcopier|teleport|sitesnagger|headlesschrome|phantomjs|selenium|playwright|puppeteer/i;
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const ua = request.headers.get("user-agent") || "";
 
   // 1. 네이버·구글·다음 등 공식 검색엔진 및 썸네일 수집 봇은 무조건 최우선 통과 (썸네일·SEO 100% 보호)

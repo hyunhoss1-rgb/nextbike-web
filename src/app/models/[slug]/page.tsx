@@ -20,9 +20,9 @@ import {
 } from "lucide-react";
 
 interface Props {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export async function generateStaticParams() {
@@ -32,7 +32,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const model = getModelBySlug(params.slug);
+  const { slug } = await params;
+  const model = getModelBySlug(slug);
   if (!model) return {};
 
   const title = `${model.name} 매입 | 중고 시세 최고가 당일 현금 매입`;
@@ -80,8 +81,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function ModelDetailPage({ params }: Props) {
-  const model = getModelBySlug(params.slug);
+export default async function ModelDetailPage({ params }: Props) {
+  const { slug } = await params;
+  const model = getModelBySlug(slug);
   if (!model) {
     notFound();
   }

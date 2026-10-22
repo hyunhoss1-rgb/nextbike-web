@@ -1,0 +1,2 @@
+# Preserve the upstream font license byte-for-byte, including its original whitespace.
+public/fonts/pretendard/LICENSE whitespace=-blank-at-eol

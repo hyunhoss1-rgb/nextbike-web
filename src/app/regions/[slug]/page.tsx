@@ -28,9 +28,9 @@ import {
 } from "lucide-react";
 
 interface Props {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export async function generateStaticParams() {
@@ -40,7 +40,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const region = getRegionBySlug(params.slug);
+  const { slug } = await params;
+  const region = getRegionBySlug(slug);
   if (!region) return {};
 
   const tokens = region.name.split(/\s+/);
@@ -136,8 +137,9 @@ function getCleanBreadcrumbName(name: string, fullName?: string, parentName?: st
   return fullName || name;
 }
 
-export default function RegionPage({ params }: Props) {
-  const region = getRegionBySlug(params.slug);
+export default async function RegionPage({ params }: Props) {
+  const { slug } = await params;
+  const region = getRegionBySlug(slug);
   if (!region) {
     notFound();
   }

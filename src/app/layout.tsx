@@ -102,13 +102,6 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
-        {/* 모바일 LCP 최적화: 웹폰트 렌더 블로킹 제거 및 병렬 연결 */}
-        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css"
-        />
         {/* 네이버·구글·다음 검색엔진 봇은 모든 메인·세부페이지 100% 정상 색인 및 썸네일 이미지 허용 */}
         <meta name="Yeti" content="index, follow, max-image-preview:large" />
         <meta

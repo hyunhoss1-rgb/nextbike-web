@@ -25,13 +25,13 @@ export default function CasesPage() {
         <div className="text-center max-w-3xl mx-auto space-y-4">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan text-xs font-bold">
             <ShieldCheck className="w-3.5 h-3.5" />
-            실시간 출장 매입 & 정산 완료 리포트 (총 {cases.length}건)
+            출장 매입 사례 (총 {cases.length}건)
           </div>
           <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
             전국 <span className="text-brand-cyan">출장 매입 실거래 내역</span>
           </h1>
           <p className="text-sm sm:text-base text-gray-400 leading-relaxed">
-            실제 라이더 댁 앞에서 정비 엔지니어링 실차 검수를 거쳐 100% 당일 전액 정산 및 서류 이전까지 종결된 최근 매입 거래 내역입니다. 부당 감가 없이 사전 협의된 견적을 끝까지 지킵니다.
+            실제 라이더 댁 앞에서 정비 엔지니어링 실차 검수를 거쳐 전액 정산 및 서류 이전까지 진행한 매입 사례입니다. 부당 감가 없이 사전 협의된 견적을 끝까지 지킵니다.
           </p>
         </div>
 
@@ -50,9 +50,9 @@ export default function CasesPage() {
                   </span>
                   <div className="flex items-center gap-2">
                     <span className="px-2 py-0.5 rounded bg-brand-cyan/10 text-[10px] text-brand-cyan font-bold border border-brand-cyan/30">
-                      {c.displayDate || "정산 완료"}
+                      {c.displayDate || "매입 사례"}
                     </span>
-                    <span className="text-gray-500 text-[11px]">{c.date}</span>
+                    {c.date && <span className="text-gray-500 text-[11px]">{c.date}</span>}
                   </div>
                 </div>
 

@@ -488,7 +488,7 @@ export default function HomePage() {
       </section>
 
       {/* ================= 4. 매입 가능 차종 뱃지 클라우드 ================= */}
-      <section className="py-14 border-b border-border/60 bg-surface/20">
+      <section className="py-10 sm:py-12 border-b border-border/60 bg-surface/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
           <ScrollReveal animation="fade-up">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-cyan/10 border border-brand-cyan/30 text-brand-cyan text-xs font-bold">
@@ -546,7 +546,7 @@ export default function HomePage() {
       </section>
 
       {/* ================= 5. 인기 기종별 매입 바로가기 ================= */}
-      <section className="py-16 sm:py-20 border-b border-border/60">
+      <section className="py-10 sm:py-14 border-b border-border/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal animation="fade-up">
             <ModelLinkGrid />

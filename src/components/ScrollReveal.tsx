@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useEffect, useRef, useState } from "react";
 
@@ -25,17 +25,21 @@ export default function ScrollReveal({
   children,
   animation = "fade-up",
   delay = 0,
-  duration = 700,
+  duration = 600,
   className = "",
   as: Component = "div",
-  threshold = 0.1,
+  threshold = 0,
   once = true,
 }: ScrollRevealProps) {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const domRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (typeof window === "undefined" || !("IntersectionObserver" in window)) {
+    if (
+      typeof window === "undefined" ||
+      !("IntersectionObserver" in window) ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
       setIsVisible(true);
       return;
     }
@@ -47,13 +51,11 @@ export default function ScrollReveal({
           if (once && domRef.current) {
             observer.unobserve(domRef.current);
           }
-        } else if (!once) {
-          setIsVisible(false);
         }
       },
       {
-        threshold,
-        rootMargin: "0px 0px -40px 0px",
+        threshold: 0,
+        rootMargin: "80px 0px 80px 0px",
       }
     );
 
@@ -67,28 +69,7 @@ export default function ScrollReveal({
         observer.unobserve(currentRef);
       }
     };
-  }, [threshold, once]);
-
-  const getTransformStyle = () => {
-    switch (animation) {
-      case "fade-up":
-        return "translate-y-8";
-      case "fade-down":
-        return "-translate-y-8";
-      case "fade-left":
-        return "-translate-x-8";
-      case "fade-right":
-        return "translate-x-8";
-      case "zoom-in":
-        return "scale-95";
-      case "fade":
-      default:
-        return "translate-y-0";
-    }
-  };
-
-  const hiddenClass = `${getTransformStyle()} opacity-0 pointer-events-none`;
-  const visibleClass = "translate-y-0 translate-x-0 scale-100 opacity-100 pointer-events-auto";
+  }, [once]);
 
   return (
     <Component
@@ -97,8 +78,10 @@ export default function ScrollReveal({
         transitionDuration: `${duration}ms`,
         transitionDelay: `${delay}ms`,
       }}
-      className={`transition-all ease-out will-change-[transform,opacity] ${
-        isVisible ? visibleClass : hiddenClass
+      className={`transition-all ease-out ${
+        isVisible
+          ? "translate-y-0 translate-x-0 scale-100 opacity-100"
+          : "translate-y-3 opacity-95"
       } ${className}`}
     >
       {children}

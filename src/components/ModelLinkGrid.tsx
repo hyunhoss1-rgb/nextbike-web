@@ -51,6 +51,7 @@ function matchesBrand(brand: string, key: string): boolean {
 export default function ModelLinkGrid({ currentSlug }: ModelLinkGridProps) {
   const [selectedBrand, setSelectedBrand] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [showAllMobile, setShowAllMobile] = useState<boolean>(false);
 
   const filteredModels = useMemo(() => {
     return BIKE_MODELS.filter((m) => {
@@ -59,6 +60,9 @@ export default function ModelLinkGrid({ currentSlug }: ModelLinkGridProps) {
       return true;
     });
   }, [selectedBrand, searchQuery]);
+
+  const isDefaultView = selectedBrand === "all" && !searchQuery.trim();
+  const hiddenMobileCount = isDefaultView ? Math.max(0, filteredModels.length - 16) : 0;
 
   return (
     <div className="space-y-4">
@@ -140,40 +144,60 @@ export default function ModelLinkGrid({ currentSlug }: ModelLinkGridProps) {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-          {filteredModels.map((model) => {
-            const isCurrent = model.slug === currentSlug;
-            return (
-              <Link
-                key={model.slug}
-                href={`/models/${model.slug}`}
-                className={`p-3.5 rounded-xl border transition-all flex flex-col justify-between group ${
-                  isCurrent
-                    ? "bg-brand-cyan/10 border-brand-cyan text-white shadow-lg shadow-brand-cyan/10"
-                    : "bg-surface border border-border hover:border-brand-cyan hover:bg-card text-gray-300 hover:-translate-y-0.5"
-                }`}
-              >
-                <div>
-                  <div className="flex items-center justify-between text-[10px] mb-1">
-                    <span className="font-bold text-brand-cyan truncate max-w-[90px]">
-                      {model.brand}
-                    </span>
-                    <span className="text-gray-500 font-medium">
-                      {model.displacement}
+        <>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+            {filteredModels.map((model, idx) => {
+              const isCurrent = model.slug === currentSlug;
+              const hideOnMobile = isDefaultView && !showAllMobile && idx >= 16;
+              return (
+                <Link
+                  key={model.slug}
+                  href={`/models/${model.slug}`}
+                  className={`${hideOnMobile ? "hidden sm:flex" : "flex"} p-3.5 rounded-xl border transition-all flex-col justify-between group ${
+                    isCurrent
+                      ? "bg-brand-cyan/10 border-brand-cyan text-white shadow-lg shadow-brand-cyan/10"
+                      : "bg-surface border border-border hover:border-brand-cyan hover:bg-card text-gray-300 hover:-translate-y-0.5"
+                  }`}
+                >
+                  <div>
+                    <div className="flex items-center justify-between text-[10px] mb-1">
+                      <span className="font-bold text-brand-cyan truncate max-w-[90px]">
+                        {model.brand}
+                      </span>
+                      <span className="text-gray-500 font-medium">
+                        {model.displacement}
+                      </span>
+                    </div>
+                    <span className="text-xs sm:text-sm font-bold text-white group-hover:text-brand-cyan transition-colors block leading-tight">
+                      {model.name}
                     </span>
                   </div>
-                  <span className="text-xs sm:text-sm font-bold text-white group-hover:text-brand-cyan transition-colors block leading-tight">
-                    {model.name}
-                  </span>
-                </div>
-                <div className="mt-3 pt-2 border-t border-border/50 flex items-center justify-between text-[11px] text-gray-500">
-                  <span className="truncate max-w-[85px]">{model.category}</span>
-                  <span className="text-brand-cyan font-bold text-[10px] shrink-0">당일매입</span>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+                  <div className="mt-3 pt-2 border-t border-border/50 flex items-center justify-between text-[11px] text-gray-500">
+                    <span className="truncate max-w-[85px]">{model.category}</span>
+                    <span className="text-brand-cyan font-bold text-[10px] shrink-0">당일매입</span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* 모바일 전체 기종 펼쳐보기 버튼 (16개 초과 시 노출) */}
+          {isDefaultView && hiddenMobileCount > 0 && (
+            <div className="sm:hidden pt-2 text-center">
+              <button
+                type="button"
+                onClick={() => setShowAllMobile(!showAllMobile)}
+                className="w-full py-3 px-4 rounded-xl bg-surface border border-brand-cyan/40 hover:border-brand-cyan text-brand-cyan font-bold text-xs flex items-center justify-center gap-1.5 transition-all active:scale-[0.98]"
+              >
+                {showAllMobile ? (
+                  <>인기 기종 16개만 간략히 보기 ▲</>
+                ) : (
+                  <>전체 126개 인기 기종 펼쳐보기 (+{hiddenMobileCount}개 더보기 ▼)</>
+                )}
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

@@ -165,7 +165,7 @@ export default function RegionSearchBrowser({
               className="text-sm sm:text-base font-extrabold text-white flex items-center gap-2"
             >
               <Search className="w-4 h-4 text-brand-cyan" />
-              <span>전국 시·군·구·읍·면·동 출장 지역 검색</span>
+              <span>전국 출장 지역 검색</span>
             </label>
             <span className="text-xs text-gray-400">
               {trimmedQuery ? (
@@ -196,7 +196,7 @@ export default function RegionSearchBrowser({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="시·군·구 또는 동·읍·면·신도시 입력 (예: 함안, 가야읍, 시흥 배곧, 제기동, 하남 미사, 일산, 해운대...)"
+              placeholder="지역명 입력 (예: 배곧, 정왕동, 일산, 해운대...)"
               className="w-full pl-12 pr-24 py-3.5 sm:py-4 rounded-xl bg-[#0b0f14] border border-border focus:border-brand-cyan focus:ring-2 focus:ring-brand-cyan/20 text-sm sm:text-base text-white placeholder:text-gray-500 outline-none transition-all"
             />
             {searchQuery && (

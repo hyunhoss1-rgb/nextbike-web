@@ -67,7 +67,7 @@ export default function RegionTableGrid({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="전국 시·군·구·읍·면 검색 (예: 함안, 하남, 구리, 시흥, 창원...)"
+              placeholder="지역명 검색 (예: 시흥, 일산, 창원, 해운대...)"
               className="w-full pl-10 pr-8 py-2.5 rounded-xl bg-surface border border-border focus:border-brand-cyan text-xs sm:text-sm text-white placeholder:text-gray-500 outline-none transition-all shadow-sm"
             />
             {searchQuery && (
@@ -120,7 +120,7 @@ export default function RegionTableGrid({
           href="/regions"
           className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-gray-400 hover:text-brand-cyan transition-colors group"
         >
-          <span>대한민국 전 시·군·구·읍·면·동 통합 검색 및 상세 안내 보기</span>
+          <span>전국 출장 지역 검색 및 상세 안내</span>
           <ArrowRight className="w-4 h-4 text-gray-500 group-hover:text-brand-cyan group-hover:translate-x-0.5 transition-all" />
         </Link>
       </div>

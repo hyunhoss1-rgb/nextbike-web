@@ -48,7 +48,6 @@ const QUICK_KEYWORDS = [
   "엑스맥스",
   "슈퍼커브",
   "벤리110",
-  "보이저",
   "크루심",
   "시티베스트",
   "다운타운",
@@ -90,12 +89,11 @@ const KOREAN_ALIAS_MAP: Record<string, string[]> = {
   버그만: ["버그만", "burgman"],
   하야부사: ["하야부사", "hayabusa"],
   부사: ["하야부사", "hayabusa"],
-  보이저: ["보이저", "joymax", "sym"],
   크루심: ["크루심", "cruisym"],
   다운타운: ["다운타운", "downtown"],
   익사이팅: ["익사이팅", "xciting"],
   시티: ["시티", "citi"],
-  대림: ["dna", "대림", "시티", "보이저", "vf", "엠보이"],
+  대림: ["dna", "대림", "시티", "vf", "엠보이"],
   디엔에이: ["dna", "대림"],
   효성: ["kr", "효성", "코멧", "미라쥬", "아퀼라", "델리로드"],
   케이알: ["kr", "효성"],
@@ -248,7 +246,7 @@ export default function ModelSearchGrid({ models }: ModelSearchGridProps) {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="차종명, 브랜드, 배기량 입력 (예: PCX, 엔맥스, 벤리, 보이저, 크루심, 시티베스트, R3, 할리, 125cc...)"
+              placeholder="차종명, 브랜드, 배기량 입력 (예: PCX, 엔맥스, 벤리, 크루심, 시티베스트, R3, 할리, 125cc...)"
               className="w-full pl-12 pr-24 py-3.5 sm:py-4 rounded-xl bg-[#0b0f14] border border-border focus:border-brand-cyan focus:ring-2 focus:ring-brand-cyan/20 text-sm sm:text-base text-white placeholder:text-gray-500 outline-none transition-all"
             />
             {searchQuery && (

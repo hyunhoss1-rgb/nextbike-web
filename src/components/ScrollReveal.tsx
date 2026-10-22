@@ -25,13 +25,13 @@ export default function ScrollReveal({
   children,
   animation = "fade-up",
   delay = 0,
-  duration = 600,
+  duration = 700,
   className = "",
   as: Component = "div",
-  threshold = 0,
+  threshold = 0.02,
   once = true,
 }: ScrollRevealProps) {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
   const domRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -51,11 +51,13 @@ export default function ScrollReveal({
           if (once && domRef.current) {
             observer.unobserve(domRef.current);
           }
+        } else if (!once) {
+          setIsVisible(false);
         }
       },
       {
-        threshold: 0,
-        rootMargin: "80px 0px 80px 0px",
+        threshold: threshold,
+        rootMargin: "50px 0px -20px 0px",
       }
     );
 
@@ -69,7 +71,28 @@ export default function ScrollReveal({
         observer.unobserve(currentRef);
       }
     };
-  }, [once]);
+  }, [threshold, once]);
+
+  const getTransformStyle = () => {
+    switch (animation) {
+      case "fade-up":
+        return "translate-y-6";
+      case "fade-down":
+        return "-translate-y-6";
+      case "fade-left":
+        return "-translate-x-6";
+      case "fade-right":
+        return "translate-x-6";
+      case "zoom-in":
+        return "scale-95";
+      case "fade":
+      default:
+        return "translate-y-0";
+    }
+  };
+
+  const hiddenClass = `${getTransformStyle()} opacity-0 pointer-events-none`;
+  const visibleClass = "translate-y-0 translate-x-0 scale-100 opacity-100 pointer-events-auto";
 
   return (
     <Component
@@ -78,10 +101,8 @@ export default function ScrollReveal({
         transitionDuration: `${duration}ms`,
         transitionDelay: `${delay}ms`,
       }}
-      className={`transition-all ease-out ${
-        isVisible
-          ? "translate-y-0 translate-x-0 scale-100 opacity-100"
-          : "translate-y-3 opacity-95"
+      className={`transition-all ease-out will-change-[transform,opacity] ${
+        isVisible ? visibleClass : hiddenClass
       } ${className}`}
     >
       {children}
@@ -121,7 +142,7 @@ export function StatCounter({
           setHasStarted(true);
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.1 }
     );
 
     const current = domRef.current;

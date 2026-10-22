@@ -74,7 +74,7 @@ export default function RegionsIndexPage() {
             전국 <span className="text-brand-cyan">지역별 오토바이매입</span> · <span className="text-brand-yellow">중고바이크 매입</span>
           </h1>
           <p className="text-sm sm:text-base text-gray-300 leading-relaxed">
-            서울·경기·인천 수도권부터 부산·대구·대전·광주 및 전국 모든 시·군·구·읍·면·동까지 검색창에 우리 동네 이름을 입력해 보세요. 상차 전 100% 당일 선입금 원칙으로 안전하게 방문 매입합니다.
+            수도권부터 전국 전 지역 어디든 검색창에 우리 동네 이름을 입력해 보세요. 상차 전 100% 당일 선입금 원칙으로 안전하게 방문 매입합니다.
           </p>
         </div>
       </div>

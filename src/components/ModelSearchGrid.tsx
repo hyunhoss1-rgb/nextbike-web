@@ -288,8 +288,8 @@ export default function ModelSearchGrid({ models }: ModelSearchGridProps) {
             &ldquo;{searchQuery}&rdquo; 검색어와 일치하는 등록 기종을 찾지 못했습니다
           </div>
           <p className="text-xs sm:text-sm text-gray-400 max-w-xl mx-auto leading-relaxed">
-            넥스트바이크는 홈페이지 목록에 없는 구형 2T 스쿠터, 단종 바이크, 직수입 레어 기종, 전기 오토바이, 사륜 오토바이(ATV)까지{" "}
-            <strong className="text-brand-cyan">전 차종 100% 당일 최고가 출장 매입</strong>합니다.
+            넥스트바이크는 홈페이지 목록에 없는 구형 2T 스쿠터, 단종 바이크, 직수입 레어 기종, 사륜 오토바이(ATV)까지{" "}
+            <strong className="text-brand-cyan">전 내연기관 차종 100% 당일 최고가 출장 매입 (※ 전기오토바이 제외)</strong>합니다.
           </p>
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
             <button

@@ -119,9 +119,9 @@ export default function Header() {
       </div>
 
       {/* 메인 네비게이션 */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+      <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-3 lg:gap-4">
         {/* 로고 */}
-        <Link href="/" className="flex items-center gap-2.5 group">
+        <Link href="/" className="flex items-center gap-2.5 group shrink-0">
           <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-brand-cyan to-blue-600 flex items-center justify-center font-black text-black shadow-lg shadow-brand-cyan/20 group-hover:scale-105 transition-transform">
             <Zap className="w-5 h-5 sm:w-6 sm:h-6 fill-black" />
           </div>
@@ -129,35 +129,35 @@ export default function Header() {
             <span className="text-lg sm:text-2xl font-black tracking-tight text-white flex items-center gap-1">
               NEXT<span className="text-brand-cyan">BIKE</span>
             </span>
-            <span className="text-[10px] sm:text-[11px] font-semibold tracking-wider text-gray-400 -mt-1">
+            <span className="text-[10px] sm:text-[11px] font-semibold tracking-wider text-gray-400 -mt-1 whitespace-nowrap">
               넥스트바이크 · 24시 오토바이매입
             </span>
           </div>
         </Link>
 
         {/* 데스크탑 네비게이션 */}
-        <nav className="hidden xl:flex items-center gap-6 text-sm font-semibold text-gray-200">
+        <nav className="hidden xl:flex items-center gap-3.5 2xl:gap-6 text-[13px] 2xl:text-sm font-semibold text-gray-200 whitespace-nowrap">
           <Link
             href="/price"
-            className="hover:text-brand-cyan transition-colors"
+            className="hover:text-brand-cyan transition-colors whitespace-nowrap shrink-0"
           >
             중고 시세
           </Link>
           <Link
             href="/regions"
-            className="hover:text-brand-cyan transition-colors"
+            className="hover:text-brand-cyan transition-colors whitespace-nowrap shrink-0"
           >
             지역별 매입
           </Link>
           <Link
             href="/models"
-            className="hover:text-brand-cyan transition-colors"
+            className="hover:text-brand-cyan transition-colors whitespace-nowrap shrink-0"
           >
             차종별 매입
           </Link>
           <Link
             href="/magazine"
-            className="hover:text-brand-cyan transition-colors flex items-center gap-1"
+            className="hover:text-brand-cyan transition-colors flex items-center gap-1 whitespace-nowrap shrink-0"
           >
             <span>매거진</span>
             <span className="text-[9px] font-black text-[#191600] px-1.5 py-0.5 rounded-full bg-brand-yellow leading-none">
@@ -166,45 +166,45 @@ export default function Header() {
           </Link>
           <Link
             href="/cases"
-            className="hover:text-brand-cyan transition-colors"
+            className="hover:text-brand-cyan transition-colors whitespace-nowrap shrink-0"
           >
             매입 사례
           </Link>
           <Link
             href="/reviews"
-            className="hover:text-brand-cyan transition-colors"
+            className="hover:text-brand-cyan transition-colors whitespace-nowrap shrink-0"
           >
             매입 후기
           </Link>
           <Link
             href="/#process"
-            className="hover:text-brand-cyan transition-colors"
+            className="hover:text-brand-cyan transition-colors whitespace-nowrap shrink-0"
           >
             매입 절차
           </Link>
           <Link
             href="/#faq"
-            className="hover:text-brand-cyan transition-colors"
+            className="hover:text-brand-cyan transition-colors whitespace-nowrap shrink-0"
           >
             자주 묻는 질문
           </Link>
         </nav>
 
         {/* 데스크탑 우측 콜투액션 */}
-        <div className="hidden sm:flex items-center gap-3">
+        <div className="hidden sm:flex items-center gap-2 xl:gap-3 shrink-0">
           <a
             href="tel:01048952487"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-brand-cyan/50 text-brand-cyan hover:bg-brand-cyan hover:text-black font-bold text-xs sm:text-sm transition-all shadow-sm"
+            className="inline-flex items-center gap-1.5 xl:gap-2 px-3 xl:px-4 py-2 rounded-lg border border-brand-cyan/50 text-brand-cyan hover:bg-brand-cyan hover:text-black font-bold text-xs sm:text-sm transition-all shadow-sm whitespace-nowrap shrink-0"
           >
-            <Phone className="w-4 h-4" />
-            010-4895-2487
+            <Phone className="w-4 h-4 shrink-0" />
+            <span className="whitespace-nowrap">010-4895-2487</span>
           </a>
           <a
             href="#estimate"
-            className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-lg bg-brand-cyan hover:bg-brand-cyanHover text-black font-extrabold text-xs sm:text-sm transition-all shadow-lg shadow-brand-cyan/25"
+            className="inline-flex items-center gap-1.5 px-4 xl:px-5 py-2.5 rounded-lg bg-brand-cyan hover:bg-brand-cyanHover text-black font-extrabold text-xs sm:text-sm transition-all shadow-lg shadow-brand-cyan/25 whitespace-nowrap shrink-0"
           >
-            30초 무료 견적
-            <ChevronRight className="w-4 h-4" />
+            <span className="whitespace-nowrap">30초 무료 견적</span>
+            <ChevronRight className="w-4 h-4 shrink-0" />
           </a>
         </div>
 

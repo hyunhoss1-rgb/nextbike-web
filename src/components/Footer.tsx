@@ -37,9 +37,9 @@ export default function Footer() {
               <MapPin className="w-6 h-6 text-brand-cyan" />
             </div>
             <div>
-              <h4 className="text-white font-bold text-base mb-1">시흥/부천 본사 및 전국 출장</h4>
+              <h4 className="text-white font-bold text-base mb-1">수도권 및 전국 당일 출장</h4>
               <p className="text-xs text-gray-400 leading-relaxed">
-                경기 시흥 본사 기반 수도권 30분대 즉시 방문 및 전국 순회 출장팀을 운영합니다.
+                수도권 30분대 즉시 방문 및 전국 순회 출장팀을 365일 상시 운영합니다.
               </p>
             </div>
           </div>
@@ -67,9 +67,6 @@ export default function Footer() {
               <p>
                 <strong className="text-gray-300">상호명:</strong> 넥스트바이크 (NEXTBIKE) &nbsp;|&nbsp;{" "}
                 <strong className="text-gray-300">사업자등록번호:</strong> 699-16-02037
-              </p>
-              <p>
-                <strong className="text-gray-300">소재지:</strong> 경기도 시흥시 은행동 301-25 1층 넥스트바이크
               </p>
               <p>
                 <strong className="text-gray-300">대표전화:</strong>{" "}

@@ -1,5 +1,6 @@
 import { MAGAZINE_ARTICLES_OCTOBER } from "./magazineOctober";
 import { MAGAZINE_ARTICLES_BATTERY } from "./magazineBattery";
+import { MAGAZINE_ARTICLES_NOVEMBER } from "./magazineNovember";
 
 export interface QuickInfo {
   difficulty: string;
@@ -1524,6 +1525,7 @@ export const MAGAZINE_ARTICLES: MagazineArticle[] = [
 
   ...MAGAZINE_ARTICLES_OCTOBER,
   ...MAGAZINE_ARTICLES_BATTERY,
+  ...MAGAZINE_ARTICLES_NOVEMBER,
 ];
 
 // 한국 시간(KST) 기준 오늘 날짜 문자열 YYYY-MM-DD

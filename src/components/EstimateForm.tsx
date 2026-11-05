@@ -15,27 +15,39 @@ interface PhotoItem {
   previewUrl: string;
 }
 
-// 브라우저 클라이언트 이미지 압축 유틸리티 (대용량 사진도 0.1초 만에 최적화, PC/모바일 호환 보장)
-async function compressImage(file: File): Promise<File> {
+// 브라우저 클라이언트 이미지 압축 유틸리티 (갤럭시 고화질 50MP/200MP·무확장자 파일·아이폰 완벽 호환)
+async function compressImage(file: File, index = 0): Promise<File> {
   if (typeof window === "undefined") return file;
-  const isImage =
-    file.type.startsWith("image/") ||
-    /\.(jpe?g|png|webp|gif|bmp|jfif|heic|svg)$/i.test(file.name);
-  if (!isImage) return file;
+  // 이미 충분히 작은 JPEG(350KB 이하)이고 확장자가 정상인 경우 재압축 생략
+  if (file.type === "image/jpeg" && file.size > 0 && file.size <= 350 * 1024 && /\.jpe?g$/i.test(file.name)) {
+    return file;
+  }
 
   return new Promise((resolve) => {
-    const timeout = setTimeout(() => resolve(file), 2500);
+    let objectUrl = "";
+    const cleanup = () => {
+      if (objectUrl) {
+        try {
+          URL.revokeObjectURL(objectUrl);
+        } catch {}
+        objectUrl = "";
+      }
+    };
 
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = (event) => {
+    const timeout = setTimeout(() => {
+      cleanup();
+      resolve(file);
+    }, 8000);
+
+    try {
+      objectUrl = URL.createObjectURL(file);
       const img = new Image();
       img.onload = () => {
         clearTimeout(timeout);
         try {
-          const maxDim = 1600;
-          let width = img.width;
-          let height = img.height;
+          const maxDim = 1280;
+          let width = img.naturalWidth || img.width || 1280;
+          let height = img.naturalHeight || img.height || 960;
           if (width > maxDim || height > maxDim) {
             if (width > height) {
               height = Math.round((height * maxDim) / width);
@@ -54,8 +66,10 @@ async function compressImage(file: File): Promise<File> {
             ctx.drawImage(img, 0, 0, width, height);
             canvas.toBlob(
               (blob) => {
-                if (blob) {
-                  const safeName = file.name.replace(/\.[^/.]+$/, "") + ".jpg";
+                cleanup();
+                if (blob && blob.size > 0) {
+                  const baseName = (file.name || `bike_${index}`).replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9_-]/g, "_") || `bike_${index}`;
+                  const safeName = `${baseName}.jpg`;
                   const compressedFile = new File([blob], safeName, {
                     type: "image/jpeg",
                     lastModified: Date.now(),
@@ -66,25 +80,28 @@ async function compressImage(file: File): Promise<File> {
                 }
               },
               "image/jpeg",
-              0.8
+              0.75
             );
           } else {
+            cleanup();
             resolve(file);
           }
         } catch {
+          cleanup();
           resolve(file);
         }
       };
       img.onerror = () => {
         clearTimeout(timeout);
+        cleanup();
         resolve(file);
       };
-      img.src = event.target?.result as string;
-    };
-    reader.onerror = () => {
+      img.src = objectUrl;
+    } catch {
       clearTimeout(timeout);
+      cleanup();
       resolve(file);
-    };
+    }
   });
 }
 
@@ -235,9 +252,24 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
     setTimeout(() => setIsFlashing(false), 120);
 
     const video = videoRef.current;
+    const rawW = video.videoWidth || 1280;
+    const rawH = video.videoHeight || 720;
+    const maxDim = 1280;
+    let width = rawW;
+    let height = rawH;
+    if (width > maxDim || height > maxDim) {
+      if (width > height) {
+        height = Math.round((height * maxDim) / width);
+        width = maxDim;
+      } else {
+        width = Math.round((width * maxDim) / height);
+        height = maxDim;
+      }
+    }
+
     const canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth || 1280;
-    canvas.height = video.videoHeight || 720;
+    canvas.width = width;
+    canvas.height = height;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -253,24 +285,30 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
         }
       },
       "image/jpeg",
-      0.85
+      0.78
     );
   };
 
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const selected = Array.from(e.target.files);
+      e.target.value = "";
       const remainingSlots = 5 - photoItems.length;
       if (remainingSlots <= 0) {
         alert("사진은 최대 5장까지 첨부 가능합니다.");
         return;
       }
-      const toAdd = selected.slice(0, remainingSlots).map((file) => ({
-        file,
-        previewUrl: URL.createObjectURL(file),
-      }));
-      setPhotoItems((prev) => [...prev, ...toAdd]);
-      e.target.value = "";
+      const filesToProcess = selected.slice(0, remainingSlots);
+      // 선택 즉시 순차 압축하여 제출 시 지연 및 메모리 초과 원천 차단
+      const processedItems: PhotoItem[] = [];
+      for (let i = 0; i < filesToProcess.length; i++) {
+        const compressed = await compressImage(filesToProcess[i], photoItems.length + i);
+        processedItems.push({
+          file: compressed,
+          previewUrl: URL.createObjectURL(compressed),
+        });
+      }
+      setPhotoItems((prev) => [...prev, ...processedItems].slice(0, 5));
     }
   };
 
@@ -286,11 +324,11 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!phone) {
+    if (!phone.trim()) {
       alert("연락처를 입력해 주세요.");
       return;
     }
-    if (!model) {
+    if (!model.trim()) {
       alert("바이크 모델명을 입력해 주세요.");
       return;
     }
@@ -302,6 +340,21 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
     setLoading(true);
     setErrorMessage(null);
     setPhotosDelivered(true);
+
+    const sendTextOnlyFallback = async (): Promise<boolean> => {
+      try {
+        const fallbackRes = await fetch("/api/estimate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ phone, model, year, mileage, region, memo }),
+        });
+        const fallbackData = await fallbackRes.json().catch(() => null);
+        return Boolean(fallbackRes.ok && fallbackData?.success === true);
+      } catch {
+        return false;
+      }
+    };
+
     try {
       const formData = new FormData();
       formData.append("phone", phone);
@@ -311,13 +364,20 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
       formData.append("region", region);
       formData.append("memo", memo);
 
+      let skippedAnyPhoto = false;
       if (photoItems.length > 0) {
-        const compressedList = await Promise.all(
-          photoItems.map((item) => compressImage(item.file))
-        );
-        compressedList.forEach((file) => {
-          formData.append("photos", file);
-        });
+        // Vercel Serverless 최대 요청 한도(4.5MB)를 절대 넘지 않도록 순차 압축 및 3.8MB 안전 캡 적용
+        const MAX_TOTAL_BYTES = 3.8 * 1024 * 1024;
+        let accumulatedBytes = 0;
+        for (let i = 0; i < photoItems.length; i++) {
+          const compressed = await compressImage(photoItems[i].file, i);
+          if (accumulatedBytes + compressed.size <= MAX_TOTAL_BYTES) {
+            formData.append("photos", compressed);
+            accumulatedBytes += compressed.size;
+          } else {
+            skippedAnyPhoto = true;
+          }
+        }
       }
 
       const res = await fetch("/api/estimate", {
@@ -325,22 +385,52 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
         body: formData,
       });
 
-      const result = await res.json();
+      const result = await res.json().catch(() => null);
+
       if (!res.ok || result?.success !== true) {
-        throw new Error("견적 신청을 전달하지 못했습니다.");
+        // 입력값 오류(400)이고 사진이 없는 경우는 서버 안내 문구 표시
+        if (res.status === 400 && photoItems.length === 0 && result?.error) {
+          throw new Error(result.error);
+        }
+        // 사진 첨부 상태에서 용량 초과(413), 타임아웃, 포맷 오류 등이 발생하면 즉시 텍스트 우선 접수 자동 재시도
+        if (photoItems.length > 0) {
+          const fallbackOk = await sendTextOnlyFallback();
+          if (fallbackOk) {
+            setPhotosDelivered(false);
+            try {
+              sessionStorage.removeItem("nextbike_estimate_draft");
+            } catch {}
+            setSubmitted(true);
+            return;
+          }
+        }
+        throw new Error(result?.error || "견적 신청을 전달하지 못했습니다.");
       }
 
-      setPhotosDelivered(result.photosDelivered !== false);
+      setPhotosDelivered(result.photosDelivered !== false && !skippedAnyPhoto);
 
       try {
         sessionStorage.removeItem("nextbike_estimate_draft");
       } catch {}
 
       setSubmitted(true);
-    } catch {
-      setErrorMessage(
-        "견적 신청이 완료되지 않았습니다. 입력 내용은 이 화면에 남아 있으니 잠시 후 다시 신청하거나, 아래 전화 또는 카카오톡으로 문의해 주세요."
-      );
+    } catch (err) {
+      // 네트워크 순단 등으로 사진 업로드가 실패한 경우에도 텍스트 단독 전송 재시도
+      if (photoItems.length > 0) {
+        const fallbackOk = await sendTextOnlyFallback();
+        if (fallbackOk) {
+          setPhotosDelivered(false);
+          try {
+            sessionStorage.removeItem("nextbike_estimate_draft");
+          } catch {}
+          setSubmitted(true);
+          return;
+        }
+      }
+      const msg = err instanceof Error && err.message && err.message !== "Failed to fetch"
+        ? err.message
+        : "견적 신청이 완료되지 않았습니다. 입력 내용은 이 화면에 남아 있으니 잠시 후 다시 신청하거나, 아래 전화 또는 카카오톡으로 문의해 주세요.";
+      setErrorMessage(msg);
     } finally {
       setLoading(false);
     }

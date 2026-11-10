@@ -3,6 +3,10 @@ import { REGIONS } from "@/data/regions";
 import { BIKE_MODELS } from "@/data/models";
 import { getPublishedArticles } from "@/data/magazine";
 
+// A crawler must receive the current publication set, independent of metadata
+// route caching. The XML is inexpensive to generate and has stable article dates.
+export const dynamic = "force-dynamic";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr";
   const now = new Date();
@@ -11,55 +15,46 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const routes: MetadataRoute.Sitemap = [
     {
       url: `${baseUrl}`,
-      lastModified: now,
       changeFrequency: "daily",
       priority: 1.0,
     },
     {
       url: `${baseUrl}/magazine`,
-      lastModified: now,
       changeFrequency: "daily",
       priority: 0.95,
     },
     {
       url: `${baseUrl}/price`,
-      lastModified: now,
       changeFrequency: "daily",
       priority: 0.9,
     },
     {
       url: `${baseUrl}/regions`,
-      lastModified: now,
       changeFrequency: "weekly",
       priority: 0.9,
     },
     {
       url: `${baseUrl}/models`,
-      lastModified: now,
       changeFrequency: "weekly",
       priority: 0.9,
     },
     {
       url: `${baseUrl}/cases`,
-      lastModified: now,
       changeFrequency: "weekly",
       priority: 0.85,
     },
     {
       url: `${baseUrl}/reviews`,
-      lastModified: now,
       changeFrequency: "weekly",
       priority: 0.8,
     },
     {
       url: `${baseUrl}/privacy`,
-      lastModified: now,
       changeFrequency: "monthly",
       priority: 0.3,
     },
     {
       url: `${baseUrl}/terms`,
-      lastModified: now,
       changeFrequency: "monthly",
       priority: 0.3,
     },
@@ -68,24 +63,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // 모든 지역별 & 동별 개별 랜딩페이지 (1,200+ URL)
   const regionRoutes: MetadataRoute.Sitemap = REGIONS.map((region) => ({
     url: `${baseUrl}/regions/${region.slug}`,
-    lastModified: now,
     changeFrequency: "weekly",
     priority: region.isMetropolitan ? 0.85 : (region.priority || 0.8),
   }));
 
-  // 모든 기종별 개별 랜딩페이지 (74 URL)
+  // All current model landing pages.
   const modelRoutes: MetadataRoute.Sitemap = BIKE_MODELS.map((model) => ({
     url: `${baseUrl}/models/${model.slug}`,
-    lastModified: now,
     changeFrequency: "weekly",
     priority: 0.8,
   }));
 
   // 일일 자동 발행 매거진 칼럼 페이지
-  const publishedArticles = getPublishedArticles();
+  const publishedArticles = getPublishedArticles(now);
   const magazineRoutes: MetadataRoute.Sitemap = publishedArticles.map((article) => ({
     url: `${baseUrl}/magazine/${article.slug}`,
-    lastModified: new Date(article.publishDate),
+    lastModified: new Date(article.publishDate + "T00:00:00+09:00"),
     changeFrequency: "weekly",
     priority: 0.85,
   }));

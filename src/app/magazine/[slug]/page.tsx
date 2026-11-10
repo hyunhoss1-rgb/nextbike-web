@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import {
-  getAllArticles,
   getArticleBySlug,
   getRelatedArticles,
 } from "@/data/magazine";
@@ -33,23 +32,19 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
+// Check publication on every request; do not cache a future article body/404.
+export const dynamic = "force-dynamic";
+
 interface Props {
   params: Promise<{
     slug: string;
   }>;
 }
 
-export async function generateStaticParams() {
-  const articles = getAllArticles();
-  return articles.map((article) => ({
-    slug: article.slug,
-  }));
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const article = getArticleBySlug(slug);
-  if (!article) return {};
+  if (!article) notFound();
 
   const title = `${article.title} | 오토바이 매거진`;
   const description = article.excerpt;

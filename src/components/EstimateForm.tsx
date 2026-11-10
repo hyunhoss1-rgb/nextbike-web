@@ -25,6 +25,7 @@ async function compressImage(file: File, index = 0): Promise<File> {
 
   return new Promise((resolve) => {
     let objectUrl = "";
+    let settled = false;
     const cleanup = () => {
       if (objectUrl) {
         try {
@@ -34,16 +35,20 @@ async function compressImage(file: File, index = 0): Promise<File> {
       }
     };
 
-    const timeout = setTimeout(() => {
+    const finish = (result: File) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeout);
       cleanup();
-      resolve(file);
-    }, 8000);
+      resolve(result);
+    };
+    const timeout = setTimeout(() => finish(file), 8000);
 
     try {
       objectUrl = URL.createObjectURL(file);
       const img = new Image();
       img.onload = () => {
-        clearTimeout(timeout);
+        if (settled) return;
         try {
           const maxDim = 1280;
           let width = img.naturalWidth || img.width || 1280;
@@ -66,7 +71,7 @@ async function compressImage(file: File, index = 0): Promise<File> {
             ctx.drawImage(img, 0, 0, width, height);
             canvas.toBlob(
               (blob) => {
-                cleanup();
+                if (settled) return;
                 if (blob && blob.size > 0) {
                   const baseName = (file.name || `bike_${index}`).replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9_-]/g, "_") || `bike_${index}`;
                   const safeName = `${baseName}.jpg`;
@@ -74,33 +79,27 @@ async function compressImage(file: File, index = 0): Promise<File> {
                     type: "image/jpeg",
                     lastModified: Date.now(),
                   });
-                  resolve(compressedFile);
+                  finish(compressedFile);
                 } else {
-                  resolve(file);
+                  finish(file);
                 }
               },
               "image/jpeg",
               0.75
             );
           } else {
-            cleanup();
-            resolve(file);
+            finish(file);
           }
         } catch {
-          cleanup();
-          resolve(file);
+          finish(file);
         }
       };
       img.onerror = () => {
-        clearTimeout(timeout);
-        cleanup();
-        resolve(file);
+        finish(file);
       };
       img.src = objectUrl;
     } catch {
-      clearTimeout(timeout);
-      cleanup();
-      resolve(file);
+      finish(file);
     }
   });
 }
@@ -118,6 +117,7 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
   const [submitted, setSubmitted] = useState(false);
   const [photosDelivered, setPhotosDelivered] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [processingPhotos, setProcessingPhotos] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
 
@@ -128,6 +128,21 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const fallbackInputRef = useRef<HTMLInputElement>(null);
+  const photoItemsRef = useRef<PhotoItem[]>([]);
+  const photoProcessingRef = useRef(false);
+  const submittingRef = useRef(false);
+  const cameraStartingRef = useRef(false);
+  const cameraSessionRef = useRef(0);
+
+  const replacePhotos = (items: PhotoItem[]) => {
+    photoItemsRef.current = items;
+    setPhotoItems(items);
+  };
+
+  const finishPhotoProcessing = () => {
+    photoProcessingRef.current = false;
+    setProcessingPhotos(false);
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -195,7 +210,8 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
 
   // 웹 내장 카메라 실행 (브라우저를 절대 벗어나지 않아 튕김 원천 차단)
   const startCamera = async () => {
-    if (photoItems.length >= 5) {
+    if (submittingRef.current || photoProcessingRef.current || cameraStartingRef.current || isCameraOpen) return;
+    if (photoItemsRef.current.length >= 5) {
       alert("사진은 최대 5장까지 첨부 가능합니다.");
       return;
     }
@@ -205,6 +221,8 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
       return;
     }
 
+    const session = ++cameraSessionRef.current;
+    cameraStartingRef.current = true;
     setCameraLoading(true);
     setIsCameraOpen(true);
     try {
@@ -216,21 +234,31 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
         },
         audio: false,
       });
+      if (session !== cameraSessionRef.current) {
+        stream.getTracks().forEach((track) => track.stop());
+        return;
+      }
       streamRef.current = stream;
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         await videoRef.current.play();
       }
     } catch (err) {
+      if (session !== cameraSessionRef.current) return;
       console.warn("카메라 권한 오류 또는 미지원, 기본 파일 첨부로 전환합니다:", err);
       stopCamera();
       fallbackInputRef.current?.click();
     } finally {
-      setCameraLoading(false);
+      if (session === cameraSessionRef.current) {
+        cameraStartingRef.current = false;
+        setCameraLoading(false);
+      }
     }
   };
 
   const stopCamera = () => {
+    cameraSessionRef.current += 1;
+    cameraStartingRef.current = false;
     if (streamRef.current) {
       streamRef.current.getTracks().forEach((track) => track.stop());
       streamRef.current = null;
@@ -239,91 +267,127 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
     setCameraLoading(false);
   };
 
-  const capturePhoto = () => {
-    if (!videoRef.current || photoItems.length >= 5) return;
+  const capturePhoto = async () => {
+    if (!videoRef.current || submittingRef.current || photoProcessingRef.current || cameraStartingRef.current || photoItemsRef.current.length >= 5) return;
+    photoProcessingRef.current = true;
+    setProcessingPhotos(true);
+    setErrorMessage(null);
     try {
-      if (typeof navigator !== "undefined" && navigator.vibrate) {
-        navigator.vibrate(35);
-      }
-    } catch {
-      // ignore
-    }
-    setIsFlashing(true);
-    setTimeout(() => setIsFlashing(false), 120);
-
-    const video = videoRef.current;
-    const rawW = video.videoWidth || 1280;
-    const rawH = video.videoHeight || 720;
-    const maxDim = 1280;
-    let width = rawW;
-    let height = rawH;
-    if (width > maxDim || height > maxDim) {
-      if (width > height) {
-        height = Math.round((height * maxDim) / width);
-        width = maxDim;
-      } else {
-        width = Math.round((width * maxDim) / height);
-        height = maxDim;
-      }
-    }
-
-    const canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    canvas.toBlob(
-      (blob) => {
-        if (blob) {
-          const file = new File([blob], `bike_cam_${Date.now()}.jpg`, {
-            type: "image/jpeg",
-            lastModified: Date.now(),
-          });
-          const previewUrl = URL.createObjectURL(file);
-          setPhotoItems((prev) => [...prev, { file, previewUrl }].slice(0, 5));
+      try {
+        if (typeof navigator !== "undefined" && navigator.vibrate) {
+          navigator.vibrate(35);
         }
-      },
-      "image/jpeg",
-      0.78
-    );
+      } catch {
+        // ignore
+      }
+      setIsFlashing(true);
+      setTimeout(() => setIsFlashing(false), 120);
+
+      const video = videoRef.current;
+      const rawW = video.videoWidth || 1280;
+      const rawH = video.videoHeight || 720;
+      const maxDim = 1280;
+      let width = rawW;
+      let height = rawH;
+      if (width > maxDim || height > maxDim) {
+        if (width > height) {
+          height = Math.round((height * maxDim) / width);
+          width = maxDim;
+        } else {
+          width = Math.round((width * maxDim) / height);
+          height = maxDim;
+        }
+      }
+
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("카메라 이미지를 준비할 수 없습니다.");
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const blob = await new Promise<Blob | null>((resolve, reject) => {
+        let settled = false;
+        const timer = setTimeout(() => {
+          settled = true;
+          reject(new Error("사진 준비 시간이 초과되었습니다."));
+        }, 8000);
+        try {
+          canvas.toBlob((result) => {
+            if (settled) return;
+            settled = true;
+            clearTimeout(timer);
+            resolve(result);
+          }, "image/jpeg", 0.78);
+        } catch (error) {
+          settled = true;
+          clearTimeout(timer);
+          reject(error);
+        }
+      });
+      if (!blob) throw new Error("촬영한 사진을 준비할 수 없습니다.");
+      const file = new File([blob], `bike_cam_${Date.now()}.jpg`, {
+        type: "image/jpeg",
+        lastModified: Date.now(),
+      });
+      const previewUrl = URL.createObjectURL(file);
+      replacePhotos([...photoItemsRef.current, { file, previewUrl }]);
+    } catch {
+      setErrorMessage("촬영한 사진을 준비하지 못했습니다. 다시 촬영하거나 앨범에서 선택해 주세요.");
+    } finally {
+      finishPhotoProcessing();
+    }
   };
 
   const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const selected = Array.from(e.target.files);
       e.target.value = "";
-      const remainingSlots = 5 - photoItems.length;
+      if (!selected.length || submittingRef.current || photoProcessingRef.current || cameraStartingRef.current) return;
+      const remainingSlots = 5 - photoItemsRef.current.length;
       if (remainingSlots <= 0) {
         alert("사진은 최대 5장까지 첨부 가능합니다.");
         return;
       }
       const filesToProcess = selected.slice(0, remainingSlots);
+      photoProcessingRef.current = true;
+      setProcessingPhotos(true);
+      setErrorMessage(null);
       // 선택 즉시 순차 압축하여 제출 시 지연 및 메모리 초과 원천 차단
       const processedItems: PhotoItem[] = [];
-      for (let i = 0; i < filesToProcess.length; i++) {
-        const compressed = await compressImage(filesToProcess[i], photoItems.length + i);
-        processedItems.push({
-          file: compressed,
-          previewUrl: URL.createObjectURL(compressed),
-        });
+      try {
+        for (let i = 0; i < filesToProcess.length; i++) {
+          const compressed = await compressImage(filesToProcess[i], photoItemsRef.current.length + i);
+          processedItems.push({
+            file: compressed,
+            previewUrl: URL.createObjectURL(compressed),
+          });
+        }
+        replacePhotos([...photoItemsRef.current, ...processedItems]);
+      } catch {
+        processedItems.forEach((item) => URL.revokeObjectURL(item.previewUrl));
+        setErrorMessage("사진을 준비하지 못했습니다. 다시 선택해 주세요.");
+      } finally {
+        finishPhotoProcessing();
       }
-      setPhotoItems((prev) => [...prev, ...processedItems].slice(0, 5));
     }
   };
 
   const removePhoto = (idx: number) => {
-    setPhotoItems((prev) => {
-      const target = prev[idx];
-      if (target?.previewUrl) {
-        URL.revokeObjectURL(target.previewUrl);
-      }
-      return prev.filter((_, i) => i !== idx);
-    });
+    if (submittingRef.current || photoProcessingRef.current) return;
+    const target = photoItemsRef.current[idx];
+    if (target?.previewUrl) {
+      URL.revokeObjectURL(target.previewUrl);
+    }
+    replacePhotos(photoItemsRef.current.filter((_, i) => i !== idx));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (submittingRef.current) return;
+    if (photoProcessingRef.current || cameraStartingRef.current || isCameraOpen) {
+      setErrorMessage("사진 준비를 마친 뒤 견적을 신청해 주세요.");
+      return;
+    }
     if (!phone.trim()) {
       alert("연락처를 입력해 주세요.");
       return;
@@ -336,7 +400,21 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
       alert("개인정보 수집 및 이용에 동의해 주세요.");
       return;
     }
+    const oversizedField = [
+      { value: phone, label: "연락처", max: 50 },
+      { value: model, label: "바이크 모델명", max: 150 },
+      { value: year, label: "연식", max: 50 },
+      { value: mileage, label: "주행거리", max: 50 },
+      { value: region, label: "보관 지역", max: 300 },
+      { value: memo, label: "특이사항", max: 2000 },
+    ].find((field) => field.value.trim().length > field.max);
+    if (oversizedField) {
+      setErrorMessage(`${oversizedField.label}은 ${oversizedField.max.toLocaleString()}자 이내로 입력해 주세요.`);
+      return;
+    }
 
+    submittingRef.current = true;
+    const submittedPhotos = [...photoItemsRef.current];
     setLoading(true);
     setErrorMessage(null);
     setPhotosDelivered(true);
@@ -365,12 +443,12 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
       formData.append("memo", memo);
 
       let skippedAnyPhoto = false;
-      if (photoItems.length > 0) {
+      if (submittedPhotos.length > 0) {
         // Vercel Serverless 최대 요청 한도(4.5MB)를 절대 넘지 않도록 순차 압축 및 3.8MB 안전 캡 적용
         const MAX_TOTAL_BYTES = 3.8 * 1024 * 1024;
         let accumulatedBytes = 0;
-        for (let i = 0; i < photoItems.length; i++) {
-          const compressed = await compressImage(photoItems[i].file, i);
+        for (let i = 0; i < submittedPhotos.length; i++) {
+          const compressed = await compressImage(submittedPhotos[i].file, i);
           if (accumulatedBytes + compressed.size <= MAX_TOTAL_BYTES) {
             formData.append("photos", compressed);
             accumulatedBytes += compressed.size;
@@ -389,11 +467,11 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
 
       if (!res.ok || result?.success !== true) {
         // 입력값 오류(400)이고 사진이 없는 경우는 서버 안내 문구 표시
-        if (res.status === 400 && photoItems.length === 0 && result?.error) {
+        if (res.status === 400 && submittedPhotos.length === 0 && result?.error) {
           throw new Error(result.error);
         }
         // 사진 첨부 상태에서 용량 초과(413), 타임아웃, 포맷 오류 등이 발생하면 즉시 텍스트 우선 접수 자동 재시도
-        if (photoItems.length > 0) {
+        if (submittedPhotos.length > 0) {
           const fallbackOk = await sendTextOnlyFallback();
           if (fallbackOk) {
             setPhotosDelivered(false);
@@ -416,7 +494,7 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
       setSubmitted(true);
     } catch (err) {
       // 네트워크 순단 등으로 사진 업로드가 실패한 경우에도 텍스트 단독 전송 재시도
-      if (photoItems.length > 0) {
+      if (submittedPhotos.length > 0) {
         const fallbackOk = await sendTextOnlyFallback();
         if (fallbackOk) {
           setPhotosDelivered(false);
@@ -432,6 +510,7 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
         : "견적 신청이 완료되지 않았습니다. 입력 내용은 이 화면에 남아 있으니 잠시 후 다시 신청하거나, 아래 전화 또는 카카오톡으로 문의해 주세요.";
       setErrorMessage(msg);
     } finally {
+      submittingRef.current = false;
       setLoading(false);
     }
   };
@@ -522,7 +601,7 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
               <button
                 type="button"
                 onClick={capturePhoto}
-                disabled={photoItems.length >= 5}
+                disabled={photoItems.length >= 5 || processingPhotos || cameraLoading || loading}
                 className="w-20 h-20 rounded-full border-4 border-white/90 p-1 flex items-center justify-center active:scale-90 transition-transform shadow-2xl disabled:opacity-30 disabled:pointer-events-none touch-manipulation cursor-pointer"
                 aria-label="사진 촬영"
               >
@@ -531,7 +610,9 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
                 </div>
               </button>
               <span className="text-[11px] font-bold text-brand-cyan tracking-wide">
-                {photoItems.length >= 5
+                {processingPhotos
+                  ? "사진 준비 중..."
+                  : photoItems.length >= 5
                   ? "최대 5장 완료"
                   : `연속 촬영 가능 (${photoItems.length}/5장)`}
               </span>
@@ -582,7 +663,8 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
             <button
               onClick={() => {
                 setSubmitted(false);
-                setPhotoItems([]);
+                photoItemsRef.current.forEach((item) => URL.revokeObjectURL(item.previewUrl));
+                replacePhotos([]);
                 setPhotosDelivered(true);
               }}
               className="w-full sm:w-auto px-5 py-3.5 rounded-xl border border-border text-gray-400 hover:text-white text-sm"
@@ -617,6 +699,7 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
               </label>
               <input
                 type="tel"
+                maxLength={50}
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="예) 010-1234-5678"
@@ -633,6 +716,7 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
               <input
                 type="text"
                 value={model}
+                maxLength={150}
                 onChange={(e) => setModel(e.target.value)}
                 placeholder="예) 혼다 PCX125, NMAX, R1250GS"
                 required
@@ -648,6 +732,7 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
               <input
                 type="text"
                 value={year}
+                maxLength={50}
                 onChange={(e) => setYear(e.target.value)}
                 placeholder="예) 2023년식"
                 className="w-full px-4 py-3 rounded-lg bg-card border border-border text-white text-base sm:text-sm placeholder:text-gray-500 focus:outline-none focus:border-brand-cyan transition-colors"
@@ -662,6 +747,7 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
               <input
                 type="text"
                 value={mileage}
+                maxLength={50}
                 onChange={(e) => setMileage(e.target.value)}
                 placeholder="예) 8,500km"
                 className="w-full px-4 py-3 rounded-lg bg-card border border-border text-white text-base sm:text-sm placeholder:text-gray-500 focus:outline-none focus:border-brand-cyan transition-colors"
@@ -677,6 +763,7 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
             <input
               type="text"
               value={region}
+              maxLength={300}
               onChange={(e) => setRegion(e.target.value)}
               placeholder="예) 경기도 시흥시 배곧동, 서울 강남구 역삼동"
               className="w-full px-4 py-3 rounded-lg bg-card border border-border text-white text-base sm:text-sm placeholder:text-gray-500 focus:outline-none focus:border-brand-cyan transition-colors"
@@ -691,10 +778,12 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
             <textarea
               rows={2}
               value={memo}
+              maxLength={2000}
               onChange={(e) => setMemo(e.target.value)}
               placeholder="예) 탑박스 장착됨, 배터리 방전되어 시동 안 걸림, 서류 폐지 완료됨 등"
               className="w-full px-4 py-2.5 rounded-lg bg-card border border-border text-white text-base sm:text-sm placeholder:text-gray-500 focus:outline-none focus:border-brand-cyan transition-colors resize-none"
             />
+            <p className="mt-1 text-[11px] text-gray-500">최대 2,000자까지 입력할 수 있습니다.</p>
           </div>
 
           {/* 사진 업로드 */}
@@ -721,6 +810,7 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
                     accept="image/*"
                     multiple
                     onChange={handlePhotoUpload}
+                    disabled={loading || processingPhotos || cameraLoading}
                     className="hidden"
                   />
                 </label>
@@ -729,6 +819,7 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
                 <button
                   type="button"
                   onClick={startCamera}
+                  disabled={loading || processingPhotos || cameraLoading}
                   className="flex flex-col items-center justify-center p-3 rounded-xl border border-dashed border-brand-cyan/40 hover:border-brand-cyan text-gray-200 hover:text-brand-cyan cursor-pointer transition-all bg-card/90 hover:bg-card active:scale-[0.98] shadow-sm"
                 >
                   <Camera className="w-6 h-6 mb-1 text-brand-cyan" />
@@ -747,6 +838,7 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
                   accept="image/*"
                   capture="environment"
                   onChange={handlePhotoUpload}
+                  disabled={loading || processingPhotos}
                   className="hidden"
                 />
               </div>
@@ -768,6 +860,7 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
                     <button
                       type="button"
                       onClick={() => removePhoto(idx)}
+                      disabled={loading || processingPhotos}
                       className="absolute top-1 right-1 w-6 h-6 rounded-full bg-red-600/90 hover:bg-red-700 text-white font-bold flex items-center justify-center text-xs shadow-md active:scale-90"
                     >
                       <X className="w-3.5 h-3.5" />
@@ -778,6 +871,12 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
                   </div>
                 ))}
               </div>
+            )}
+
+            {processingPhotos && (
+              <p role="status" className="mb-3 text-xs font-semibold text-brand-cyan">
+                사진을 준비하고 있습니다. 완료되면 견적을 신청할 수 있습니다.
+              </p>
             )}
 
             {/* 안내 팁 박스 */}
@@ -926,10 +1025,12 @@ export default function EstimateForm({ initialRegion = "", initialModel = "" }: 
           {/* 제출 버튼 */}
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || processingPhotos || cameraLoading || isCameraOpen}
             className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-xl bg-gradient-to-r from-brand-cyan to-teal-400 hover:brightness-105 text-black font-black text-base shadow-xl shadow-brand-cyan/20 transition-all active:scale-[0.99] disabled:opacity-50"
           >
-            {loading ? (
+            {processingPhotos ? (
+              <span className="animate-pulse">사진 준비 중...</span>
+            ) : loading ? (
               <span className="animate-pulse">사진 최적화 및 견적 접수 중...</span>
             ) : (
               <>

@@ -64,6 +64,7 @@ export async function POST(req: Request) {
     const validPhotos = photos
       .slice(0, MAX_PHOTOS)
       .filter((photo) => photo.size > 0 && photo.size <= MAX_PHOTO_BYTES);
+    const excludedPhotoCount = photos.length - validPhotos.length;
 
     const botToken = process.env.TELEGRAM_BOT_TOKEN?.trim();
     const chatId = process.env.TELEGRAM_CHAT_ID?.trim();
@@ -97,6 +98,9 @@ export async function POST(req: Request) {
             ? `📷 첨부사진: ${validPhotos.length}장 첨부됨`
             : `⚠️ 첨부사진 ${validPhotos.length}장 전송 실패: 고객에게 사진을 다시 요청해 주세요.`
         : "",
+      excludedPhotoCount > 0
+        ? `⚠️ 첨부사진 ${excludedPhotoCount}장은 용량 또는 개수 제한으로 전달되지 않았습니다. 고객에게 사진을 다시 요청해 주세요.`
+        : "",
       `⏰ 접수일시: ${kstTime}`,
       "━━━━━━━━━━━━━━━━━━",
       "👉 고객님께 빠른 유선/문자 상담을 진행해 주세요.",
@@ -124,7 +128,7 @@ export async function POST(req: Request) {
     }, 8_000);
 
     let delivered = false;
-    let photosDelivered = true;
+    let photosDelivered = photos.length === 0;
     const text = makeText("included");
 
     if (validPhotos.length === 0) {
@@ -133,47 +137,53 @@ export async function POST(req: Request) {
       const separateText = text.length > 1024;
       const textDelivered = separateText ? await sendText(makeText("separate")) : false;
 
-      const caption = separateText
-        ? `📷 견적 문의 사진 ${validPhotos.length}장\n📞 ${phone}\n🏍️ ${model}`
-        : text;
-      const mediaForm = new FormData();
-      mediaForm.append("chat_id", chatId);
-      let method: string;
-      if (validPhotos.length === 1) {
-        method = "sendPhoto";
-        mediaForm.append("caption", caption);
-        const safeFileName = validPhotos[0].name && /\.[a-z0-9]+$/i.test(validPhotos[0].name)
-          ? validPhotos[0].name
-          : "bike_0.jpg";
-        mediaForm.append("photo", validPhotos[0], safeFileName);
-      } else {
-        method = "sendMediaGroup";
-        const media = validPhotos.map((photo, index) => {
-          const key = `photo_${index}`;
-          const safeFileName = photo.name && /\.[a-z0-9]+$/i.test(photo.name)
-            ? photo.name
-            : `bike_${index}.jpg`;
-          mediaForm.append(key, photo, safeFileName);
-          return { type: "photo", media: `attach://${key}`, caption: index === 0 ? caption : undefined };
-        });
-        mediaForm.append("media", JSON.stringify(media));
-      }
+      // A short media caption cannot stand in for the full lead. If the complete
+      // text failed, let the caller retry it rather than acknowledge photo-only
+      // delivery and silently lose the memo, location, year or mileage.
+      if (!separateText || textDelivered) {
+        const caption = separateText
+          ? `📷 견적 문의 사진 ${validPhotos.length}장\n📞 ${phone}\n🏍️ ${model}`
+          : text;
+        const mediaForm = new FormData();
+        mediaForm.append("chat_id", chatId);
+        let method: string;
+        if (validPhotos.length === 1) {
+          method = "sendPhoto";
+          mediaForm.append("caption", caption);
+          const safeFileName = validPhotos[0].name && /\.[a-z0-9]+$/i.test(validPhotos[0].name)
+            ? validPhotos[0].name
+            : "bike_0.jpg";
+          mediaForm.append("photo", validPhotos[0], safeFileName);
+        } else {
+          method = "sendMediaGroup";
+          const media = validPhotos.map((photo, index) => {
+            const key = `photo_${index}`;
+            const safeFileName = photo.name && /\.[a-z0-9]+$/i.test(photo.name)
+              ? photo.name
+              : `bike_${index}.jpg`;
+            mediaForm.append(key, photo, safeFileName);
+            return { type: "photo", media: `attach://${key}`, caption: index === 0 ? caption : undefined };
+          });
+          mediaForm.append("media", JSON.stringify(media));
+        }
 
-      photosDelivered = await send(method, { method: "POST", body: mediaForm }, 10_000);
+        let mediaDelivered = await send(method, { method: "POST", body: mediaForm }, 10_000);
 
-      // If sendPhoto/sendMediaGroup fails (e.g., HEIC/HEIF or non-standard image dimensions),
-      // try sending as document when 1 photo, and always ensure the text lead is delivered.
-      if (!photosDelivered && validPhotos.length === 1) {
-        const docForm = new FormData();
-        docForm.append("chat_id", chatId);
-        docForm.append("caption", caption);
-        docForm.append("document", validPhotos[0], validPhotos[0].name || "bike_photo.jpg");
-        photosDelivered = await send("sendDocument", { method: "POST", body: docForm }, 8_000);
-      }
+        // HEIC/HEIF and other non-standard images can still be delivered as a
+        // document. The complete short lead remains in that document caption.
+        if (!mediaDelivered && validPhotos.length === 1) {
+          const docForm = new FormData();
+          docForm.append("chat_id", chatId);
+          docForm.append("caption", caption);
+          docForm.append("document", validPhotos[0], validPhotos[0].name || "bike_photo.jpg");
+          mediaDelivered = await send("sendDocument", { method: "POST", body: docForm }, 8_000);
+        }
 
-      delivered = photosDelivered || textDelivered;
-      if (!delivered) {
-        delivered = await sendText(makeText("failed"));
+        photosDelivered = mediaDelivered && excludedPhotoCount === 0;
+        delivered = mediaDelivered || textDelivered;
+        if (!delivered) {
+          delivered = await sendText(makeText("failed"));
+        }
       }
     }
 

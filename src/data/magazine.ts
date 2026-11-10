@@ -1,6 +1,7 @@
 import { MAGAZINE_ARTICLES_OCTOBER } from "./magazineOctober";
 import { MAGAZINE_ARTICLES_BATTERY } from "./magazineBattery";
 import { MAGAZINE_ARTICLES_NOVEMBER } from "./magazineNovember";
+import { getKstDateString, isPublicationDateReached } from "@/lib/publication-date";
 
 export interface QuickInfo {
   difficulty: string;
@@ -1529,41 +1530,36 @@ export const MAGAZINE_ARTICLES: MagazineArticle[] = [
 ];
 
 // 한국 시간(KST) 기준 오늘 날짜 문자열 YYYY-MM-DD
-export function getKstTodayString(): string {
-  const now = new Date();
-  // KST = UTC + 9
-  const utc = now.getTime() + now.getTimezoneOffset() * 60000;
-  const kstTime = new Date(utc + 9 * 3600000);
-  return kstTime.toISOString().split("T")[0];
+export function getKstTodayString(now: Date = new Date()): string {
+  return getKstDateString(now);
 }
 
-// 오늘 날짜 이전에 발행된 글만 필터링 (매일 자정 새로운 글이 자동 공개됨)
-export function getPublishedArticles(): MagazineArticle[] {
-  const todayStr = getKstTodayString();
-  return MAGAZINE_ARTICLES.filter((article) => article.publishDate <= todayStr).sort((a, b) =>
+// Public lists are periodically revalidated after publication in KST.
+export function getPublishedArticles(now: Date = new Date()): MagazineArticle[] {
+  return MAGAZINE_ARTICLES.filter((article) => isPublicationDateReached(article.publishDate, now)).sort((a, b) =>
     b.publishDate.localeCompare(a.publishDate)
   );
 }
 
-// 전체 기사 (빌드 시 SSG 경로 생성용)
+// Raw editorial inventory; public pages use the publication-aware selectors.
 export function getAllArticles(): MagazineArticle[] {
   return MAGAZINE_ARTICLES;
 }
 
 // 슬러그로 특정 기사 조회
-export function getArticleBySlug(slug: string): MagazineArticle | undefined {
-  return MAGAZINE_ARTICLES.find((a) => a.slug === slug);
+export function getArticleBySlug(slug: string, now: Date = new Date()): MagazineArticle | undefined {
+  return MAGAZINE_ARTICLES.find((a) => a.slug === slug && isPublicationDateReached(a.publishDate, now));
 }
 
 // 최신 글 N개 (메인 홈 연동용)
-export function getRecentArticles(limit = 3): MagazineArticle[] {
-  return getPublishedArticles().slice(0, limit);
+export function getRecentArticles(limit = 3, now: Date = new Date()): MagazineArticle[] {
+  return getPublishedArticles(now).slice(0, limit);
 }
 
 // 관련 글 추천 (같은 카테고리 우선)
-export function getRelatedArticles(currentSlug: string, limit = 3): MagazineArticle[] {
-  const current = getArticleBySlug(currentSlug);
-  const published = getPublishedArticles().filter((a) => a.slug !== currentSlug);
+export function getRelatedArticles(currentSlug: string, limit = 3, now: Date = new Date()): MagazineArticle[] {
+  const current = getArticleBySlug(currentSlug, now);
+  const published = getPublishedArticles(now).filter((a) => a.slug !== currentSlug);
   if (!current) return published.slice(0, limit);
 
   const sameCategory = published.filter((a) => a.category === current.category);

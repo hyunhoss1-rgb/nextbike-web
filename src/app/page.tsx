@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "오토바이매입 · 중고오토바이매입 | 전국 중고바이크 당일 출장매입",
   description:

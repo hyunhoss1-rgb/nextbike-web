@@ -42,8 +42,6 @@ const KOREAN_ALIAS_MAP: Record<string, string[]> = {
   버그만: ["버그만", "burgman"],
   하야부사: ["하야부사", "hayabusa"],
   부사: ["하야부사", "hayabusa"],
-  크루심: ["크루심", "cruisym"],
-  다운타운: ["다운타운", "downtown"],
   익사이팅: ["익사이팅", "xciting"],
   시티: ["시티", "citi"],
   대림: ["dna", "대림", "시티", "vf", "엠보이"],

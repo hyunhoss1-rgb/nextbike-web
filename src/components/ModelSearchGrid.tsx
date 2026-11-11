@@ -49,9 +49,7 @@ const QUICK_KEYWORDS = [
   "엑스맥스",
   "슈퍼커브",
   "벤리110",
-  "크루심",
   "시티베스트",
-  "다운타운",
   "R3",
   "S1000RR",
   "할리",
@@ -164,7 +162,7 @@ export default function ModelSearchGrid({ models }: ModelSearchGridProps) {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="차종명, 브랜드, 배기량 입력 (예: PCX, 엔맥스, 벤리, 크루심, 시티베스트, R3, 할리, 125cc...)"
+              placeholder="차종명, 브랜드, 배기량 입력 (예: PCX, 엔맥스, 벤리, 포르자, 시티베스트, R3, 할리, 125cc...)"
               className="w-full pl-12 pr-24 py-3.5 sm:py-4 rounded-xl bg-[#0b0f14] border border-border focus:border-brand-cyan focus:ring-2 focus:ring-brand-cyan/20 text-sm sm:text-base text-white placeholder:text-gray-500 outline-none transition-all"
             />
             {searchQuery && (

@@ -82,7 +82,7 @@ export default function ModelLinkGridClient({ models, currentSlug }: ModelLinkGr
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="기종 검색 (예: PCX, 엔맥스, 크루심...)"
+              placeholder="기종 검색 (예: PCX, 엔맥스, 포르자...)"
               className="w-full pl-8 pr-7 py-1.5 rounded-lg bg-surface border border-border focus:border-brand-cyan text-xs text-white placeholder:text-gray-500 outline-none"
             />
             {searchQuery && (

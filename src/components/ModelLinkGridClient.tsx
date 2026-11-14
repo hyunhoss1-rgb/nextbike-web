@@ -14,14 +14,13 @@ const BRAND_TABS = [
   { key: "all", label: "전체" },
   { key: "혼다", label: "혼다" },
   { key: "야마하", label: "야마하" },
-  { key: "SYM", label: "SYM" },
-  { key: "킴코", label: "킴코" },
-  { key: "국산", label: "DNA·KR(국산)" },
+  { key: "스즈키", label: "스즈키" },
+  { key: "가와사키", label: "가와사키" },
   { key: "BMW", label: "BMW" },
   { key: "할리데이비슨", label: "할리데이비슨" },
+  { key: "로얄엔필드", label: "로얄엔필드" },
   { key: "베스파", label: "베스파" },
-  { key: "가와사키", label: "가와사키" },
-  { key: "스즈키", label: "스즈키" },
+  { key: "국산", label: "DNA·KR(국산)" },
   { key: "etc", label: "기타인기브랜드" },
 ];
 
@@ -37,7 +36,7 @@ function matchesBrand(brand: string, key: string): boolean {
   }
   if (key === "etc") {
     return (
-      !["혼다", "야마하", "SYM", "킴코", "가와사키", "스즈키"].includes(brand) &&
+      !["혼다", "야마하", "가와사키", "스즈키", "로얄엔필드"].includes(brand) &&
       !brand.includes("DNA") &&
       !brand.includes("KR") &&
       !brand.includes("BMW") &&

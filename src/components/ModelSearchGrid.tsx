@@ -22,15 +22,14 @@ const BRAND_TABS = [
   { key: "all", label: "전체" },
   { key: "혼다", label: "혼다 (Honda)" },
   { key: "야마하", label: "야마하 (Yamaha)" },
-  { key: "SYM", label: "SYM" },
-  { key: "킴코", label: "킴코 (KYMCO)" },
-  { key: "국산", label: "DNA·KR (대림·효성)" },
   { key: "스즈키", label: "스즈키 (Suzuki)" },
   { key: "가와사키", label: "가와사키 (Kawasaki)" },
   { key: "BMW", label: "BMW 모토라드" },
   { key: "할리", label: "할리데이비슨" },
+  { key: "로얄엔필드", label: "로얄엔필드" },
   { key: "베스파", label: "베스파 (Vespa)" },
-  { key: "etc", label: "유럽·기타 수입" },
+  { key: "국산", label: "DNA·KR (대림·효성)" },
+  { key: "etc", label: "두카티·트라이엄프·기타" },
 ];
 
 const CATEGORY_TABS = [
@@ -68,7 +67,7 @@ function matchesBrandTab(model: BikeModel, brandKey: string): boolean {
   }
   if (brandKey === "etc") {
     return (
-      !["혼다", "야마하", "SYM", "킴코", "스즈키", "가와사키", "베스파"].includes(model.brand) &&
+      !["혼다", "야마하", "스즈키", "가와사키", "로얄엔필드", "베스파"].includes(model.brand) &&
       !model.brand.includes("DNA") &&
       !model.brand.includes("KR") &&
       !model.brand.includes("BMW") &&

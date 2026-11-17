@@ -1,6 +1,7 @@
 import { MAGAZINE_ARTICLES_OCTOBER } from "./magazineOctober";
 import { MAGAZINE_ARTICLES_BATTERY } from "./magazineBattery";
 import { MAGAZINE_ARTICLES_NOVEMBER } from "./magazineNovember";
+import { MAGAZINE_ARTICLES_AUTO } from "./magazineAuto";
 import { getKstDateString, isPublicationDateReached } from "@/lib/publication-date";
 
 export interface QuickInfo {
@@ -1527,6 +1528,7 @@ export const MAGAZINE_ARTICLES: MagazineArticle[] = [
   ...MAGAZINE_ARTICLES_OCTOBER,
   ...MAGAZINE_ARTICLES_BATTERY,
   ...MAGAZINE_ARTICLES_NOVEMBER,
+  ...MAGAZINE_ARTICLES_AUTO,
 ];
 
 // 한국 시간(KST) 기준 오늘 날짜 문자열 YYYY-MM-DD

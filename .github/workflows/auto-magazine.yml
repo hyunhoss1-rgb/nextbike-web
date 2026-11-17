@@ -1,0 +1,49 @@
+name: Auto Daily Magazine Publisher
+
+on:
+  schedule:
+    # Runs every day at 00:00 UTC (09:00 KST)
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+    inputs:
+      ensure_days:
+        description: "Days ahead to ensure daily magazine schedule coverage"
+        required: false
+        default: "10"
+
+permissions:
+  contents: write
+
+jobs:
+  publish-daily-magazine:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate scheduled magazine articles
+        run: node tools/auto-magazine/generate-daily-article.mjs --ensure-days "${{ github.event.inputs.ensure_days || '10' }}"
+
+      - name: Typecheck and run publication tests
+        run: npm run typecheck && node --test tests/magazine-publication.test.cjs tests/search-data.test.cjs
+
+      - name: Commit and push new articles if updated
+        run: |
+          if [ -n "$(git status --porcelain src/data/magazineAuto.ts)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add src/data/magazineAuto.ts
+            git commit -m "chore(magazine): auto-publish scheduled SEO articles"
+            git push
+          else
+            echo "No new magazine updates to commit."
+          fi

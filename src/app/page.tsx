@@ -526,45 +526,58 @@ export default function HomePage() {
           <ScrollReveal animation="zoom-in" delay={150}>
             <div className="flex flex-wrap justify-center gap-2.5 max-w-5xl mx-auto">
               {[
-                "혼다 PCX125",
-                "야마하 NMAX125",
-                "혼다 포르자350",
-                "야마하 XMAX300",
-                "할리데이비슨 포티에잇",
-                "BMW R1250RT",
-                "BMW R1250GS",
-                "BMW S1000RR",
-                "야마하 TMAX560",
-                "혼다 슈퍼커브110",
-                "혼다 CT125 헌터커브",
-                "혼다 레블500",
-                "스즈키 하야부사",
-                "가와사키 닌자400",
-                "베스파 GTS300",
-                "할리데이비슨 팻보이",
-                "혼다 CBR650R",
-                "야마하 YZF-R3",
-                "혼다 골드윙 1800",
-                "DNA모터스 UHR125",
-                "로얄엔필드 클래식350",
-                "스즈키 버그만400",
-                "BMW C400GT",
-              ].map((tag) => (
-                <a
-                  key={tag}
-                  href="#estimate"
+                { slug: "pcx125", label: "혼다 PCX125 (배달·출퇴근)" },
+                { slug: "nmax125", label: "야마하 NMAX125" },
+                { slug: "forza350", label: "혼다 포르자350" },
+                { slug: "xmax300", label: "야마하 XMAX300" },
+                { slug: "harley-fatboy", label: "할리데이비슨 팻보이" },
+                { slug: "harley-pan-america-1250", label: "할리 팬아메리카1250" },
+                { slug: "harley-lowrider-st", label: "할리 로우라이더ST" },
+                { slug: "harley-fortyeight", label: "할리데이비슨 포티에잇" },
+                { slug: "bmw-r1250gs", label: "BMW R1250GS" },
+                { slug: "bmw-r1300gs", label: "BMW R1300GS" },
+                { slug: "bmw-f900gs", label: "BMW F900GS" },
+                { slug: "bmw-s1000rr", label: "BMW S1000RR" },
+                { slug: "tmax560", label: "야마하 TMAX560" },
+                { slug: "yamaha-r9", label: "야마하 YZF-R9" },
+                { slug: "supercub110", label: "혼다 슈퍼커브110" },
+                { slug: "huntercub", label: "혼다 CT125 헌터커브" },
+                { slug: "honda-cbr600rr", label: "혼다 CBR600RR" },
+                { slug: "x-adv750", label: "혼다 X-ADV750" },
+                { slug: "suzuki-hayabusa", label: "스즈키 하야부사" },
+                { slug: "suzuki-gsx8r", label: "스즈키 GSX-8R" },
+                { slug: "kawasaki-z900rs", label: "가와사키 Z900RS" },
+                { slug: "kawasaki-zx4rr", label: "가와사키 닌자 ZX-4RR" },
+                { slug: "vespa-gts", label: "베스파 GTS300" },
+                { slug: "royal-enfield-supermeteor650", label: "로얄엔필드 슈퍼메테오650" },
+                { slug: "ducati-diavel", label: "두카티 디아벨 V4" },
+                { slug: "uhr125", label: "DNA모터스 UHR125" },
+              ].map((item) => (
+                <Link
+                  key={item.slug}
+                  href={`/models/${item.slug}`}
                   className="px-3.5 py-2 rounded-xl bg-surface border border-border hover:border-brand-cyan hover:text-brand-cyan text-xs sm:text-sm font-bold text-gray-200 transition-all shadow-sm hover:scale-105 active:scale-95"
                 >
-                  {tag}
-                </a>
+                  {item.label}
+                </Link>
               ))}
-              <span className="px-3.5 py-2 rounded-xl border border-dashed border-brand-cyan/40 text-xs sm:text-sm font-bold text-brand-cyan">
-                그 외 전 기종 당일 상담 가능
-              </span>
+              <Link
+                href="/models"
+                className="px-3.5 py-2 rounded-xl border border-dashed border-brand-cyan/40 hover:bg-brand-cyan hover:text-black text-xs sm:text-sm font-bold text-brand-cyan transition-colors"
+              >
+                할리·BMW·가와사키·스즈키 전 183종 보기 →
+              </Link>
             </div>
           </ScrollReveal>
           <p className="text-xs text-gray-400">
-            혼다 · 야마하 · BMW 모토라드 · 할리데이비슨 · 가와사키 · 스즈키 · 베스파 · 로얄엔필드 등 전 제조사 바이크 상시 매입
+            중고 스쿠터·배달용 PCX/NMAX부터 대배기량·아메리칸 바이크까지 국내 정식발매 내연기관 전 기종 상시 매입 (※ 전기오토바이·리스 승계 제외) ·{" "}
+            <Link href="/price" className="text-brand-cyan font-bold hover:underline">
+              중고 오토바이 시세표
+            </Link>{" "}
+            ·{" "}
+            <Link href="/regions" className="text-brand-cyan font-bold hover:underline">
+              전국 출장 지역 안내
+            </Link>
           </p>
         </div>
       </section>

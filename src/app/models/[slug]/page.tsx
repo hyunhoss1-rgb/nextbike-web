@@ -265,7 +265,41 @@ export default async function ModelDetailPage({ params }: Props) {
         />
       </section>
 
-      {/* ================= 3. FAQ ================= */}
+      {/* ================= 3-1. 브랜드 허브 · 시세표 · 매입 서류 안내 링크 ================= */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-border/60 pt-10">
+        <div className="p-5 sm:p-6 rounded-2xl bg-surface border border-border flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <span className="text-xs font-bold text-brand-cyan block">
+              {model.brand} 전체 매입 및 행정 안내
+            </span>
+            <p className="text-xs sm:text-sm text-gray-300">
+              리스·할부 완납 후 사용폐지 또는 개인 명의이전이 완료된 내연기관 차량을 당일 최고가로 매입합니다. (※ 전기오토바이 제외)
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+            <Link
+              href="/models"
+              className="px-3.5 py-2 rounded-lg bg-card hover:bg-brand-cyan hover:text-black border border-border text-xs font-bold text-gray-200 transition-colors"
+            >
+              {model.brand} 전 기종 매입 허브 →
+            </Link>
+            <Link
+              href="/price"
+              className="px-3.5 py-2 rounded-lg bg-card hover:bg-brand-cyan hover:text-black border border-border text-xs font-bold text-gray-200 transition-colors"
+            >
+              중고 오토바이 시세표 →
+            </Link>
+            <Link
+              href="/magazine/bike-deregistration-guide-2026"
+              className="px-3.5 py-2 rounded-lg bg-card hover:bg-brand-cyan hover:text-black border border-border text-xs font-bold text-gray-200 transition-colors"
+            >
+              명의이전·폐지 서류 →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ================= 4. FAQ ================= */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-border/60 pt-12">
         <FaqSection />
       </section>

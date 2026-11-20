@@ -225,6 +225,7 @@ export default function ModelsIndexPage() {
                     <Link
                       key={item.slug}
                       href={`/models/${item.slug}`}
+                      prefetch={false}
                       className="px-2.5 py-1 rounded-lg bg-card hover:bg-brand-cyan hover:text-black border border-border/80 text-[11px] font-semibold text-gray-200 transition-colors"
                     >
                       {item.label}

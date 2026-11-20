@@ -101,6 +101,7 @@ export default function PricePage() {
                   <Link
                     key={m.slug}
                     href={`/models/${m.slug}`}
+                    prefetch={false}
                     className="px-2 py-1 rounded-md bg-card hover:bg-brand-cyan hover:text-black border border-border text-[11px] font-bold text-gray-200 transition-colors"
                   >
                     {m.label}
@@ -130,6 +131,7 @@ export default function PricePage() {
               </p>
               <Link
                 href={`/models/${b.slug}`}
+                prefetch={false}
                 className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 rounded-lg bg-card hover:bg-brand-cyan hover:text-black border border-border text-xs font-bold text-gray-200 transition-colors"
               >
                 <span>{b.name} 상세 시세 및 감정 기준 보기</span>
@@ -171,6 +173,7 @@ export default function PricePage() {
                   <td className="p-4 sm:p-5 text-center">
                     <Link
                       href={`/models/${b.slug}`}
+                      prefetch={false}
                       className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-card hover:bg-brand-cyan hover:text-black border border-border text-xs font-bold text-gray-300 transition-all"
                     >
                       상세시세

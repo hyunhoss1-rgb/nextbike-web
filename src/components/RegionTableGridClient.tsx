@@ -111,6 +111,7 @@ export default function RegionTableGridClient({
               <Link
                 key={region.slug}
                 href={`/regions/${region.slug}`}
+                prefetch={false}
                 className="py-3 px-2 text-center text-xs sm:text-sm font-medium text-gray-300 hover:text-brand-cyan hover:bg-brand-cyan/10 transition-colors duration-150 flex items-center justify-center min-h-[46px]"
                 title={`${region.fullName} 오토바이·중고바이크 출장 매입`}
               >

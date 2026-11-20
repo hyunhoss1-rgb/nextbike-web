@@ -207,7 +207,7 @@ export default function MagazineIndexClient({ articles, todayStr, categories }: 
                     </div>
 
                     {/* 제목 */}
-                    <Link href={`/magazine/${article.slug}`}>
+                    <Link href={`/magazine/${article.slug}`} prefetch={false}>
                       <h3 className="text-base sm:text-lg font-bold text-white group-hover:text-brand-cyan transition-colors line-clamp-2 leading-snug">
                         {article.title}
                       </h3>
@@ -227,6 +227,7 @@ export default function MagazineIndexClient({ articles, todayStr, categories }: 
                     </span>
                     <Link
                       href={`/magazine/${article.slug}`}
+                      prefetch={false}
                       className="font-bold text-brand-cyan flex items-center gap-1 group-hover:translate-x-1 transition-transform"
                     >
                       칼럼 읽기 <ChevronRight className="w-3.5 h-3.5" />

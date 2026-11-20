@@ -3,9 +3,9 @@ import { REGIONS } from "@/data/regions";
 import { BIKE_MODELS } from "@/data/models";
 import { getPublishedArticles } from "@/data/magazine";
 
-// A crawler must receive the current publication set, independent of metadata
-// route caching. The XML is inexpensive to generate and has stable article dates.
-export const dynamic = "force-dynamic";
+// Revalidate hourly via CDN/ISR so crawlers get newly published KST daily articles
+// without burning Serverless Function invocations & Fast Origin Transfer on every hit.
+export const revalidate = 3600;
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr";

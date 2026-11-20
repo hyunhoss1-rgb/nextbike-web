@@ -126,6 +126,7 @@ export default function RegionsIndexPage() {
             <Link
               key={hub.slug}
               href={`/regions/${hub.slug}`}
+              prefetch={false}
               className="p-3 rounded-xl bg-surface border border-border hover:border-brand-cyan text-xs font-bold text-gray-200 hover:text-brand-cyan flex items-center justify-between gap-2 transition-colors"
             >
               <span className="truncate">{hub.label}</span>

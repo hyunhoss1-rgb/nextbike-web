@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "오토바이매입 · 중고오토바이매입 | 전국 중고바이크 당일 출장매입",
@@ -556,6 +556,7 @@ export default function HomePage() {
                 <Link
                   key={item.slug}
                   href={`/models/${item.slug}`}
+                  prefetch={false}
                   className="px-3.5 py-2 rounded-xl bg-surface border border-border hover:border-brand-cyan hover:text-brand-cyan text-xs sm:text-sm font-bold text-gray-200 transition-all shadow-sm hover:scale-105 active:scale-95"
                 >
                   {item.label}

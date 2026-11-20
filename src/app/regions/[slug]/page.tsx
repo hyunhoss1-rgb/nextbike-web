@@ -2,7 +2,6 @@ import React from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import { REGIONS, getRegionBySlug, getDongsForCity } from "@/data/regions";
 import { BIKE_MODELS } from "@/data/models";
 import EstimateForm from "@/components/EstimateForm";
@@ -282,15 +281,25 @@ export default async function RegionPage({ params }: Props) {
 
       {/* ================= 1. 상단 브레드크럼 & 2열 히어로 레이아웃 (사진 3 완벽 구현) ================= */}
       <section className="relative overflow-hidden rounded-3xl p-4 sm:p-8 border border-border/60 bg-surface/40 max-w-7xl mx-auto">
-        {/* 백그라운드 바이크 이미지 */}
+        {/* 백그라운드 바이크 이미지 (경량 WebP 반응형 적용) */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden rounded-3xl">
-          <Image
-            src="/images/hero-bike.jpg"
-            alt={`${region.name} 오토바이 매입`}
-            fill
-            priority
-            className="object-cover object-[80%_center] opacity-15 md:opacity-20 mix-blend-screen scale-105"
-          />
+          <picture>
+            <source
+              type="image/webp"
+              srcSet="/images/hero-bike-640.webp 640w, /images/hero-bike-960.webp 960w, /images/hero-bike-1376.webp 1376w"
+              sizes="100vw"
+            />
+            <img
+              src="/images/hero-bike.jpg"
+              alt={`${region.name} 오토바이 매입`}
+              width={1376}
+              height={768}
+              fetchPriority="high"
+              loading="eager"
+              decoding="async"
+              className="absolute inset-0 h-full w-full object-cover object-[80%_center] opacity-15 md:opacity-20 mix-blend-screen scale-105"
+            />
+          </picture>
           <div className="absolute inset-0 bg-gradient-to-r from-[#0a0d10] via-[#0a0d10]/95 md:via-[#0a0d10]/80 to-[#0a0d10]/60" />
           <div className="absolute inset-0 bg-gradient-to-b from-[#0a0d10]/80 via-transparent to-[#0a0d10]" />
         </div>
@@ -458,6 +467,7 @@ export default async function RegionPage({ params }: Props) {
                     <Link
                       key={idx}
                       href={href}
+                      prefetch={false}
                       className="py-2.5 px-2 rounded-lg bg-card border border-border/80 hover:border-brand-cyan hover:text-brand-cyan hover:bg-brand-cyan/5 text-center text-xs font-semibold text-gray-300 transition-colors shadow-sm truncate block"
                       title={`${region.name} ${sub} 오토바이 매입`}
                     >
@@ -487,14 +497,22 @@ export default async function RegionPage({ params }: Props) {
       <section className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="relative overflow-hidden rounded-2xl border border-border/80 bg-gradient-to-r from-[#0c121a] via-[#101824] to-[#0c121a] p-4 sm:p-6 shadow-xl flex flex-col md:flex-row items-center gap-6">
           <div className="relative w-full md:w-80 h-48 sm:h-52 rounded-xl overflow-hidden shrink-0 border border-brand-yellow/30 shadow-lg">
-            <Image
-              src="/images/og-safe-pay.jpg"
-              alt={`${region.name} 오토바이 매입 전액 100% 선입금 안전거래`}
-              width={1200}
-              height={630}
-              priority
-              className="w-full h-full object-cover"
-            />
+            <picture>
+              <source
+                type="image/webp"
+                srcSet="/images/og-safe-pay-640.webp 640w, /images/og-safe-pay-960.webp 960w"
+                sizes="(max-width: 768px) 100vw, 320px"
+              />
+              <img
+                src="/images/og-safe-pay.jpg"
+                alt={`${region.name} 오토바이 매입 전액 100% 선입금 안전거래`}
+                width={1376}
+                height={768}
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-cover"
+              />
+            </picture>
           </div>
           <div className="space-y-3 text-center md:text-left flex-1">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-yellow/10 border border-brand-yellow/30 text-brand-yellow text-xs font-bold">
@@ -578,6 +596,7 @@ export default async function RegionPage({ params }: Props) {
             <Link
               key={bike.slug}
               href={`/models/${bike.slug}`}
+              prefetch={false}
               className="p-3.5 rounded-xl bg-surface border border-border hover:border-brand-cyan hover:bg-card transition-all group flex flex-col justify-between"
             >
               <div>
@@ -624,6 +643,7 @@ export default async function RegionPage({ params }: Props) {
               <Link
                 key={idx}
                 href={href}
+                prefetch={false}
                 className="p-3 rounded-lg bg-surface border border-border hover:border-brand-cyan hover:text-brand-cyan text-xs font-semibold text-gray-300 transition-colors flex items-center justify-between group shadow-sm"
                 title={`${region.name} ${sub} 오토바이 및 중고바이크 매입`}
               >

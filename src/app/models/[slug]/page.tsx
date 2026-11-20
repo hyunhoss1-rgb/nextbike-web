@@ -227,6 +227,7 @@ export default async function ModelDetailPage({ params }: Props) {
               <Link
                 key={m.slug}
                 href={`/models/${m.slug}`}
+                prefetch={false}
                 className="p-3.5 rounded-xl bg-surface border border-border hover:border-brand-cyan hover:bg-card transition-all group flex flex-col justify-between"
               >
                 <div>

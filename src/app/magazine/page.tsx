@@ -1,7 +1,7 @@
 import MagazineIndexClient from "@/components/MagazineIndexClient";
 import { getPublishedArticles, getKstTodayString, MAGAZINE_CATEGORIES } from "@/data/magazine";
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export default function MagazineIndexPage() {
   const now = new Date();

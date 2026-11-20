@@ -2,14 +2,16 @@ name: Auto Daily Magazine Publisher
 
 on:
   schedule:
-    # Runs every day at 00:00 UTC (09:00 KST)
-    - cron: "0 0 * * *"
+    # Runs once a week on Monday 00:00 UTC (09:00 KST) and pre-schedules 14 days ahead.
+    # Daily publication at 00:00 KST is handled automatically via publishDate + ISR,
+    # avoiding 30 unnecessary full Vercel rebuilds per month.
+    - cron: "0 0 * * 1"
   workflow_dispatch:
     inputs:
       ensure_days:
         description: "Days ahead to ensure daily magazine schedule coverage"
         required: false
-        default: "10"
+        default: "14"
 
 permissions:
   contents: write
@@ -31,7 +33,7 @@ jobs:
         run: npm ci
 
       - name: Generate scheduled magazine articles
-        run: node tools/auto-magazine/generate-daily-article.mjs --ensure-days "${{ github.event.inputs.ensure_days || '10' }}"
+        run: node tools/auto-magazine/generate-daily-article.mjs --ensure-days "${{ github.event.inputs.ensure_days || '14' }}"
 
       - name: Typecheck and run publication tests
         run: npm run typecheck && node --test tests/magazine-publication.test.cjs tests/search-data.test.cjs

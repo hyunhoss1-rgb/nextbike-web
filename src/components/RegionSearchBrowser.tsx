@@ -327,6 +327,7 @@ export default function RegionSearchBrowser({
               <Link
                 key={reg.slug}
                 href={`/regions/${reg.slug}`}
+                prefetch={false}
                 className="group block p-4 sm:p-5 rounded-2xl bg-surface border border-border hover:border-brand-cyan hover:-translate-y-1 transition-all shadow-md flex flex-col justify-between"
               >
                 <div>

@@ -312,6 +312,7 @@ export default function ModelSearchGrid({ models }: ModelSearchGridProps) {
             <Link
               key={bike.slug}
               href={`/models/${bike.slug}`}
+              prefetch={false}
               className="p-6 rounded-2xl bg-surface border border-border hover:border-brand-cyan/80 hover:-translate-y-1 transition-all flex flex-col justify-between group shadow-md"
             >
               <div>

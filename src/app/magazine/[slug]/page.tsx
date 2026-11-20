@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import {
   getArticleBySlug,
+  getPublishedArticles,
   getRelatedArticles,
 } from "@/data/magazine";
 import EstimateForm from "@/components/EstimateForm";
@@ -32,8 +33,15 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
-// Check publication on every request; do not cache a future article body/404.
-export const dynamic = "force-dynamic";
+// Serve published articles from Edge/ISR cache (revalidated hourly) instead of running
+// SSR on every single hit, while still allowing scheduled articles to go live at KST midnight.
+export const revalidate = 3600;
+
+export async function generateStaticParams() {
+  return getPublishedArticles().map((article) => ({
+    slug: article.slug,
+  }));
+}
 
 interface Props {
   params: Promise<{

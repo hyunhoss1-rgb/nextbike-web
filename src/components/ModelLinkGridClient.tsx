@@ -152,6 +152,7 @@ export default function ModelLinkGridClient({ models, currentSlug }: ModelLinkGr
                 <Link
                   key={model.slug}
                   href={`/models/${model.slug}`}
+                  prefetch={false}
                   className={`${hideOnMobile ? "hidden sm:flex" : "flex"} p-3.5 rounded-xl border transition-all flex-col justify-between group ${
                     isCurrent
                       ? "bg-brand-cyan/10 border-brand-cyan text-white shadow-lg shadow-brand-cyan/10"

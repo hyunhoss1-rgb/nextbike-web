@@ -44,9 +44,17 @@ export function proxy(request: NextRequest) {
   return NextResponse.next();
 }
 
-// 메인페이지 및 모든 세부페이지(/regions/*, /models/*, /magazine/*, /price, /cases, /reviews, /sitemap.xml 등) 전역 적용
+// 정적 에셋(폰트 92개·이미지·아이콘·robots.txt)과 Next.js 프리페치는 프록시를 타지 않도록 제외하여
+// Vercel Edge Middleware 호출량을 대폭 절감하면서도 HTML/사이트맵 AI 봇 차단을 유지합니다.
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|icon.png|apple-icon.png|images/).*)",
+    {
+      source:
+        "/((?!_next/static|_next/image|fonts/|images/|favicon.ico|icon.png|apple-icon.png|robots.txt|.*\\.woff2|.*\\.woff|.*\\.png|.*\\.jpg|.*\\.jpeg|.*\\.webp|.*\\.svg|.*\\.ico|.*\\.css|.*\\.js).*)",
+      missing: [
+        { type: "header", key: "next-router-prefetch" },
+        { type: "header", key: "purpose", value: "prefetch" },
+      ],
+    },
   ],
 };

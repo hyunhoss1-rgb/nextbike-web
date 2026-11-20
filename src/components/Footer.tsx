@@ -69,6 +69,9 @@ export default function Footer() {
                 <strong className="text-gray-300">사업자등록번호:</strong> 699-16-02037
               </p>
               <p>
+                <strong className="text-gray-300">사업장 주소:</strong> 경기도 시흥시 은행동 301-25 1층 (전국 당일 출장 매입 거점)
+              </p>
+              <p>
                 <strong className="text-gray-300">대표전화:</strong>{" "}
                 <a href="tel:01048952487" className="text-brand-cyan font-bold hover:underline">
                   010-4895-2487
@@ -83,13 +86,18 @@ export default function Footer() {
             <h4 className="text-xs font-bold tracking-wider text-gray-200 uppercase">빠른 바로가기</h4>
             <ul className="space-y-2 text-xs">
               <li>
+                <Link href="/price" className="hover:text-brand-cyan transition-colors">
+                  중고 오토바이 시세표
+                </Link>
+              </li>
+              <li>
                 <Link href="/regions" className="hover:text-brand-cyan transition-colors">
                   전국 지역별 매입 페이지
                 </Link>
               </li>
               <li>
                 <Link href="/models" className="hover:text-brand-cyan transition-colors">
-                  인기 차종/기종별 매입
+                  제조사·기종별 183종 매입
                 </Link>
               </li>
               <li>
@@ -98,19 +106,24 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="#estimate" className="hover:text-brand-cyan transition-colors">
+                <Link href="/cases" className="hover:text-brand-cyan transition-colors">
+                  전국 출장 매입 실거래 사례
+                </Link>
+              </li>
+              <li>
+                <Link href="/#estimate" className="hover:text-brand-cyan transition-colors">
                   30초 온라인 무료 견적
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#process" className="hover:text-brand-cyan transition-colors">
+                <Link href="/#process" className="hover:text-brand-cyan transition-colors">
                   방문 매입 및 서류 처리 절차
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#faq" className="hover:text-brand-cyan transition-colors">
+                <Link href="/#faq" className="hover:text-brand-cyan transition-colors">
                   자주 묻는 질문 (FAQ)
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

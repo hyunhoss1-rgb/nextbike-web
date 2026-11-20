@@ -13,11 +13,6 @@ export default function robots(): MetadataRoute.Robots {
     "anthropic-ai",
     "PerplexityBot",
     "Perplexity-User",
-    "Google-Extended",
-    "GoogleOther",
-    "GoogleOther-Image",
-    "GoogleOther-Video",
-    "Google-CloudVertexBot",
     "Applebot-Extended",
     "Bytespider",
     "CCBot",
@@ -104,6 +99,16 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "Googlebot-Image", // 구글 이미지 검색 로봇 정상 허용
         allow: ["/"],
+        disallow: ["/api/"],
+      },
+      {
+        userAgent: "GoogleOther", // 구글 검색 R&D·AI 개요(AI Overview) 크롤러 정상 허용
+        allow: allowedSearchPaths,
+        disallow: ["/api/"],
+      },
+      {
+        userAgent: "Google-Extended", // 구글 Gemini/검색 연동 노출 허용
+        allow: allowedSearchPaths,
         disallow: ["/api/"],
       },
       {

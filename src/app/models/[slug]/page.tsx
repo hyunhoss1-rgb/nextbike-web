@@ -96,6 +96,9 @@ export default async function ModelDetailPage({ params }: Props) {
       <JsonLd
         type="model"
         modelName={model.name}
+        modelBrand={model.brand}
+        modelDescription={model.summary}
+        modelPriceRange={model.priceRange}
         canonicalUrl={canonicalUrl}
       />
 

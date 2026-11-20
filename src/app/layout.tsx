@@ -112,23 +112,19 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
-        {/* 네이버·구글·다음 검색엔진 봇은 모든 메인·세부페이지 100% 정상 색인 및 썸네일 이미지 허용 */}
+        {/* 네이버·구글(일반검색·AI개요)·다음 검색엔진 봇은 모든 메인·세부페이지 100% 정상 색인 및 썸네일 이미지 허용 */}
         <meta name="Yeti" content="index, follow, max-image-preview:large" />
         <meta
           name="Googlebot"
           content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
         />
-        <meta name="Daumoa" content="index, follow, max-image-preview:large" />
-        <meta name="bingbot" content="index, follow, max-image-preview:large" />
-        {/* AI 학습·실시간 요약·스크래핑 봇은 메인 및 전 세부페이지 수집 원천 금지 */}
-        <meta
-          name="Google-Extended"
-          content="noindex, nofollow, noarchive, nosnippet, noai, noimageai"
-        />
         <meta
           name="GoogleOther"
-          content="noindex, nofollow, noarchive, nosnippet, noai, noimageai"
+          content="index, follow, max-image-preview:large, max-snippet:-1"
         />
+        <meta name="Daumoa" content="index, follow, max-image-preview:large" />
+        <meta name="bingbot" content="index, follow, max-image-preview:large" />
+        {/* 타사 AI 학습·스크래핑 봇은 메인 및 전 세부페이지 수집 원천 금지 */}
         <meta
           name="GPTBot"
           content="noindex, nofollow, noarchive, nosnippet, noai, noimageai"

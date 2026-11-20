@@ -5,15 +5,15 @@ import { NextRequest, NextResponse } from "next/server";
  * 검색엔진 색인 및 SNS 미리보기 공식 봇은 메인·세부페이지·사이트맵 모두 100% 무제한 허용 (노출 지장 0%)
  */
 const ALLOWED_SEARCH_AND_SOCIAL_BOTS =
-  /yeti|naverbot|naver\.me|cowbot|sunny|pstatic|googlebot|google-inspectiontool|storebot-google|mediapartners-google|adsbot-google|apis-google|google-read-aloud|duplexweb-google|google favicon|google-site-verification|daumoa|daum|kakaotalk|kakaotalk-scrap|bingbot|msnbot|adidxbot|bingpreview|facebookexternalhit|facebot|twitterbot|linkedinbot|slackbot|telegrambot|discordbot|linespider|pinterestbot/i;
+  /yeti|naverbot|naver\.me|cowbot|sunny|pstatic|googlebot|google-inspectiontool|googleother|google-extended|google-cloudvertexbot|storebot-google|mediapartners-google|adsbot-google|apis-google|google-read-aloud|duplexweb-google|google favicon|google-site-verification|daumoa|daum|kakaotalk|kakaotalk-scrap|bingbot|msnbot|adidxbot|bingpreview|facebookexternalhit|facebot|twitterbot|linkedinbot|slackbot|telegrambot|discordbot|linespider|pinterestbot/i;
 
 /**
- * 2순위: AI 학습/수집 크롤러, LLM 실시간 웹 브라우징 봇(GoogleOther, ChatGPT-User, OAI-SearchBot 등),
- * 경쟁사 분석 스파이 봇(Ahrefs, Semrush 등), 자동화 스크래퍼(Python, Curl, Scrapy, Headless 등)
+ * 2순위: 타사 AI 학습/수집 크롤러, 경쟁사 분석 스파이 봇(Ahrefs, Semrush 등),
+ * 자동화 스크래퍼(Python, Curl, Scrapy, Headless 등)
  * 메인페이지(/) 뿐만 아니라 모든 세부페이지(/regions/*, /models/*, /magazine/*, /price, /cases, /reviews, /sitemap.xml) 접근 시 즉시 403 차단
  */
 const BLOCKED_AI_AND_SCRAPER_BOTS =
-  /gptbot|chatgpt-user|oai-searchbot|openai|claudebot|claude-web|claude-searchbot|claude-user|anthropic-ai|perplexitybot|perplexity-user|google-extended|googleother|google-cloudvertexbot|vertexai|applebot-extended|bytespider|ccbot|diffbot|facebookbot|meta-externalagent|meta-externalfetcher|cohere-ai|cohere-training-data-crawler|amazonbot|youbot|omgilibot|omgili|ai2bot|ai2bot-dolma|duckassistbot|timpibot|webzio-extended|imagesiftbot|kangaroo bot|petalbot|pangubot|sentibot|velenpublicwebcrawler|turnitinbot|img2dataset|icc-crawler|ahrefsbot|semrushbot|mj12bot|dotbot|blexbot|dataforseobot|rogerbot|screaming frog|siteauditbot|serpstatbot|zoominfobot|barkrowler|seekportbot|scrapy|python-requests|python-urllib|python-httpx|aiohttp|curl\/|wget\/|libwww-perl|mechanize|httrack|webcopier|teleport|sitesnagger|headlesschrome|phantomjs|selenium|playwright|puppeteer/i;
+  /gptbot|chatgpt-user|oai-searchbot|openai|claudebot|claude-web|claude-searchbot|claude-user|anthropic-ai|perplexitybot|perplexity-user|applebot-extended|bytespider|ccbot|diffbot|facebookbot|meta-externalagent|meta-externalfetcher|cohere-ai|cohere-training-data-crawler|amazonbot|youbot|omgilibot|omgili|ai2bot|ai2bot-dolma|duckassistbot|timpibot|webzio-extended|imagesiftbot|kangaroo bot|petalbot|pangubot|sentibot|velenpublicwebcrawler|turnitinbot|img2dataset|icc-crawler|ahrefsbot|semrushbot|mj12bot|dotbot|blexbot|dataforseobot|rogerbot|screaming frog|siteauditbot|serpstatbot|zoominfobot|barkrowler|seekportbot|scrapy|python-requests|python-urllib|python-httpx|aiohttp|curl\/|wget\/|libwww-perl|mechanize|httrack|webcopier|teleport|sitesnagger|headlesschrome|phantomjs|selenium|playwright|puppeteer/i;
 
 export function proxy(request: NextRequest) {
   const ua = request.headers.get("user-agent") || "";

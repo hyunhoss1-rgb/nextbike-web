@@ -113,6 +113,7 @@ export default async function MagazineDetailPage({ params }: Props) {
         articleDate={article.publishDate}
         articleAuthor={article.author}
         articleTags={article.tags}
+        articleFaq={article.faq}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

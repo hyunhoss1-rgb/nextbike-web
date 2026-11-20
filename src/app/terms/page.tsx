@@ -18,7 +18,7 @@ export default function TermsPage() {
   return (
     <div className="py-10 sm:py-16">
       <JsonLd
-        type="main"
+        type="legal"
         canonicalUrl="https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/terms"
       />
 

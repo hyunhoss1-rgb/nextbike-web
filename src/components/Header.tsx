@@ -35,8 +35,8 @@ const MOBILE_MENU_ITEMS = [
   },
   {
     href: "/models",
-    title: "인기 120+ 기종별 최고가 매입",
-    desc: "스쿠터부터 수입 대형 바이크 전 차종 검색",
+    title: "정식 183+ 기종별 최고가 매입",
+    desc: "할리·BMW·혼다·야마하·스즈키·가와사키 전 기종 검색",
     icon: Bike,
   },
   {
@@ -199,13 +199,13 @@ export default function Header() {
             <Phone className="w-4 h-4 shrink-0" />
             <span className="whitespace-nowrap">010-4895-2487</span>
           </a>
-          <a
-            href="#estimate"
+          <Link
+            href="/#estimate"
             className="inline-flex items-center gap-1.5 px-4 xl:px-5 py-2.5 rounded-lg bg-brand-cyan hover:bg-brand-cyanHover text-black font-extrabold text-xs sm:text-sm transition-all shadow-lg shadow-brand-cyan/25 whitespace-nowrap shrink-0"
           >
             <span className="whitespace-nowrap">30초 무료 견적</span>
             <ChevronRight className="w-4 h-4 shrink-0" />
-          </a>
+          </Link>
         </div>
 
         {/* 모바일 햄버거 버튼 */}

@@ -3,9 +3,10 @@ import { REGIONS } from "@/data/regions";
 import { BIKE_MODELS } from "@/data/models";
 import { getPublishedArticles } from "@/data/magazine";
 
-// Revalidate hourly via CDN/ISR so crawlers get newly published KST daily articles
-// without burning Serverless Function invocations & Fast Origin Transfer on every hit.
-export const revalidate = 3600;
+// Always serve the current KST publication set dynamically so daily scheduled
+// magazine articles appear in /sitemap.xml immediately at KST midnight without
+// getting frozen at build-time prerender.
+export const dynamic = "force-dynamic";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr";

@@ -61,25 +61,12 @@ export default function HomePage() {
 
       {/* ================= 1. 히어로 섹션 ================= */}
       <section className="relative overflow-hidden pt-6 pb-16 sm:pb-24 border-b border-border/60">
-        {/* 백그라운드 바이크 이미지 & 시네마틱 오버레이 */}
+        {/* 백그라운드 바이크 이미지 & 시네마틱 오버레이 (CSS 배경 처리 — 텍스트 없는 장식 이미지가 썸네일로 오인 수집되는 현상 차단) */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-          <picture>
-            <source
-              type="image/webp"
-              srcSet="/images/hero-bike-640.webp 640w, /images/hero-bike-960.webp 960w, /images/hero-bike-1376.webp 1376w"
-              sizes="100vw"
-            />
-            <img
-              src="/images/hero-bike.jpg"
-              alt="전국 중고오토바이 당일 출장 매입 | 상차 전 100% 선입금"
-              width={1376}
-              height={768}
-              fetchPriority="high"
-              loading="eager"
-              decoding="async"
-              className="absolute inset-0 h-full w-full object-cover object-[75%_center] md:object-center opacity-30 md:opacity-35 mix-blend-screen scale-105"
-            />
-          </picture>
+          <div
+            aria-hidden="true"
+            className="bg-hero-bike absolute inset-0 bg-cover bg-[75%_center] md:bg-center opacity-30 md:opacity-35 mix-blend-screen scale-105"
+          />
           {/* 가독성 보장을 위한 다중 다크 그라데이션 */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#0a0d10] via-[#0a0d10]/95 md:via-[#0a0d10]/80 to-[#0a0d10]/70 lg:to-[#0a0d10]/40" />
           <div className="absolute inset-0 bg-gradient-to-b from-[#0a0d10]/80 via-transparent to-[#0a0d10]" />
@@ -163,6 +150,50 @@ export default function HomePage() {
             <div className="lg:col-span-6">
               <div>
                 <EstimateForm />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ================= 1.5. 100% 선입금 안심 안전거래 보증 배너 (메인 대표 썸네일 유일 <img>) ================= */}
+      <section className="py-10 sm:py-12 border-b border-border/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative overflow-hidden rounded-2xl border border-border/80 bg-gradient-to-r from-[#0c121a] via-[#101824] to-[#0c121a] p-4 sm:p-6 shadow-xl flex flex-col md:flex-row items-center gap-6">
+            <div className="relative w-full md:w-[360px] aspect-[16/9] rounded-xl overflow-hidden shrink-0 border border-brand-yellow/30 shadow-lg">
+              <picture>
+                <source
+                  type="image/webp"
+                  srcSet="/images/og-safe-pay-640.webp 640w, /images/og-safe-pay-960.webp 960w"
+                  sizes="(max-width: 768px) 100vw, 360px"
+                />
+                <img
+                  src="/images/og-safe-pay.jpg"
+                  alt="전국 중고오토바이 매입 전액 100% 선입금 안전거래 · 당일 출장매입"
+                  width={1376}
+                  height={768}
+                  fetchPriority="high"
+                  loading="eager"
+                  decoding="async"
+                  className="w-full h-full object-cover"
+                />
+              </picture>
+            </div>
+            <div className="space-y-3 text-center md:text-left flex-1">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-yellow/10 border border-brand-yellow/30 text-brand-yellow text-xs font-bold">
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>100% 안심 안전거래 보증제</span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight break-keep">
+                전국 중고오토바이·바이크 매입, <span className="text-brand-yellow">상차 전 100% 선입금</span>으로 안전하게
+              </h2>
+              <p className="text-xs sm:text-sm text-gray-300 leading-relaxed break-keep">
+                바이크를 용달차에 묶어놓고 말을 바꾸거나 가격을 깎는 악덕 감가 상술은 절대 없습니다. 전국 전지역 전문 기사 방문 시, 실차 확인 즉시 고객님 계좌로 <strong>100% 전액 송금을 먼저 완료</strong>한 후 안전하게 상차를 진행합니다.
+              </p>
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs font-bold text-gray-300 pt-1">
+                <span className="flex items-center gap-1.5 text-brand-cyan">✓ 현장 부당 감가 0건 보증</span>
+                <span className="flex items-center gap-1.5 text-brand-cyan">✓ 바이크 상차 전 전액 송금</span>
+                <span className="flex items-center gap-1.5 text-brand-cyan">✓ 전국 전지역 당일 무료 출장</span>
               </div>
             </div>
           </div>
@@ -719,25 +750,12 @@ export default function HomePage() {
 
       {/* ================= 9. 프리미엄 바이크 백그라운드 CTA 배너 (신규 추가) ================= */}
       <section className="relative overflow-hidden py-16 sm:py-24 border-b border-border/60">
-        {/* 바이크 배경 이미지 */}
+        {/* 바이크 배경 이미지 (CSS 배경 처리) */}
         <div className="absolute inset-0 z-0 pointer-events-none">
-          <picture>
-            <source
-              type="image/webp"
-              srcSet="/images/bike-banner-640.webp 640w, /images/bike-banner-960.webp 960w, /images/bike-banner-1376.webp 1376w"
-              sizes="100vw"
-            />
-            <img
-              src="/images/bike-banner.jpg"
-              alt="전국 중고오토바이 당일 출장 매입 | 상차 전 100% 선입금"
-              width={1376}
-              height={768}
-              fetchPriority="low"
-              loading="lazy"
-              decoding="async"
-              className="absolute inset-0 h-full w-full object-cover object-center opacity-25 mix-blend-screen scale-105"
-            />
-          </picture>
+          <div
+            aria-hidden="true"
+            className="bg-cta-bike absolute inset-0 bg-cover bg-center opacity-25 mix-blend-screen scale-105"
+          />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0a0d10] via-[#0a0d10]/90 to-[#0a0d10]/80" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0a0d10] via-transparent to-[#0a0d10]" />
         </div>

@@ -1067,3 +1067,57 @@ h1, h2, h3, h4, h5, h6, p, span, a, button {
   animation: pulseGlow 5s ease-in-out infinite;
 }
 
+/* 장식용 배경 이미지는 CSS background로 처리하여 검색엔진 썸네일 크롤러가 본문 대표 <img>(og-safe-pay)만 정확히 수집하도록 보장 */
+.bg-hero-bike {
+  background-image: url('/images/hero-bike.jpg');
+  background-image: image-set(
+    url('/images/hero-bike-640.webp') type('image/webp'),
+    url('/images/hero-bike.jpg') type('image/jpeg')
+  );
+}
+@media (min-width: 640px) {
+  .bg-hero-bike {
+    background-image: url('/images/hero-bike.jpg');
+    background-image: image-set(
+      url('/images/hero-bike-960.webp') type('image/webp'),
+      url('/images/hero-bike.jpg') type('image/jpeg')
+    );
+  }
+}
+@media (min-width: 1024px) {
+  .bg-hero-bike {
+    background-image: url('/images/hero-bike.jpg');
+    background-image: image-set(
+      url('/images/hero-bike-1376.webp') type('image/webp'),
+      url('/images/hero-bike.jpg') type('image/jpeg')
+    );
+  }
+}
+
+.bg-cta-bike {
+  background-image: url('/images/bike-banner.jpg');
+  background-image: image-set(
+    url('/images/bike-banner-640.webp') type('image/webp'),
+    url('/images/bike-banner.jpg') type('image/jpeg')
+  );
+}
+@media (min-width: 640px) {
+  .bg-cta-bike {
+    background-image: url('/images/bike-banner.jpg');
+    background-image: image-set(
+      url('/images/bike-banner-960.webp') type('image/webp'),
+      url('/images/bike-banner.jpg') type('image/jpeg')
+    );
+  }
+}
+@media (min-width: 1024px) {
+  .bg-cta-bike {
+    background-image: url('/images/bike-banner.jpg');
+    background-image: image-set(
+      url('/images/bike-banner-1376.webp') type('image/webp'),
+      url('/images/bike-banner.jpg') type('image/jpeg')
+    );
+  }
+}
+
+

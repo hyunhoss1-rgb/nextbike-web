@@ -83,12 +83,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       tags: article.tags,
       images: [
         {
-          url: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-image.jpg",
-          width: 1200,
-          height: 630,
-          alt: article.title,
+          url: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-safe-pay.jpg",
+          width: 1376,
+          height: 768,
+          alt: `${article.title} | 전액 100% 선입금 안전거래`,
         },
       ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-safe-pay.jpg"],
     },
   };
 }
@@ -187,6 +193,41 @@ export default async function MagazineDetailPage({ params }: Props) {
                 ))}
               </div>
             </header>
+
+            {/* 대표 안심거래 썸네일 배너 (구글·네이버 기사 대표 썸네일 <img>) */}
+            <div className="relative overflow-hidden rounded-2xl border border-border/80 bg-gradient-to-r from-[#0c121a] via-[#101824] to-[#0c121a] p-4 sm:p-5 shadow-lg flex flex-col sm:flex-row items-center gap-5">
+              <div className="relative w-full sm:w-[280px] aspect-[16/9] rounded-xl overflow-hidden shrink-0 border border-brand-yellow/30 shadow-md">
+                <picture>
+                  <source
+                    type="image/webp"
+                    srcSet="/images/og-safe-pay-640.webp 640w, /images/og-safe-pay-960.webp 960w"
+                    sizes="(max-width: 640px) 100vw, 280px"
+                  />
+                  <img
+                    src="/images/og-safe-pay.jpg"
+                    alt={`${article.title} — 전국 중고오토바이 매입 전액 100% 선입금 안전거래`}
+                    width={1376}
+                    height={768}
+                    fetchPriority="high"
+                    loading="eager"
+                    decoding="async"
+                    className="w-full h-full object-cover"
+                  />
+                </picture>
+              </div>
+              <div className="space-y-2 text-center sm:text-left flex-1">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-brand-yellow/10 border border-brand-yellow/30 text-brand-yellow text-[11px] font-bold">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <span>전액 100% 선입금 안심거래 보증</span>
+                </div>
+                <p className="text-sm sm:text-base font-black text-white leading-snug break-keep">
+                  전국 전지역 당일 무료 출장 · <span className="text-brand-yellow">상차 전 전액 즉시 송금</span>
+                </p>
+                <p className="text-xs text-gray-300 leading-relaxed break-keep">
+                  현장 부당 감가 없이 약속된 견적 그대로 계좌 입금 확인 후 안전하게 바이크를 상차합니다.
+                </p>
+              </div>
+            </div>
 
             {/* 1. 작업 전 핵심 퀵 인포 대시보드 (난이도·시간·규격·위치) */}
             {article.quickInfo && (

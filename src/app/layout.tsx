@@ -83,8 +83,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-safe-pay.jpg",
-        width: 1200,
-        height: 630,
+        width: 1376,
+        height: 768,
         alt: "중고오토바이매입 | 전액 100% 선입금 안전거래",
       },
     ],

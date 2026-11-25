@@ -104,8 +104,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: [
         {
           url: ogImageUrl,
-          width: 1200,
-          height: 630,
+          width: 1376,
+          height: 768,
           alt: `${region.name} 오토바이·중고바이크 매입 | 전액 100% 선입금 안전거래`,
         },
       ],
@@ -281,25 +281,12 @@ export default async function RegionPage({ params }: Props) {
 
       {/* ================= 1. 상단 브레드크럼 & 2열 히어로 레이아웃 (사진 3 완벽 구현) ================= */}
       <section className="relative overflow-hidden rounded-3xl p-4 sm:p-8 border border-border/60 bg-surface/40 max-w-7xl mx-auto">
-        {/* 백그라운드 바이크 이미지 (경량 WebP 반응형 적용) */}
+        {/* 백그라운드 바이크 이미지 (CSS 배경 처리 — 텍스트 없는 장식 이미지가 검색 썸네일로 오인 수집되는 현상 원천 차단) */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden rounded-3xl">
-          <picture>
-            <source
-              type="image/webp"
-              srcSet="/images/hero-bike-640.webp 640w, /images/hero-bike-960.webp 960w, /images/hero-bike-1376.webp 1376w"
-              sizes="100vw"
-            />
-            <img
-              src="/images/hero-bike.jpg"
-              alt={`${region.name} 오토바이 매입`}
-              width={1376}
-              height={768}
-              fetchPriority="high"
-              loading="eager"
-              decoding="async"
-              className="absolute inset-0 h-full w-full object-cover object-[80%_center] opacity-15 md:opacity-20 mix-blend-screen scale-105"
-            />
-          </picture>
+          <div
+            aria-hidden="true"
+            className="bg-hero-bike absolute inset-0 bg-cover bg-[80%_center] opacity-15 md:opacity-20 mix-blend-screen scale-105"
+          />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0a0d10] via-[#0a0d10]/95 md:via-[#0a0d10]/80 to-[#0a0d10]/60" />
           <div className="absolute inset-0 bg-gradient-to-b from-[#0a0d10]/80 via-transparent to-[#0a0d10]" />
         </div>
@@ -493,22 +480,23 @@ export default async function RegionPage({ params }: Props) {
       </div>
     </section>
 
-      {/* ================= 1.5. 100% 선입금 안심 안전거래 보증 배너 (네이버 썸네일 & 신뢰도 극대화) ================= */}
+      {/* ================= 1.5. 100% 선입금 안심 안전거래 보증 배너 (구글·네이버 대표 썸네일 유일 <img> & 신뢰도 극대화) ================= */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="relative overflow-hidden rounded-2xl border border-border/80 bg-gradient-to-r from-[#0c121a] via-[#101824] to-[#0c121a] p-4 sm:p-6 shadow-xl flex flex-col md:flex-row items-center gap-6">
-          <div className="relative w-full md:w-80 h-48 sm:h-52 rounded-xl overflow-hidden shrink-0 border border-brand-yellow/30 shadow-lg">
+          <div className="relative w-full md:w-[360px] aspect-[16/9] rounded-xl overflow-hidden shrink-0 border border-brand-yellow/30 shadow-lg">
             <picture>
               <source
                 type="image/webp"
                 srcSet="/images/og-safe-pay-640.webp 640w, /images/og-safe-pay-960.webp 960w"
-                sizes="(max-width: 768px) 100vw, 320px"
+                sizes="(max-width: 768px) 100vw, 360px"
               />
               <img
                 src="/images/og-safe-pay.jpg"
-                alt={`${region.name} 오토바이 매입 전액 100% 선입금 안전거래`}
+                alt={`${region.name} 오토바이 매입 전액 100% 선입금 안전거래 · 당일 출장매입`}
                 width={1376}
                 height={768}
-                loading="lazy"
+                fetchPriority="high"
+                loading="eager"
                 decoding="async"
                 className="w-full h-full object-cover"
               />

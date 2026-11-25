@@ -66,8 +66,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: [
         {
           url: "https://www.xn--299alk823a88b8ztw1bpdu7bh3ec67a.kr/images/og-safe-pay.jpg",
-          width: 1200,
-          height: 630,
+          width: 1376,
+          height: 768,
           alt: `${model.name} 중고 오토바이 매입 | 전액 100% 선입금 안전거래`,
         },
       ],
@@ -205,6 +205,48 @@ export default async function ModelDetailPage({ params }: Props) {
           {/* 우측 30초 견적 폼 (모델명 자동 주입) */}
           <div className="lg:col-span-5">
             <EstimateForm initialModel={model.name} />
+          </div>
+        </div>
+      </section>
+
+      {/* ================= 1.5. 100% 선입금 안심 안전거래 보증 배너 (검색 대표 썸네일 유일 <img>) ================= */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative overflow-hidden rounded-2xl border border-border/80 bg-gradient-to-r from-[#0c121a] via-[#101824] to-[#0c121a] p-4 sm:p-6 shadow-xl flex flex-col md:flex-row items-center gap-6">
+          <div className="relative w-full md:w-[360px] aspect-[16/9] rounded-xl overflow-hidden shrink-0 border border-brand-yellow/30 shadow-lg">
+            <picture>
+              <source
+                type="image/webp"
+                srcSet="/images/og-safe-pay-640.webp 640w, /images/og-safe-pay-960.webp 960w"
+                sizes="(max-width: 768px) 100vw, 360px"
+              />
+              <img
+                src="/images/og-safe-pay.jpg"
+                alt={`${model.name} 중고 오토바이 매입 전액 100% 선입금 안전거래 · 당일 출장매입`}
+                width={1376}
+                height={768}
+                fetchPriority="high"
+                loading="eager"
+                decoding="async"
+                className="w-full h-full object-cover"
+              />
+            </picture>
+          </div>
+          <div className="space-y-3 text-center md:text-left flex-1">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-yellow/10 border border-brand-yellow/30 text-brand-yellow text-xs font-bold">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>100% 안심 안전거래 보증제</span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight break-keep">
+              {model.name} 중고 매입, <span className="text-brand-yellow">상차 전 100% 선입금</span>으로 안전하게
+            </h2>
+            <p className="text-xs sm:text-sm text-gray-300 leading-relaxed break-keep">
+              사전 합의된 견적에서 부당하게 가격을 깎지 않습니다. 전국 어디든 전문 기사 방문 시, {model.name} 실차 확인 즉시 고객님 계좌로 <strong>100% 전액 송금을 먼저 완료</strong>한 뒤 안전하게 상차합니다.
+            </p>
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs font-bold text-gray-300 pt-1">
+              <span className="flex items-center gap-1.5 text-brand-cyan">✓ 현장 부당 감가 0건 보증</span>
+              <span className="flex items-center gap-1.5 text-brand-cyan">✓ 바이크 상차 전 전액 송금</span>
+              <span className="flex items-center gap-1.5 text-brand-cyan">✓ 전국 전지역 당일 무료 출장</span>
+            </div>
           </div>
         </div>
       </section>
